@@ -6,9 +6,12 @@ The library can be used by NodeJS applications, tools, and other automations to 
 
 ## Installation
 
+You can install the SDK using Git during the closed beta period:
+
 ```
-npm install @1password/connect
+npm install "git+ssh://git@github.com:1Password/connect-sdk-js.git#semver:~v0.0.1"
 ```
+_`semvar:~v0.0.1` will ensure you install the latest pre-release build_
 
 ## Usage
 
@@ -25,7 +28,7 @@ import {OnePasswordConnect, ItemBuilder} from "@1password/connect"
 // Create new connector with HTTP Pooling
 const op = OnePasswordConnect({
     serverUrl: "http://localhost:8000",
-    token: "my-token" ,
+    token: "my-token",
     keepAlive: true
 });
 ```
