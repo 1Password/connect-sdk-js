@@ -1,0 +1,13 @@
+.gitignore
+model/errorResponse.ts
+model/fullItem.ts
+model/fullItemAllOf.ts
+model/fullItemAllOfFields.ts
+model/fullItemAllOfSection.ts
+model/fullItemAllOfSections.ts
+model/generatorRecipe.ts
+model/item.ts
+model/itemUrls.ts
+model/itemVault.ts
+model/vault.ts
+model/models.ts

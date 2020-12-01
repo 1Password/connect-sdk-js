@@ -1,0 +1,28 @@
+[
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "title": "string",
+    "vault": {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    },
+    "category": "LOGIN",
+    "urls": [
+      {
+        "primary": true,
+        "url": "https://example.com"
+      },
+      {
+        "url": "https://example.org"
+      }
+    ],
+    "favorite": false,
+    "tags": [
+      "string"
+    ],
+    "version": 0,
+    "trashed": false,
+    "createdAt": "2020-09-25T17:58:18.170Z",
+    "updatedAt": "2020-09-25T17:58:18.170Z",
+    "lastEditedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  }
+]

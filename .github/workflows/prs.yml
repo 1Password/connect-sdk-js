@@ -1,0 +1,25 @@
+name: Pull Request QA
+
+on:
+    pull_request:
+        types: [opened, reopened]
+
+jobs:
+    lintAndTest:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Test with Node.js Latest LTS
+              uses: actions/setup-node@v1
+              with:
+                  # Latest LTS version
+                  node-version: '12.x'
+            - name: Cache NPM modules
+              uses: actions/cache@v2
+              key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+              restore-keys: |
+                  ${{ runner.OS }}-node-
+                  ${{ runner.OS }}-
+            - run: npm install
+            - run: npm run lint
+            - run: npm test

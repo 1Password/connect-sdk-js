@@ -1,0 +1,48 @@
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "title": "Bank of 1Password",
+  "vault": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  },
+  "category": "LOGIN",
+  "urls": [
+    {
+      "primary": true,
+      "url": "https://agilebits.com"
+    },
+    {
+      "url": "https://1password.ca"
+    }
+  ],
+  "favorite": false,
+  "tags": [
+    "banking"
+  ],
+  "version": 0,
+  "trashed": false,
+  "sections": [
+    {
+      "id": "5dcb81c3-9d68-46a6-83ce-c0c25cddd778",
+      "label": "My Section"
+    }
+  ],
+  "fields": [
+    {
+      "id": "0d9112a6-1f60-4d2d-8063-4fa692792a1c",
+      "section": {
+        "id": "5dcb81c3-9d68-46a6-83ce-c0c25cddd778"
+      },
+      "type": "STRING",
+      "purpose": "",
+      "label": "Example",
+      "value": "aardvark",
+      "generate": false,
+      "recipe": {
+        "length": 0,
+        "characterSets": [
+          "LETTERS"
+        ]
+      }
+    }
+  ]
+}
