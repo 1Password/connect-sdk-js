@@ -1,0 +1,45 @@
+on:
+    release:
+        types:
+            - published
+
+name: Publish Package
+jobs:
+    build:
+        name: Build and Publish Package
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v2
+
+            -   name: Cache node_modules
+                uses: actions/cache@v2
+                env:
+                    cache-id: node-cache
+                with:
+                    path: ~/.npm
+                    key: release-${{ env.cache-id }}-${{ hashFiles('**/package-lock.json') }}
+
+                # NPM CONFIG
+            -   name: Configure publishing to NPM
+                uses: actions/setup-node@v1
+                with:
+                    node-version: '12.x'
+                    registry-url: 'https://registry.npmjs.org'
+            -   name: Install dependencies
+                run: npm ci
+            -   run: npm publish --access public
+                env:
+                    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+                # GITHUB PACKAGES CONFIG
+            -   name: Configure publishing to Github Packages
+                uses: actions/setup-node@v1
+                with:
+                    node-version: '12.x'
+                    registry-url: 'https://npm.pkg.github.com'
+                    scope: '@1password' # Defaults to the user or organization that owns the workflow file
+            -   name: Publish package
+                run: npm publish
+                env:
+                    NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

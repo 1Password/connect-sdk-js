@@ -1,4 +1,4 @@
-name: Pull Request QA
+name: Pull Request Lint & Test
 
 on:
     pull_request:
@@ -16,10 +16,11 @@ jobs:
                   node-version: '12.x'
             - name: Cache NPM modules
               uses: actions/cache@v2
-              key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-              restore-keys: |
-                  ${{ runner.OS }}-node-
-                  ${{ runner.OS }}-
-            - run: npm install
+              with:
+                  path: ~/.npm
+                  key: build-cache-${{ github.base_ref }}-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      build-cache-${{ github.base_ref }}-
+            - run: npm ci
             - run: npm run lint
             - run: npm test
