@@ -1,24 +1,25 @@
 on:
-    push:
-        tags:
-            - 'v*' # Push events to matching tag with pattern v*, i.e. v1.0, v20.15.10
+    create:
+        branches:
+            - 'release/v*' # Push events to matching tag with pattern v*, i.e. v1.0, v20.15.10
 
-name: Create Draft Release
+name: Open release PR
 
 jobs:
-    build:
-        name: Create Release
+    create_pr:
+        name: Create Release Pull Reqest
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-
-            - name: Create Release
-              id: create_release
-              uses: actions/create-release@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - uses: octokit/request-action@v2.x
+              id: create_pr
               with:
-                  tag_name: ${{ github.ref }}
-                  release_name: Release ${{ github.ref }}
-                  draft: true
+                  route: POST /repos/${{ github.repostiory }}/pulls
+                  title: "Release version ${{ github.event.ref }}"
+                  head: ${{ github.ref }}
+                  base: ${{ github.event.master_branch }}
+                  body: |
+                      This is an automated PR for a new release. Please double check the following:
+                      - [ ] Changelog
+                      - [ ] Any files that reference the package version number
+          env:
+              - GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
