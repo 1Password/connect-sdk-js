@@ -1,7 +1,7 @@
 on:
     create:
         branches:
-            - 'release/v*'
+            - 'release/v[0-9]+.[0-9]+.[0-9]+'
 
 name: Open Release PR for review
 
