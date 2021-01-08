@@ -10,9 +10,11 @@ toolsdir := $(CURDIR)/scripts
 test:	## Run test suite
 	npm test
 
-build:	## Transpile project to JavaScript
+build: clean	## Transpile project to JavaScript
 	npm run build
 
+clean:	## Delete build outputs for a fresh start
+	@rm -rf ./dist
 
 ## Release functions =====================
 
