@@ -2,7 +2,7 @@ export MAIN_BRANCH ?= main
 export CHANGELOG ?= CHANGELOG.md
 
 .DEFAULT_GOAL := help
-.PHONY: release/prepare release/tag .check_bump_type .check_git_clean help
+.PHONY: test build clean release/prepare release/tag .check_bump_type .check_git_clean help
 
 curVersion := $(shell node -pe "require ('$(CURDIR)/package.json').version" | sed 's/^v//')
 toolsdir := $(CURDIR)/scripts
