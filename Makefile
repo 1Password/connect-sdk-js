@@ -5,7 +5,7 @@ export CHANGELOG ?= CHANGELOG.md
 .PHONY: test build clean release/prepare release/tag .check_bump_type .check_git_clean help
 
 GIT_BRANCH := $(shell git symbolic-ref --short HEAD)
-WORKTREE_CLEAN := $(git status --porcelain 1>/dev/null 2>&1; echo $$?)
+WORKTREE_CLEAN := $(shell git status --porcelain 1>/dev/null 2>&1; echo $$?)
 SCRIPTS_DIR := $(CURDIR)/scripts
 
 curVersion := $(shell node -pe "require ('$(CURDIR)/package.json').version" | sed 's/^v//')
@@ -33,6 +33,7 @@ release/prepare: .check_git_clean	## Bumps version and creates release branch (c
 	@test $(version) || (echo "[ERROR] version argument not set."; exit 1)
 	@git fetch --quiet origin $(MAIN_BRANCH)
 
+	## NPM version will validate the $version value
 	npm version --no-git-tag-version $(version)
 
 	@NEW_VERSION=$(version) $(SCRIPTS_DIR)/prepare-release.sh
@@ -48,9 +49,9 @@ release/tag: .check_git_clean	## Creates git tag using version from package.json
 ## Helper functions =====================
 
 .check_git_clean:
-ifneq ($GIT_BRANCH, $MAIN_BRANCH)
+ifneq ($(GIT_BRANCH), $(MAIN_BRANCH))
 	@echo "[ERROR] Please checkout default branch '$(MAIN_BRANCH)' and re-run this command."; exit 1;
 endif
-ifneq ($WORKTREE_CLEAN, 0)
+ifneq ($(WORKTREE_CLEAN), 0)
 	@echo "[ERROR] Uncommitted changes found in worktree. Address them and try again."; exit 1;
 endif
