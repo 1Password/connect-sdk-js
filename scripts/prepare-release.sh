@@ -73,8 +73,6 @@ EOF
 
 function _main() {
 
-    git fetch origin "${MAIN_BRANCH:-main}" &>/dev/null
-
     # Stash version changes
     git stash push
 
@@ -83,10 +81,10 @@ function _main() {
         exit 1
     fi
 
-    updateChangelog
-
     # Add the version changes to release branch
     git stash pop &>/dev/null
+
+    updateChangelog
 
     cat << EOF
 
