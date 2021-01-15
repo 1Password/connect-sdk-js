@@ -11,7 +11,7 @@ You can install the SDK using Git during the closed beta period:
 ```
 npm install "git+ssh://git@github.com:1Password/connect-sdk-js.git#semver:~v0.0.1"
 ```
-_`semvar:~v0.0.1` will ensure you install the latest pre-release build_
+_`semver:~v0.0.1` will ensure you install the latest pre-release build_
 
 ## Usage
 
@@ -95,7 +95,7 @@ You can use a custom client to:
 - use your own node HTTP request library
 
 #### Defining `ClientRequestOptions`
-The `HTTPClient.request(method, url, opts)` method requires an options object. The following table describes each option:
+The `HTTPClient.request(method, url, opts)` method requires an options argument. The following table describes each option:
 
 | Option | Description | Required |
 |:---|:---|---:|
@@ -120,13 +120,13 @@ DEBUG=opconnect
 
 From repository root:
 ```shell script
-npm run test
+make test
 ```
 
 ### Building
 
 ```shell script
-npm run build
+make build
 ```
 
 ---
@@ -137,8 +137,6 @@ npm run build
 
 # Security
 
-1Password requests you practice responsible disclosure if you discover a vulnerability.
-
-Please file requests via BugCrowd.
+1Password requests you practice responsible disclosure if you discover a vulnerability. Please submit discoveries via [BugCrowd](https://bugcrowd.com/agilebits).
 
 For information about security practices, please visit our [Security homepage](https://1password.com/security/).
