@@ -16,10 +16,11 @@ jobs:
                   node-version: '12.x'
             - name: Cache NPM modules
               uses: actions/cache@v2
-              key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-              restore-keys: |
-                  ${{ runner.OS }}-node-
-                  ${{ runner.OS }}-
+              with:
+                path: ~/.npm
+                key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                restore-keys: |
+                  ${{ runner.os }}-node-
             - run: npm install
             - run: npm run lint
             - run: npm test
