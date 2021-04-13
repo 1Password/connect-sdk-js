@@ -1,7 +1,8 @@
 {
-  "name": "@1password/connect",
+  "name": "@1password/connect-sdk",
   "version": "0.0.3",
-  "repository": "",
+  "homepage": "https://1password.com/secrets/",
+  "repository": "https://github.com/1Password/connect-sdk-js",
   "description": "JavaScript/Typescript SDK for 1Password Connect",
   "main": "dist/index.js",
   "files": [
