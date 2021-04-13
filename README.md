@@ -1,6 +1,6 @@
 # 1Password Connect Node SDK
 
-The 1Password Connect Node SDK provides your JavaScript & TypeScript applications access to the 1Password Connect API hosted on your infrastructure.
+The 1Password Connect Node SDK provides your JavaScript & TypeScript applications access to the 1Password Connect API hosted on your infrastructure and leverage the power of [1Password Secrets Automation](https://1password.com/secrets)
 
 The library can be used by NodeJS applications, tools, and other automations to access and manage items in 1Password Vaults.
 
@@ -9,33 +9,34 @@ The library can be used by NodeJS applications, tools, and other automations to 
 You can install the SDK using Git during the closed beta period:
 
 ```
-npm install "git+ssh://git@github.com:1Password/connect-sdk-js.git#semver:~v0.0.1"
+npm install  @1password/connect
 ```
-_`semver:~v0.0.1` will ensure you install the latest pre-release build_
 
 ## Usage
 
 ### Environment Variables
-| Variable           | Description |
-|:---------------|------------|
-|`OP_VAULT` | `ItemBuilder` will default to this vault UUID if `.setVault()` is not called when defining a new Item. |
+
+| Variable   | Description                                                                                            |
+| :--------- | ------------------------------------------------------------------------------------------------------ |
+| `OP_VAULT` | `ItemBuilder` will default to this vault UUID if `.setVault()` is not called when defining a new Item. |
 
 #### Creating an API client
 
 ```typescript
-import {OnePasswordConnect, ItemBuilder} from "@1password/connect"
+import { OnePasswordConnect, ItemBuilder } from "@1password/connect";
 
 // Create new connector with HTTP Pooling
 const op = OnePasswordConnect({
-    serverUrl: "http://localhost:8000",
-    token: "my-token",
-    keepAlive: true
+	serverUrl: "http://localhost:8000",
+	token: "my-token",
+	keepAlive: true,
 });
 ```
 
 #### Retrieving Vaults
- ```typescript
- // Get all vaults
+
+```typescript
+// Get all vaults
 let allVaults = await op.listVaults();
 
 // Get a specific vault
@@ -45,14 +46,17 @@ let vault = await op.getVault("qwerty1234EXAMPLE");
 #### Interacting with Items
 
 ```typescript
-
-const vaultId = "abc1234gkqt849EXAMPLE"
+const vaultId = "abc1234gkqt849EXAMPLE";
 
 // Create an Item
 const newItem = ItemBuilder()
-                    .setVault(myVaultId)
-                    .addField({label: "Example", value: "MySecret", sectionName: "Demo Section"})
-                    .build()
+	.setVault(myVaultId)
+	.addField({
+		label: "Example",
+		value: "MySecret",
+		sectionName: "Demo Section",
+	})
+	.build();
 
 const createdItem = await op.createVaultItem(newItem);
 
@@ -60,50 +64,52 @@ const createdItem = await op.createVaultItem(newItem);
 const item = await op.getItem(myVaultId, "exampleItemUUID");
 
 // Get Item by name
-const namedItem = await op.getItemByTitle(myVaultId, "Example Title")
+const namedItem = await op.getItemByTitle(myVaultId, "Example Title");
 
 // Update an Item
-item.title = "New Title"
-const updatedItem = await op.updateItem(myVaultId, myItem)
+item.title = "New Title";
+const updatedItem = await op.updateItem(myVaultId, myItem);
 
 // Delete an Item
-await op.deleteVaultItem(myVaultId, updatedItem.id)
+await op.deleteVaultItem(myVaultId, updatedItem.id);
 ```
-
 
 ### Custom HTTPClient
 
 You may provide a custom HTTPClient class to customize how the library sends requests to the server.
 
 The HTTPClient must implement the `IRequestClient` interface:
-```typescript
-import {ClientRequestOptions} from "./client";
-interface IRequestClient {
-    defaultTimeout: number;
 
-    request(
-        method: HTTPMethod,
-        url: string,
-        opts: ClientRequestOptions,
-    ): Promise<Response>;
+```typescript
+import { ClientRequestOptions } from "./client";
+interface IRequestClient {
+	defaultTimeout: number;
+
+	request(
+		method: HTTPMethod,
+		url: string,
+		opts: ClientRequestOptions,
+	): Promise<Response>;
 }
 ```
 
 You can use a custom client to:
-- handle proxy network access
-- add additional logging
-- use your own node HTTP request library
+
+-   handle proxy network access
+-   add additional logging
+-   use your own node HTTP request library
 
 #### Defining `ClientRequestOptions`
+
 The `HTTPClient.request(method, url, opts)` method requires an options argument. The following table describes each option:
 
-| Option | Description | Required |
-|:---|:---|---:|
-| `authToken` | The token used to authenticate the client to a 1Password Connect API. | **Yes**
-| `params`| Object with string key-value pairs to be used as querystring parameters | No
-| `data` | A string or object made up of key-value pairs. Defines the request body. | No
-| `headers`| Object with string key-value pairs. Merged with default headers. | No
-| `timeout`| Sets timeout value for the HTTP request. | No
+| Option      | Description                                                              | Required |
+| :---------- | :----------------------------------------------------------------------- | -------: |
+| `authToken` | The token used to authenticate the client to a 1Password Connect API.    |  **Yes** |
+| `params`    | Object with string key-value pairs to be used as querystring parameters  |       No |
+| `data`      | A string or object made up of key-value pairs. Defines the request body. |       No |
+| `headers`   | Object with string key-value pairs. Merged with default headers.         |       No |
+| `timeout`   | Sets timeout value for the HTTP request.                                 |       No |
 
 ### Logging with `debug`
 
@@ -114,11 +120,13 @@ All log messages are defined under the `opconnect` namespace. To print log state
 ```
 DEBUG=opconnect
 ```
+
 ## Development
 
 ### Running Tests
 
 From repository root:
+
 ```shell script
 make test
 ```
