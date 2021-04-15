@@ -8,7 +8,7 @@
 
 ## Fixes
 
--   A user-friendly description of a fix. {issue-number}
+-   Updated the README with instructions on how to install the package
 
 ## Security
 
