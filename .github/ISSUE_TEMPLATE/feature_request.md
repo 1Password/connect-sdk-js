@@ -16,7 +16,7 @@ The description should help the reader understand why the feature is necessary.
 The better we understand your use case, the better we can help create an appropriate solution. -->
 
 
-### How should it work?
+### Proposed Solution
 <!-- If you already have an idea for how the feature should work, use this space to describe it.
 We'll work with you to find a workable approach, and any implementation details are appreciated.
 -->

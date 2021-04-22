@@ -21,10 +21,8 @@ Connect Server Version:
 <!-- What OS was the SDK running on? -->
 OS:
 
-<!-- What version of Node and TypeScript were you running when the error occurred? -->
+<!-- What version of Node were you running when the error occurred? -->
 Node Version:
-
-TypeScript Version:
 
 ## What happened?
 <!-- Describe the bug or error -->
