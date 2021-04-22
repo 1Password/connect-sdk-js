@@ -14,7 +14,7 @@ SDK Version:
 
 <!-- What version of the Connect server are you running?
 You can get this information from the Integrations section in 1Password
-https://1password.com/integrations/active
+https://start.1password.com/integrations/active
 -->
 Connect Server Version:
 
