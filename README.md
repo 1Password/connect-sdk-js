@@ -9,7 +9,7 @@ The library can be used by NodeJS applications, tools, and other automations to 
 You can install the SDK using npm
 
 ```
-npm install  @1password/connect
+npm install @1password/connect
 ```
 
 or using Yarn

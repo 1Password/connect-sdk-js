@@ -12,7 +12,7 @@ export class RequestAdapter {
 
     public constructor(client, opts: RequestAdapterOptions) {
         if (!opts.serverURL || !opts.token) {
-            throw TypeError("ServerURL and Token are required.");
+            throw TypeError("Options serverURL and token are required.");
         }
 
         this.baseURL = new URL(opts.serverURL);
