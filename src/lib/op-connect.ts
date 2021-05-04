@@ -27,7 +27,7 @@ export const newConnectClient = (opts: OPConfig): OPConnect => {
     }
 
     if (!opts.serverURL || !opts.token) {
-        throw new Error("Options serverUrl and token are required.");
+        throw new Error("Options serverURL and token are required.");
     }
 
     return new OPConnect(opts);
