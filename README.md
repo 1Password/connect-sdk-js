@@ -32,7 +32,7 @@ import { OnePasswordConnect, ItemBuilder } from "@1password/connect";
 
 // Create new connector with HTTP Pooling
 const op = OnePasswordConnect({
-	serverUrl: "http://localhost:8000",
+	serverURL: "http://localhost:8080",
 	token: "my-token",
 	keepAlive: true,
 });
