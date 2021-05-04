@@ -9,7 +9,7 @@ The library can be used by NodeJS applications, tools, and other automations to 
 You can install the SDK using npm
 
 ```
-npm install  @1password/connect
+npm install @1password/connect
 ```
 
 or using Yarn
@@ -32,7 +32,7 @@ import { OnePasswordConnect, ItemBuilder } from "@1password/connect";
 
 // Create new connector with HTTP Pooling
 const op = OnePasswordConnect({
-	serverUrl: "http://localhost:8000",
+	serverURL: "http://localhost:8000",
 	token: "my-token",
 	keepAlive: true,
 });

@@ -8,9 +8,9 @@ jest.mock("../src/lib/client", () => ({
         HTTPClient: jest.fn().mockImplementation(() => ({request: mockedRequest})),
     }));
 
-test("Assert Token and BaseURL are required", () => {
+test("Assert Token and Server URL are required", () => {
     expect(() => new RequestAdapter(new HTTPClient(), {serverURL: undefined, token: undefined}))
-        .toThrowError("ServerURL and Token are required.");
+        .toThrowError("Options serverURL and token are required.");
 });
 
 describe("Assert Adapter delegates calls to Client", () => {
