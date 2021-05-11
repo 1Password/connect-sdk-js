@@ -1,7 +1,7 @@
 import { FullItem } from "../model/fullItem";
 import { Item as SimpleItem, ObjectSerializer } from "../model/models";
 import { Vault } from "../model/vault";
-import {RequestAdapter, Response} from "./requests";
+import { RequestAdapter, Response } from "./requests";
 
 class OPResource {
     protected adapter: RequestAdapter;
@@ -18,7 +18,10 @@ export class Vaults extends OPResource {
      * Return all vaults the Service Account has permission to view.
      */
     public async list(): Promise<Vault[]> {
-        const { data } = await this.adapter.sendRequest("get", `${this.basePath}/`);
+        const { data } = await this.adapter.sendRequest(
+            "get",
+            `${this.basePath}/`,
+        );
         return ObjectSerializer.deserialize(data, "Array<Vault>");
     }
 
@@ -50,11 +53,10 @@ export class Vaults extends OPResource {
 }
 
 export class Items extends OPResource {
-
     private basePath = (vaultId: string, itemId?: string): string =>
         itemId && typeof itemId !== "undefined"
             ? `v1/vaults/${vaultId}/items/${itemId}`
-            : `v1/vaults/${vaultId}/items/`
+            : `v1/vaults/${vaultId}/items/`;
 
     public async create(vaultId: string, item: FullItem): Promise<FullItem> {
         const { data } = await this.adapter.sendRequest(
@@ -83,18 +85,24 @@ export class Items extends OPResource {
         }
 
         const { data } = opts.itemId
-                ? await this.getById(vaultId, opts.itemId)
-                : await this.getByTitle(vaultId, opts.title);
+            ? await this.getById(vaultId, opts.itemId)
+            : await this.getByTitle(vaultId, opts.title);
 
         return ObjectSerializer.deserialize(data, "FullItem");
     }
 
     public async delete(vaultId: string, itemId: string): Promise<Response> {
-        return await this.adapter.sendRequest("delete", this.basePath(vaultId, itemId));
+        return await this.adapter.sendRequest(
+            "delete",
+            this.basePath(vaultId, itemId),
+        );
     }
 
     private async getById(vaultId: string, itemId: string): Promise<Response> {
-        return await this.adapter.sendRequest("get", this.basePath(vaultId, itemId));
+        return await this.adapter.sendRequest(
+            "get",
+            this.basePath(vaultId, itemId),
+        );
     }
 
     /**
@@ -106,19 +114,28 @@ export class Items extends OPResource {
      * @returns {Promise<FullItem>}
      * @private
      */
-    private async getByTitle(vaultId: string, title: string): Promise<Response> {
-        const queryPath = `${this.basePath(vaultId)}?filter=title eq "${title}"`;
+    private async getByTitle(
+        vaultId: string,
+        title: string,
+    ): Promise<Response> {
+        const queryPath = `${this.basePath(
+            vaultId,
+        )}?filter=title eq "${title}"`;
 
-        const {data} = await this.adapter.sendRequest("get", queryPath);
+        const { data } = await this.adapter.sendRequest("get", queryPath);
 
         if (!data?.length) {
-            return Promise.reject({status: 404, message: "No Items found with title"});
+            return Promise.reject({
+                status: 404,
+                message: "No Items found with title",
+            });
         }
 
         if (data.length > 1) {
             return Promise.reject({
                 status: 400,
-                message: "Found multiple Items with given title. Provide a more specific Item title",
+                message:
+                    "Found multiple Items with given title. Provide a more specific Item title",
             });
         }
 
@@ -127,4 +144,6 @@ export class Items extends OPResource {
 }
 
 // Either itemId OR title must be supplied
-type GetItemOptions = {itemId: string, title?: never} | {title: string, itemId?: never};
+type GetItemOptions =
+    | { itemId: string; title?: never }
+    | { title: string; itemId?: never };
