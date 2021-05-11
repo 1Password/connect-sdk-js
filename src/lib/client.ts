@@ -63,12 +63,29 @@ export class HTTPClient implements IRequestClient {
 
         const axiosInstance = axios.create(axiosConfig);
 
+        axiosInstance.interceptors.request.use(
+            (config) => config,
+            // eslint-disable-next-line @typescript-eslint/promise-function-async,@typescript-eslint/tslint/config
+            (error) => {
+                if (!error.response) {
+                    return Promise.reject({
+                        message: error.message,
+                        code: error.code,
+                    });
+                }
+                return Promise.reject(error.response.data);
+            },
+        );
+
         axiosInstance.interceptors.response.use(
             (response) => response,
             // eslint-disable-next-line @typescript-eslint/promise-function-async,@typescript-eslint/tslint/config
             (error) => {
                 if (!error.response) {
-                    return Promise.reject(error.message);
+                    return Promise.reject({
+                        message: error.message,
+                        code: error.code,
+                    });
                 }
                 return Promise.reject(error.response.data);
             },
