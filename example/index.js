@@ -60,4 +60,3 @@ if (answer == 'y') {
 }
 
 console.log(steps["outro"])
-
