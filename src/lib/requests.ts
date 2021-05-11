@@ -44,7 +44,11 @@ export class RequestAdapter {
             ...{ authToken: this.token },
         };
         debug("Sending request - %s %s", method.toUpperCase(), path);
-        return this.client.request(method, this.normalizeURL(path), clientOptions);
+        return this.client.request(
+            method,
+            this.normalizeURL(path),
+            clientOptions,
+        );
     }
 
     /**
