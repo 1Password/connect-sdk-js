@@ -90,7 +90,7 @@ class OPConnect {
      * @returns {Promise<FullItem>}
      */
     public async getItem(vaultId: string, itemId: string): Promise<FullItem> {
-        return await this.items.get(vaultId, {itemId});
+        return await this.items.get(vaultId, { itemId });
     }
 
     /**
@@ -102,8 +102,11 @@ class OPConnect {
      * @param {string} title
      * @returns {Promise<FullItem>}
      */
-    public async getItemByTitle(vaultId: string, title: string): Promise<FullItem> {
-        return await this.items.get(vaultId, {title});
+    public async getItemByTitle(
+        vaultId: string,
+        title: string,
+    ): Promise<FullItem> {
+        return await this.items.get(vaultId, { title });
     }
 
     /**
@@ -113,7 +116,10 @@ class OPConnect {
      * @param {FullItem} item
      * @returns {Promise<FullItem>}
      */
-    public async createItem(vaultId: string, item: FullItem): Promise<FullItem> {
+    public async createItem(
+        vaultId: string,
+        item: FullItem,
+    ): Promise<FullItem> {
         return this.items.create(vaultId, item);
     }
 
@@ -125,7 +131,10 @@ class OPConnect {
      * @param {FullItem} item
      * @returns {Promise<FullItem>}
      */
-    public async updateItem(vaultId: string, item: FullItem): Promise<FullItem> {
+    public async updateItem(
+        vaultId: string,
+        item: FullItem,
+    ): Promise<FullItem> {
         if (!item.id) throw Error("Item ID must be defined.");
         return await this.items.update(vaultId, item);
     }

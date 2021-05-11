@@ -68,8 +68,8 @@ export class ItemBuilder {
 
         this.item.urls = this.urls.hrefs.map((href) =>
             this.urls.primaryUrl === href
-                ? ({primary: true, href} as ItemUrls)
-                : ({href} as ItemUrls),
+                ? ({ primary: true, href } as ItemUrls)
+                : ({ href } as ItemUrls),
         );
         const builtItem = cloneDeep(this.item);
         debug(
@@ -91,7 +91,7 @@ export class ItemBuilder {
         this.item.tags = [];
 
         this.sections = new Map();
-        this.urls = {primaryUrl: "", hrefs: []};
+        this.urls = { primaryUrl: "", hrefs: [] };
     }
 
     /**
@@ -101,7 +101,7 @@ export class ItemBuilder {
      * @returns {ItemBuilder}
      */
     public setVault(vaultId: string): ItemBuilder {
-        this.item.vault = {id: vaultId} as ItemVault;
+        this.item.vault = { id: vaultId } as ItemVault;
         return this;
     }
 
@@ -145,12 +145,14 @@ export class ItemBuilder {
         };
 
         if (opts.sectionName) {
-            const {id: sectionId} = this.getOrCreateSection(opts.sectionName);
-            field.section = {id: sectionId};
+            const { id: sectionId } = this.getOrCreateSection(opts.sectionName);
+            field.section = { id: sectionId };
         }
 
         if (opts.generate && !validRecipe(opts.recipe)) {
-            throw TypeError(`Field '${opts.label}' contains an invalid Recipe.`);
+            throw TypeError(
+                `Field '${opts.label}' contains an invalid Recipe.`,
+            );
         }
 
         this.item.fields.push(field);
@@ -221,7 +223,7 @@ export class ItemBuilder {
      * @return {FullItemAllOfSections}
      */
     private getOrCreateSection(sectionName: string): FullItemAllOfSections {
-        const normalizedName = slug(sectionName, {replacement: "", lower: true});
+        const normalizedName = slug(sectionName, { lower: true });
 
         if (this.sections.has(normalizedName)) {
             return this.sections.get(normalizedName);

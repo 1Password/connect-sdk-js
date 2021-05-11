@@ -1,0 +1,128 @@
+env:
+    es6: true
+    jest: true
+extends:
+    - "eslint:recommended"
+    - "plugin:@typescript-eslint/eslint-recommended"
+    - "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    - "plugin:@typescript-eslint/recommended"
+    - "plugin:import/recommended"
+    - "plugin:import/typescript"
+    - "plugin:jsdoc/recommended"
+    - "plugin:no-unsanitized/DOM"
+    - "plugin:prettier/recommended"
+    - "plugin:unicorn/recommended"
+    - prettier
+    - prettier/@typescript-eslint
+    - prettier/standard
+    - prettier/unicorn
+parser: "@typescript-eslint/parser"
+parserOptions:
+    project: "./tsconfig.eslint.json"
+    sourceType: module
+plugins:
+    - "@typescript-eslint"
+    - deprecation
+    - import
+    - jsdoc
+    - no-unsanitized
+    - prefer-arrow
+    - prettier
+    - unicorn
+ignorePatterns:
+    - "**/dist/**"
+    - "**/*.d.ts"
+    - "**/*.js"
+rules:
+    ##### Rejected rules
+    # We use namespaces for specific purposes
+    "@typescript-eslint/no-namespace": "off"
+    # TS gives us this already with noUnusedLocals and noUnusedParameters
+    "@typescript-eslint/no-unused-vars": "off"
+    # Reduce is useful
+    unicorn/no-reduce: "off"
+    # Don't want to rename "params" to "parameters"
+    unicorn/prevent-abbreviations: "off"
+
+    ##### Tweaked rules
+    unicorn/filename-case:
+        - "error"
+        - case: "snakeCase"
+
+    ##### Additional rules
+    "@typescript-eslint/array-type": error
+    "@typescript-eslint/consistent-type-assertions": error
+    "@typescript-eslint/consistent-type-definitions": error
+    "@typescript-eslint/dot-notation": error
+    "@typescript-eslint/explicit-member-accessibility": error
+    "@typescript-eslint/naming-convention":
+        - "warn"
+        - selector: default
+          format:
+              - strictCamelCase
+          leadingUnderscore: allow
+        - selector: variable
+          modifiers:
+              - const
+          format:
+              - strictCamelCase
+              - UPPER_CASE
+          leadingUnderscore: allow
+        - selector: typeLike
+          format:
+              - StrictPascalCase
+    "@typescript-eslint/no-unused-expressions": error
+    "@typescript-eslint/prefer-for-of": error
+    "@typescript-eslint/prefer-function-type": error
+    "@typescript-eslint/promise-function-async": error
+    "@typescript-eslint/unified-signatures": error
+    arrow-body-style: error
+    curly: error
+    deprecation/deprecation: "warn"
+    eqeqeq: error
+    guard-for-in: error
+    id-denylist:
+        - error
+        - any
+        - Number
+        - number
+        - String
+        - string
+        - Boolean
+        - boolean
+        - Undefined
+        - undefined
+    id-match: error
+    import/no-deprecated: error
+    import/order: error
+    no-caller: error
+    no-eval: error
+    no-new-func: error
+    no-new-wrappers: error
+    no-octal-escape: error
+    # See https://eslint.org/docs/developer-guide/selectors and https://astexplorer.net/ for help editing these
+    no-restricted-syntax:
+        - "error"
+        - selector: "MemberExpression[object.name='Math'][property.name='random']"
+          message: "Do not use Math.random. Use crypto.getRandomValues"
+        - selector: "AssignmentExpression Identifier[name='innerHTML']"
+          message: "Do not use innerHTML"
+        - selector: ":matches(MemberExpression[object.name='document'][property.name='write'], MemberExpression[object.object.name='window'][object.property.name='document'][property.name='write'])"
+          message: "Do not use document.write"
+        - selector: ":matches(MemberExpression[object.name='document'][property.name='domain'], MemberExpression[object.object.name='window'][object.property.name='document'][property.name='domain'])"
+          message: "Do not use document.domain"
+        - selector: "Literal[value=/^http:/]"
+          message: "Use https instead of http."
+    no-shadow:
+        - error
+        - builtinGlobals: true
+          hoist: all
+    no-throw-literal: error
+    no-undef-init: error
+    object-shorthand: error
+    one-var:
+        - error
+        - never
+    prefer-arrow/prefer-arrow-functions: error
+    prettier/prettier: error
+    radix: error

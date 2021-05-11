@@ -133,7 +133,7 @@ describe("Test ItemBuilder", () => {
             .addSection("section 1")
             .build();
         expect(itemOneSection.sections.length).toEqual(1);
-        // if duplicate names used, the first appearance of the section label is saved
+        // sections are collapsed into one if normalized names are equal
         expect(itemOneSection.sections[0].label).toEqual("Section 1");
 
         const itemUtf8Sections = new ItemBuilder()
@@ -144,7 +144,7 @@ describe("Test ItemBuilder", () => {
             .build();
 
         expect(itemUtf8Sections.sections.length).toEqual(1);
-        // if duplicate names used, the first appearance of the section label is saved
+        // sections are collapsed into one if normalized names are equal
         expect(itemUtf8Sections.sections[0].label).toEqual("🔐 Secure!");
 
         const itemMultipleSections = new ItemBuilder()
