@@ -51,7 +51,7 @@ let vault = await op.getVault({vault_id});
 #### Interacting with Items
 
 ```typescript
-const vaultId = {vault_uuid};
+const myVaultId = {vault_uuid};
 
 // Create an Item
 const newItem = ItemBuilder()
