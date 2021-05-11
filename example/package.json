@@ -1,0 +1,10 @@
+{
+    "dependencies": {
+      "@1password/connect": "*",
+      "readline-sync": "*"
+    },
+    "scripts": {
+      "start": "node index.js"
+    },
+    "type": "module"
+  }
