@@ -223,7 +223,7 @@ export class ItemBuilder {
      * @return {FullItemAllOfSections}
      */
     private getOrCreateSection(sectionName: string): FullItemAllOfSections {
-        const normalizedName = slug(sectionName, {replacement: "", lower: true});
+        const normalizedName = slug(sectionName, { lower: true });
 
         if (this.sections.has(normalizedName)) {
             return this.sections.get(normalizedName);
