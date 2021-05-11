@@ -45,17 +45,17 @@ const op = OnePasswordConnect({
 let allVaults = await op.listVaults();
 
 // Get a specific vault
-let vault = await op.getVault("qwerty1234EXAMPLE");
+let vault = await op.getVault({vault_id});
 ```
 
 #### Interacting with Items
 
 ```typescript
-const vaultId = "abc1234gkqt849EXAMPLE";
+const vaultId = {vault_uuid};
 
 // Create an Item
 const newItem = ItemBuilder()
-	.setVault(myVaultId)
+	.setVault(myVaultId).setCategory("LOGIN")
 	.addField({
 		label: "Example",
 		value: "MySecret",
@@ -63,10 +63,10 @@ const newItem = ItemBuilder()
 	})
 	.build();
 
-const createdItem = await op.createVaultItem(newItem);
+const createdItem = await op.createItem(newItem);
 
 // Get an Item
-const item = await op.getItem(myVaultId, "exampleItemUUID");
+const item = await op.getItem(myVaultId, {item_uuid});
 
 // Get Item by name
 const namedItem = await op.getItemByTitle(myVaultId, "Example Title");
@@ -76,7 +76,7 @@ item.title = "New Title";
 const updatedItem = await op.updateItem(myVaultId, myItem);
 
 // Delete an Item
-await op.deleteVaultItem(myVaultId, updatedItem.id);
+await op.deleteItem(myVaultId, updatedItem.id);
 ```
 
 ### Custom HTTPClient
