@@ -117,6 +117,7 @@ export namespace Item {
         Document = <any> 'DOCUMENT',
         EmailAccount = <any> 'EMAIL_ACCOUNT',
         SocialSecurityNumber = <any> 'SOCIAL_SECURITY_NUMBER',
+        APICredential = <any> 'API_CREDENTIAL',
         Custom = <any> 'CUSTOM'
     }
 }
