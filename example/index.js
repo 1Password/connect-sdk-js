@@ -3,7 +3,7 @@ import * as readline from "readline-sync"
 import steps from steps
 
 const steps = {
-    "intro": "\nHello from 1Password! In order to exemplify the end-to-end process of creating, posting, retrieving and, eventually, deleting an item, the following steps are taken: \n",
+    "intro": "\nHello from 1Password! In order to demonstrate creating, editing, retrieving and, eventually, deleting an item, the following steps are taken: \n",
     "step1": '1. The SDK has contacted the Connect Server, and a client has been created, based on the provided OP_CONNECT_TOKEN.',
     "step2": '2. An item containing the secret string has been successfully created.',
     "step3": '3. The item containing the secret string has been successfully added in the default vault.',
