@@ -8,7 +8,7 @@ Given a (secret) string, this example will create an item, add it to given vault
 In order to be able to run this example, one will need:
 
 * [Docker](https://docs.docker.com/install/), installed and running
-* an [1Password Connect](https://support.1password.com/secrets-automation/#step-2-deploy-a-1password-connect-server) server, hosted on your infrastructure
+* a [1Password Connect](https://support.1password.com/secrets-automation/#step-2-deploy-a-1password-connect-server) server, hosted on your infrastructure
 * a Connect token, with read/write permissions for at least one vault accessible by the Connect instance
 
 
