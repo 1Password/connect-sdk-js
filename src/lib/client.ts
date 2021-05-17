@@ -67,9 +67,9 @@ export class HTTPClient implements IRequestClient {
             (response) => response,
             // eslint-disable-next-line @typescript-eslint/promise-function-async,@typescript-eslint/tslint/config
             (error) => {
-                if (!!error.response) {
+                if (error.response) {
                     return Promise.reject(error.response.data);
-                } else if (!!error.request) {
+                } else if (error.request) {
                     return Promise.reject(error.request);
                 } else {
                     return Promise.reject({
