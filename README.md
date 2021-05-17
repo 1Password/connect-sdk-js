@@ -55,7 +55,8 @@ const myVaultId = {vault_uuid};
 
 // Create an Item
 const newItem = ItemBuilder()
-	.setVault(myVaultId).setCategory("LOGIN")
+	.setVault(myVaultId)
+    .setCategory("LOGIN")
 	.addField({
 		label: "Example",
 		value: "MySecret",
