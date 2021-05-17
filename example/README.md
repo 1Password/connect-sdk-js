@@ -1,6 +1,6 @@
 # JavaScript Connect SDK Example
 
-This example has been created in order to illustrate the main available functionality with regard to item manipulation, in the JavaScript Connect SDK.
+This example demonstrates how to create, read, and modify items available to your 1Password Connect deployment using the JavaScript Connect SDK.
 Given a (secret) string, this example will create an item, add it to given vault, retrieve it and, eventually, remove it.
 
 ## Prerequisites
