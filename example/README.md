@@ -21,8 +21,11 @@ Build the JavaScript docker demo
 
 Run the docker demo with the required fields passed as environment variables
 ```
-docker run -it -e OP_CONNECT_TOKEN=<YOUR_CONNECT_TOKEN> -e OP_VAULT=<YOUR_VAULT_ID> /
-    -e OP_CONNECT_HOST=<YOUR_CONNECT_HOST> -e SECRET_STRING=<ANY_RANDOM_STRING> /
+docker run -it \
+    -e OP_CONNECT_TOKEN=<YOUR_CONNECT_TOKEN> \
+    -e OP_VAULT=<YOUR_VAULT_ID> \
+    -e OP_CONNECT_HOST=<YOUR_CONNECT_HOST> \ 
+    -e SECRET_STRING=<ANY_RANDOM_STRING> \
     js-connect-sdk-example
 ```
 
