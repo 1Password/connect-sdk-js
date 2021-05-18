@@ -1,18 +1,32 @@
-[//]: # "START/LATEST"
-
+[//]: # (START/LATEST)
 # Latest
 
 ## Features
+  * A user-friendly description of a new feature. {issue-number}
 
--   A user-friendly description of a new feature. {issue-number}
+## Fixes
+ * A user-friendly description of a fix. {issue-number}
+
+## Security
+ * A user-friendly description of a security fix. {issue-number}
+
+---
+
+[//]: # ("START/v1.0.1")
+
+# v1.0.1
+
+## Features
+
+-   Add support for items of type `API_CREDENTIAL`. (#20)
+-   Add a containerized example implementation. (#17)
 
 ## Fixes
 
--   Updated the README with instructions on how to install the package
-
-## Security
-
--   A user-friendly description of a security fix. {issue-number}
+-   Fix error when HTTP response object does not contain a `data` key. (#16)
+-   Updated the README with instructions on how to install the package. (#11)
+-   Unify the usage of "serverURL" and token options. (#13)
+-   Replace TSLint with ESLint plugin. (#18)
 
 ---
 
