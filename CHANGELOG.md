@@ -17,6 +17,8 @@
 # v1.0.1
 
 ## Features
+
+-   Add support for items of type `API_CREDENTIAL`. (#20)
 -   Add a containerized example implementation. (#17)
 
 ## Fixes
