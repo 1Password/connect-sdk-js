@@ -21,13 +21,12 @@ Build the JavaScript docker demo
 
 Run the docker demo with the required fields passed as environment variables
 ```
-docker run -it \
-    -e OP_CONNECT_TOKEN=<YOUR_CONNECT_TOKEN> \
-    -e OP_VAULT=<YOUR_VAULT_ID> \
-    -e OP_CONNECT_HOST=<YOUR_CONNECT_HOST> \ 
-    -e SECRET_STRING=<ANY_RANDOM_STRING> \
-    js-connect-sdk-example
-```
+docker run \
+--env OP_CONNECT_TOKEN=<YOUR_CONNECT_TOKEN> \
+--env OP_VAULT=<YOUR_VAULT_ID> \
+--env OP_CONNECT_HOST=<YOUR_CONNECT_HOST> \ 
+--env SECRET_STRING=<ANY_RANDOM_STRING> \
+-it js-connect-sdk-example
 
 If your connect instance is deployed locally, the `OP_CONNECT_HOST` environment variable should be set to `http://host.docker.internal:8080`.
 
