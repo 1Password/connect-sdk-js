@@ -1,6 +1,5 @@
 import { OnePasswordConnect, ItemBuilder } from "@1password/connect";
 import * as readline from "readline-sync"
-import steps from steps
 
 const steps = {
     "intro": "\nHello from 1Password! In order to demonstrate creating, editing, retrieving and, eventually, deleting an item, the following steps are taken: \n",
