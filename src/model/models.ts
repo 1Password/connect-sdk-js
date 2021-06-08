@@ -1,5 +1,3 @@
-import localVarRequest from 'request';
-
 export * from './errorResponse';
 export * from './fullItem';
 export * from './fullItemAllOf';
@@ -11,19 +9,6 @@ export * from './item';
 export * from './itemUrls';
 export * from './itemVault';
 export * from './vault';
-
-import * as fs from 'fs';
-
-export interface RequestDetailedFile {
-    value: Buffer;
-    options?: {
-        filename?: string;
-        contentType?: string;
-    }
-}
-
-export type RequestFile = string | Buffer | fs.ReadStream | RequestDetailedFile;
-
 
 import { ErrorResponse } from './errorResponse';
 import { FullItem } from './fullItem';
@@ -37,28 +22,27 @@ import { ItemUrls } from './itemUrls';
 import { ItemVault } from './itemVault';
 import { Vault } from './vault';
 
-/* tslint:disable:no-unused-variable */
 let primitives = [
-                    "string",
-                    "boolean",
-                    "double",
-                    "integer",
-                    "long",
-                    "float",
-                    "number",
-                    "any"
-                 ];
+    "string",
+    "boolean",
+    "double",
+    "integer",
+    "long",
+    "float",
+    "number",
+    "any"
+];
 
-let enumsMap: {[index: string]: any} = {
-        "FullItem.CategoryEnum": FullItem.CategoryEnum,
-        "FullItemAllOfFields.TypeEnum": FullItemAllOfFields.TypeEnum,
-        "FullItemAllOfFields.PurposeEnum": FullItemAllOfFields.PurposeEnum,
-        "GeneratorRecipe.CharacterSetsEnum": GeneratorRecipe.CharacterSetsEnum,
-        "Item.CategoryEnum": Item.CategoryEnum,
-        "Vault.TypeEnum": Vault.TypeEnum,
+let enumsMap: { [index: string]: any } = {
+    "FullItem.CategoryEnum": FullItem.CategoryEnum,
+    "FullItemAllOfFields.TypeEnum": FullItemAllOfFields.TypeEnum,
+    "FullItemAllOfFields.PurposeEnum": FullItemAllOfFields.PurposeEnum,
+    "GeneratorRecipe.CharacterSetsEnum": GeneratorRecipe.CharacterSetsEnum,
+    "Item.CategoryEnum": Item.CategoryEnum,
+    "Vault.TypeEnum": Vault.TypeEnum,
 }
 
-let typeMap: {[index: string]: any} = {
+let typeMap: { [index: string]: any } = {
     "ErrorResponse": ErrorResponse,
     "FullItem": FullItem,
     "FullItemAllOf": FullItemAllOf,
@@ -96,7 +80,7 @@ export class ObjectSerializer {
             } else {
                 if (data[discriminatorProperty]) {
                     var discriminatorType = data[discriminatorProperty];
-                    if(typeMap[discriminatorType]){
+                    if (typeMap[discriminatorType]) {
                         return discriminatorType; // use the type given in the discriminator
                     } else {
                         return expectedType; // discriminator did not map to a type
@@ -137,7 +121,7 @@ export class ObjectSerializer {
 
             // get the map for the correct type.
             let attributeTypes = typeMap[type].getAttributeTypeMap();
-            let instance: {[index: string]: any} = {};
+            let instance: { [index: string]: any } = {};
             for (let index in attributeTypes) {
                 let attributeType = attributeTypes[index];
                 instance[attributeType.baseName] = ObjectSerializer.serialize(data[attributeType.name], attributeType.type);
@@ -182,77 +166,3 @@ export class ObjectSerializer {
         }
     }
 }
-
-export interface Authentication {
-    /**
-    * Apply authentication settings to header and query params.
-    */
-    applyToRequest(requestOptions: localVarRequest.Options): Promise<void> | void;
-}
-
-export class HttpBasicAuth implements Authentication {
-    public username: string = '';
-    public password: string = '';
-
-    applyToRequest(requestOptions: localVarRequest.Options): void {
-        requestOptions.auth = {
-            username: this.username, password: this.password
-        }
-    }
-}
-
-export class HttpBearerAuth implements Authentication {
-    public accessToken: string | (() => string) = '';
-
-    applyToRequest(requestOptions: localVarRequest.Options): void {
-        if (requestOptions && requestOptions.headers) {
-            const accessToken = typeof this.accessToken === 'function'
-                            ? this.accessToken()
-                            : this.accessToken;
-            requestOptions.headers["Authorization"] = "Bearer " + accessToken;
-        }
-    }
-}
-
-export class ApiKeyAuth implements Authentication {
-    public apiKey: string = '';
-
-    constructor(private location: string, private paramName: string) {
-    }
-
-    applyToRequest(requestOptions: localVarRequest.Options): void {
-        if (this.location == "query") {
-            (<any>requestOptions.qs)[this.paramName] = this.apiKey;
-        } else if (this.location == "header" && requestOptions && requestOptions.headers) {
-            requestOptions.headers[this.paramName] = this.apiKey;
-        } else if (this.location == 'cookie' && requestOptions && requestOptions.headers) {
-            if (requestOptions.headers['Cookie']) {
-                requestOptions.headers['Cookie'] += '; ' + this.paramName + '=' + encodeURIComponent(this.apiKey);
-            }
-            else {
-                requestOptions.headers['Cookie'] = this.paramName + '=' + encodeURIComponent(this.apiKey);
-            }
-        }
-    }
-}
-
-export class OAuth implements Authentication {
-    public accessToken: string = '';
-
-    applyToRequest(requestOptions: localVarRequest.Options): void {
-        if (requestOptions && requestOptions.headers) {
-            requestOptions.headers["Authorization"] = "Bearer " + this.accessToken;
-        }
-    }
-}
-
-export class VoidAuth implements Authentication {
-    public username: string = '';
-    public password: string = '';
-
-    applyToRequest(_: localVarRequest.Options): void {
-        // Do nothing
-    }
-}
-
-export type Interceptor = (requestOptions: localVarRequest.Options) => (Promise<void> | void);

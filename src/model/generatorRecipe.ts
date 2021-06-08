@@ -10,8 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { RequestFile } from './models';
-
 /**
 * The recipe is used in conjunction with the \"generate\" property to set the character set used to generate a new secure value
 */
