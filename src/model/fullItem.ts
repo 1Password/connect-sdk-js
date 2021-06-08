@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { RequestFile } from './models';
 import { FullItemAllOf } from './fullItemAllOf';
 import { FullItemAllOfFields } from './fullItemAllOfFields';
 import { FullItemAllOfSections } from './fullItemAllOfSections';
