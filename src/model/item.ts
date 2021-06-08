@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { RequestFile } from './models';
 import { ItemUrls } from './itemUrls';
 import { ItemVault } from './itemVault';
 

@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { RequestFile } from './models';
 import { FullItemAllOfSection } from './fullItemAllOfSection';
 import { GeneratorRecipe } from './generatorRecipe';
 
