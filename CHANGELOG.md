@@ -12,6 +12,17 @@
 
 ---
 
+[//]: # (START/v1.0.2)
+# v1.0.2
+
+## Fixes
+* Remove unused code created by the openapi-generator-cli. {#25}
+
+## Security
+* Update dependencies to address Dependabot security alerts. {#24}
+
+---
+
 [//]: # ("START/v1.0.1")
 
 # v1.0.1
