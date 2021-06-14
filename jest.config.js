@@ -4,5 +4,6 @@ module.exports = {
   roots: ["./src/", "./__test__"],
   collectCoverage: true,
   collectCoverageFrom: ["src/**/*.{js,jsx,ts}"],
-  coverageDirectory: "./__test__/coverage"
+  coverageDirectory: "./__test__/coverage",
+  coverageReporters: ["json-summary"]
 };
