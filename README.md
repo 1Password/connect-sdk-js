@@ -1,6 +1,6 @@
 # 1Password Connect Node SDK
 
-[![Codecov Coverage](https://img.shields.io/codecov/c/github/1Password/connect-sdk-js/coverage-report.svg?style=flat-square)](https://codecov.io/gh/1Password/connect-sdk-js/)
+[![codecov](https://codecov.io/gh/1Password/connect-sdk-js/branch/main/graph/badge.svg?token=m0PJVEn5m4)](https://codecov.io/gh/1Password/connect-sdk-js)
 
 The 1Password Connect Node SDK provides your JavaScript & TypeScript applications access to the 1Password Connect API hosted on your infrastructure and leverage the power of [1Password Secrets Automation](https://1password.com/secrets)
 
