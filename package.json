@@ -12,7 +12,7 @@
         "prepublishOnly": "npm run test && npm run lint",
         "prepare": "npm run build",
         "test": "jest",
-        "test:coverage": "npx jest && codecov",
+        "test:coverage": "npx jest --ci --coverage",
         "build": "tsc",
         "lint": "eslint --ext .ts"
     },
