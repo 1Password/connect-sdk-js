@@ -1,0 +1,30 @@
+name: Code Coverage main
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    coverage:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Test with Node.js Latest LTS
+              uses: actions/setup-node@v1
+              with:
+                # Latest LTS version
+                node-version: '12.x'
+            - name: Cache NPM modules
+              uses: actions/cache@v2
+              with:
+                path: ~/.npm
+                key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                restore-keys: |
+                    ${{ runner.os }}-node-
+            - name: Run tests
+              run: npm install && npm run test:coverage
+            - name: Upload coverage to Codecov
+              uses: codecov/codecov-action@v1
+              with:
+                irectory: ./coverage/
