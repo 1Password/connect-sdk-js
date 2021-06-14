@@ -23,4 +23,26 @@ jobs:
                   ${{ runner.os }}-node-
             - run: npm install
             - run: npm run lint
-            - run: npm run test:coverage
+            - run: npm run test
+    addCoverage:
+        needs: lintAndTest
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Test with Node.js Latest LTS
+              uses: actions/setup-node@v1
+              with:
+                # Latest LTS version
+                node-version: '12.x'
+            - name: Cache NPM modules
+              uses: actions/cache@v2
+              with:
+                path: ~/.npm
+                key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                restore-keys: |
+                  ${{ runner.os }}-node-
+            - name: Create coverage reports
+              run: npm run make-badges
+            - uses: stefanzweifel/git-auto-commit-action@v4
+              with:
+                commit_message: Create coverage report

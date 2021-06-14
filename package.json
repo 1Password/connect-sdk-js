@@ -13,7 +13,7 @@
         "prepare": "npm run build",
         "test": "jest",
         "test:coverage": "npx jest --coverage --colors",
-        "make-badges": "istanbul-badges-readme --coverageDir='./__test__/coverage' --statementsLabel='Test Coverage'",
+        "make-badges": "npm test:coverage && istanbul-badges-readme --coverageDir='./__test__/coverage' --statementsLabel='Test Coverage'",
         "build": "tsc",
         "lint": "eslint --ext .ts"
     },
