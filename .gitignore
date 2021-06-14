@@ -5,3 +5,4 @@ typings/
 *.tsbuildinfo
 dist/
 .code
+/coverage

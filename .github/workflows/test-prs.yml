@@ -42,7 +42,4 @@ jobs:
                 restore-keys: |
                   ${{ runner.os }}-node-
             - name: Create coverage reports
-              run: npm install && npm run make-badges
-            - uses: stefanzweifel/git-auto-commit-action@v4
-              with:
-                commit_message: Create coverage report
+              run: npm install && npm run test:coverage
