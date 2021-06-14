@@ -1,6 +1,6 @@
 # 1Password Connect Node SDK
 
-![Test Coverage](https://img.shields.io/badge/statements-96.18%25-brightgreen.svg)
+![Statements](https://img.shields.io/badge/Test%20Coverage-96.18%25-brightgreen.svg)
 
 The 1Password Connect Node SDK provides your JavaScript & TypeScript applications access to the 1Password Connect API hosted on your infrastructure and leverage the power of [1Password Secrets Automation](https://1password.com/secrets)
 
