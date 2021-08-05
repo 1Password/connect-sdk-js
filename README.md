@@ -54,7 +54,7 @@ let vault = await op.getVault({vault_id});
 const myVaultId = {vault_uuid};
 
 // Create an Item
-const newItem = ItemBuilder()
+const newItem = new ItemBuilder()
 	.setVault(myVaultId)
     .setCategory("LOGIN")
 	.addField({
@@ -124,7 +124,7 @@ The 1Password Connect JS client uses the [`debug`](https://www.npmjs.com/package
 All log messages are defined under the `opconnect` namespace. To print log statements, include the `opconnect` namespace when defining the `DEBUG` environment variable:
 
 ```
-DEBUG=opconnect
+DEBUG=opconnect:*
 ```
 
 ## Development
