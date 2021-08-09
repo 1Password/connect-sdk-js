@@ -59,6 +59,10 @@ export class Items extends OPResource {
             : `v1/vaults/${vaultId}/items/`;
 
     public async create(vaultId: string, item: FullItem): Promise<FullItem> {
+        item.vault = Object.assign(item.vault || {}, {
+            id: vaultId
+        });
+        
         const { data } = await this.adapter.sendRequest(
             "post",
             this.basePath(vaultId),
