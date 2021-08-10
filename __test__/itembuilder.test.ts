@@ -22,6 +22,9 @@ describe("Test ItemBuilder", () => {
             .setCategory(CategoryEnum.Login)
             .build();
 
+        // Vault should not be defined
+        expect(newItem.vault).toBeUndefined();
+
         // Item ID is set by server when not defined locally
         expect(newItem.id).toBeUndefined();
 

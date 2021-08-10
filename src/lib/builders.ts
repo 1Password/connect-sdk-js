@@ -83,6 +83,18 @@ export class ItemBuilder {
     }
 
     /**
+     * @deprecated
+     * Sets the parent Vault ID for the Item being constructed.
+     *
+     * @param {string} vaultId
+     * @returns {ItemBuilder}
+     */
+     public setVault(vaultId: string): ItemBuilder {
+        this.item.vault = { id: vaultId } as ItemVault;
+        return this;
+    }
+
+    /**
      * Set Title for the item under construction
      *
      * @param {string} title
