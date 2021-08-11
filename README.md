@@ -66,7 +66,7 @@ const newItem = new ItemBuilder()
 	})
 	.build();
 
-const createdItem = await op.createItem(newItem);
+const createdItem = await op.createItem(myVaultId, newItem);
 
 // Get an Item
 const item = await op.getItem(myVaultId, {item_uuid});
