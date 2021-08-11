@@ -49,17 +49,6 @@ export class ItemBuilder {
      * Performs final assembly of the new Item.
      */
     public build(): FullItem {
-        if (!this.item.vault || !this.item.vault.id) {
-            // Always fall back to using environment variable when vault is undefined
-            if (!process.env.OP_VAULT) {
-                throw Error("Vault ID is required.");
-            }
-            debug("Using OP_VAULT env var for new Item.");
-            this.item.vault = Object.assign(this.item.vault || {}, {
-                id: process.env.OP_VAULT,
-            });
-        }
-
         if (!this.item.category) {
             throw Error("Item Category is required.");
         }
@@ -75,7 +64,6 @@ export class ItemBuilder {
         debug(
             "Successfully built Item (id: %s, vault: %s)",
             builtItem.id,
-            builtItem.vault.id,
         );
         this.reset();
         return builtItem;
@@ -95,12 +83,13 @@ export class ItemBuilder {
     }
 
     /**
+     * @deprecated
      * Sets the parent Vault ID for the Item being constructed.
      *
      * @param {string} vaultId
      * @returns {ItemBuilder}
      */
-    public setVault(vaultId: string): ItemBuilder {
+     public setVault(vaultId: string): ItemBuilder {
         this.item.vault = { id: vaultId } as ItemVault;
         return this;
     }
@@ -211,7 +200,7 @@ export class ItemBuilder {
         this.item.category = category as FullItem.CategoryEnum;
         return this;
     }
-
+    
     /**
      * Creates a new Item Section if it does not exist. Otherwise, return the previously-created
      * Item Section.

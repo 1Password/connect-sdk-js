@@ -81,7 +81,6 @@ describe("Test OnePasswordConnect CRUD", () => {
         );
 
         const item = new ItemBuilder()
-            .setVault(VAULTID)
             .setCategory(CategoryEnum.Login)
             .build();
 

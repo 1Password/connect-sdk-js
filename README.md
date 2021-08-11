@@ -21,12 +21,6 @@ yarn add @1password/connect
 
 ## Usage
 
-### Environment Variables
-
-| Variable   | Description                                                                                            |
-| :--------- | ------------------------------------------------------------------------------------------------------ |
-| `OP_VAULT` | `ItemBuilder` will default to this vault UUID if `.setVault()` is not called when defining a new Item. |
-
 #### Creating an API client
 
 ```typescript
@@ -57,7 +51,6 @@ const myVaultId = {vault_uuid};
 
 // Create an Item
 const newItem = new ItemBuilder()
-	.setVault(myVaultId)
     .setCategory("LOGIN")
 	.addField({
 		label: "Example",

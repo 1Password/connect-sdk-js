@@ -19,10 +19,11 @@ describe("Test ItemBuilder", () => {
 
     test("Create Item with minimum required fields", () => {
         const newItem = new ItemBuilder()
-            .setVault(VAULT_ID)
             .setCategory(CategoryEnum.Login)
             .build();
-        expect(newItem.vault).toEqual({id: VAULT_ID});
+
+        // Vault should not be defined
+        expect(newItem.vault).toBeUndefined();
 
         // Item ID is set by server when not defined locally
         expect(newItem.id).toBeUndefined();
@@ -35,13 +36,11 @@ describe("Test ItemBuilder", () => {
         const builder = new ItemBuilder();
 
         const firstItem = builder
-            .setVault(VAULT_ID)
             .setCategory(CategoryEnum.Custom)
             .setTitle("first")
             .build();
 
         const secondItem = builder
-            .setVault("abc123")
             .setCategory(CategoryEnum.Custom)
             .setTitle("second")
             .addTag("second")
@@ -53,7 +52,6 @@ describe("Test ItemBuilder", () => {
 
     test("multiple url.primary assignments", () => {
         const newItem = new ItemBuilder()
-            .setVault(VAULT_ID)
             .setCategory(CategoryEnum.Login)
             .addUrl({href: "1password.com", primary: true})
             .addUrl({href: "agilebits.com", primary: true})
@@ -82,7 +80,6 @@ describe("Test ItemBuilder", () => {
 
         // Never called => undefined
         const itemNotFavorite = new ItemBuilder()
-            .setVault(VAULT_ID)
             .setCategory(CategoryEnum.Custom)
             .build();
 
@@ -90,7 +87,6 @@ describe("Test ItemBuilder", () => {
 
         // Toggle favorite => True
         const item = new ItemBuilder()
-            .setVault(VAULT_ID)
             .setCategory(CategoryEnum.Custom)
             .toggleFavorite()
             .build();
@@ -98,7 +94,6 @@ describe("Test ItemBuilder", () => {
 
         // User called toggleFavorite twice, expect "True" to be toggled back to "False"
         const itemFavoriteCalledTwice = new ItemBuilder()
-            .setVault(VAULT_ID)
             .setCategory(CategoryEnum.Custom)
             .toggleFavorite()
             .toggleFavorite()
@@ -109,8 +104,7 @@ describe("Test ItemBuilder", () => {
 
     test("set item category", () => {
 
-        const builder = new ItemBuilder()
-            .setVault(VAULT_ID);
+        const builder = new ItemBuilder();
 
         // Invalid category -> ERROR
         expect(() => {
@@ -127,7 +121,6 @@ describe("Test ItemBuilder", () => {
 
         // Case in-sensitive section names
         const itemOneSection = new ItemBuilder()
-            .setVault(VAULT_ID)
             .setCategory(CategoryEnum.Login)
             .addSection("Section 1")
             .addSection("section 1")
@@ -137,7 +130,6 @@ describe("Test ItemBuilder", () => {
         expect(itemOneSection.sections[0].label).toEqual("Section 1");
 
         const itemUtf8Sections = new ItemBuilder()
-            .setVault(VAULT_ID)
             .setCategory(CategoryEnum.Login)
             .addSection("🔐 Secure!")
             .addSection("🔐 Secure")
@@ -148,7 +140,6 @@ describe("Test ItemBuilder", () => {
         expect(itemUtf8Sections.sections[0].label).toEqual("🔐 Secure!");
 
         const itemMultipleSections = new ItemBuilder()
-            .setVault(VAULT_ID)
             .setCategory(CategoryEnum.Login)
             .addSection("It's a secret!")
             .addSection("Geheimnis")
@@ -164,8 +155,7 @@ describe("Test ItemBuilder", () => {
         const caseInsensitiveTags = ["myTag", "mytag", "MYTAG"];
 
         const itemWithTagsBuilder = new ItemBuilder()
-            .setCategory(CategoryEnum.Login)
-            .setVault(VAULT_ID);
+            .setCategory(CategoryEnum.Login);
 
         caseInsensitiveTags.forEach((tag) => {
             itemWithTagsBuilder.addTag(tag);
@@ -180,7 +170,6 @@ describe("Test ItemBuilder", () => {
     test("adding fields: defaults", () => {
         const item = new ItemBuilder()
             .setCategory(CategoryEnum.Login)
-            .setVault(VAULT_ID)
             .addField({value: "MySecret"})
             .build();
 
@@ -199,8 +188,7 @@ describe("Test ItemBuilder", () => {
         const fieldSectionName = "Test Section";
 
         const item = new ItemBuilder()
-            .setCategory(CategoryEnum.Login)
-            .setVault(VAULT_ID)
+            .setCategory(CategoryEnum.Login) 
             .addField({value: "MySecret", sectionName: fieldSectionName})
             .build();
 
@@ -221,7 +209,6 @@ describe("Test ItemBuilder", () => {
 
         const item = new ItemBuilder()
             .setCategory(CategoryEnum.Login)
-            .setVault(VAULT_ID)
             .addSection(fieldSectionName)
             .addField({value: "MySecret", sectionName: fieldSectionName})
             .build();
@@ -240,7 +227,6 @@ describe("Test ItemBuilder", () => {
     test("adding fields: generate value with invalid recipe", () => {
 
         const builder = new ItemBuilder()
-            .setVault(VAULT_ID)
             .setCategory(CategoryEnum.Login);
 
         // If `generate = false` then recipe evaluation is skipped
@@ -261,8 +247,7 @@ describe("Test ItemBuilder", () => {
 
         // When `generate` = true, expect recipe validation
         const builderWithRecipeValidation = new ItemBuilder()
-            .setCategory(CategoryEnum.Login)
-            .setVault(VAULT_ID);
+            .setCategory(CategoryEnum.Login);
 
         expect(() => {
             builderWithRecipeValidation.addField( {
@@ -276,8 +261,7 @@ describe("Test ItemBuilder", () => {
 
     test("adding fields: generate = true, recipe is valid", () => {
         const builder = new ItemBuilder()
-            .setCategory(CategoryEnum.Login)
-            .setVault(VAULT_ID);
+            .setCategory(CategoryEnum.Login);
 
         expect(() => {
             builder.addField( {
@@ -309,22 +293,8 @@ describe("Use ENV Vars as default values", () => {
         process.env = ENV_BACKUP;
     });
 
-    test("Error thrown when no OP_VAULT and vault.id is undefined", () => {
-       const builder = new ItemBuilder().setCategory(CategoryEnum.Login);
-       expect(() => {builder.build(); }).toThrowError();
-    });
-
     test("Error thrown when Item Category undefined", () => {
-       const builder = new ItemBuilder().setVault("EXAMPLE");
+       const builder = new ItemBuilder();
        expect(() => {builder.build(); }).toThrowError();
-    });
-
-    test("process.env.OP_VAULT used when VaultID not set", () => {
-        process.env.OP_VAULT = "771c124d-edce-4bd7-a831-421d0c1f25c6";
-
-        const item = new ItemBuilder().setCategory(CategoryEnum.Login).build();
-
-        expect(item.vault).toBeDefined();
-        expect(item.vault.id).toEqual(process.env.OP_VAULT);
     });
 });
