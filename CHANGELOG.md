@@ -12,6 +12,22 @@
 
 ---
 
+[//]: # (START/v1.0.3)
+# v1.0.3
+
+## Features
+* Add test coverage report using Codecov {#27}
+* Remove `setVault` from ItemBuilder {#31}
+
+## Fixes
+* Fix ItemBuilder example and logging section in README {#28}
+* Fix create item example in README {#30}
+
+## Security
+* Update axios to v0.21.3. {#33}
+
+---
+
 [//]: # (START/v1.0.2)
 # v1.0.2
 
