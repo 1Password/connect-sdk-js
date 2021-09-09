@@ -24,7 +24,7 @@
 * Fix create item example in README {#30}
 
 ## Security
-* Update axios to v0.21.3. {#33}
+* Update axios to v0.21.3 {#33}
 
 ---
 
