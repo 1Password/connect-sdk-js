@@ -25,6 +25,7 @@
 
 ## Security
 * Update axios to v0.21.3 {#33}
+* Update tmpl to v1.0.5
 
 ---
 
