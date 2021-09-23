@@ -9,12 +9,12 @@ describe("Test ItemBuilder", () => {
     // @ts-expect-error
     const invalidRecipe = {
         length: 6,
-        characterSets: new Set(["adfioadhfg"]),
+        characterSets: new Array("adfioadhfg"),
     } as GeneratorRecipe;
 
     const validRecipe = {
         length: 6,
-        characterSets: new Set([GeneratorRecipe.CharacterSetsEnum.Digits]),
+        characterSets: new Array(GeneratorRecipe.CharacterSetsEnum.Digits),
     } as GeneratorRecipe;
 
     test("Create Item with minimum required fields", () => {
