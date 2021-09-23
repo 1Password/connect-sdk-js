@@ -236,14 +236,14 @@ export class ItemBuilder {
  * @returns {boolean}
  */
 const validRecipe = (recipe: GeneratorRecipe): boolean => {
-    if (!recipe.characterSets || !recipe.characterSets.size) return true;
+    if (!recipe.characterSets || !recipe.characterSets.length) return true;
 
     const allowedCharactersSets = Object.values(
         GeneratorRecipe.CharacterSetsEnum,
     );
 
     // User provided more character sets than are defined
-    if (recipe.characterSets.size > allowedCharactersSets.length) return false;
+    if (recipe.characterSets.length > allowedCharactersSets.length) return false;
 
     for (const cs of recipe.characterSets) {
         if (allowedCharactersSets.indexOf(cs) === -1) {
