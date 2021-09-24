@@ -236,6 +236,7 @@ export class ItemBuilder {
  * @returns {boolean}
  */
 const validRecipe = (recipe: GeneratorRecipe): boolean => {
+    recipe.characterSets = [...new Set(recipe.characterSets)];
     if (!recipe.characterSets || !recipe.characterSets.length) return true;
 
     const allowedCharactersSets = Object.values(
