@@ -130,7 +130,10 @@ export class ItemBuilder {
             label: opts.label,
             value: opts.value,
             generate: opts.generate || false,
-            recipe: opts.generate ? opts.recipe : undefined,
+            recipe: opts.generate ? {
+                length: opts.recipe.length,
+                characterSets: [...new Set(opts.recipe.characterSets)]
+            } as GeneratorRecipe : undefined,
         };
 
         if (opts.sectionName) {
@@ -236,7 +239,6 @@ export class ItemBuilder {
  * @returns {boolean}
  */
 const validRecipe = (recipe: GeneratorRecipe): boolean => {
-    recipe.characterSets = [...new Set(recipe.characterSets)];
     if (!recipe.characterSets || !recipe.characterSets.length) return true;
 
     const allowedCharactersSets = Object.values(
