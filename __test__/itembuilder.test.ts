@@ -4,8 +4,6 @@ import CategoryEnum = FullItem.CategoryEnum;
 
 describe("Test ItemBuilder", () => {
 
-    const VAULT_ID = "4igktuuidfgm4vkqgvryopsm";
-
     // @ts-expect-error
     const invalidRecipe = {
         length: 6,
@@ -188,7 +186,7 @@ describe("Test ItemBuilder", () => {
         const fieldSectionName = "Test Section";
 
         const item = new ItemBuilder()
-            .setCategory(CategoryEnum.Login) 
+            .setCategory(CategoryEnum.Login)
             .addField({value: "MySecret", sectionName: fieldSectionName})
             .build();
 
@@ -277,9 +275,30 @@ describe("Test ItemBuilder", () => {
         const [field] = item.fields;
         expect(field.generate).toEqual(true);
         expect(field.recipe.characterSets).toEqual(validRecipe.characterSets);
-
     });
 
+    test("adding fields: generate = true, characterSets are deduplicated", () => {
+        const builder = new ItemBuilder()
+            .setCategory(CategoryEnum.Login)
+            .addField({
+                value: "MySecret",
+                generate: true,
+                recipe: {
+                    characterSets: [
+                        GeneratorRecipe.CharacterSetsEnum.Digits,
+                        GeneratorRecipe.CharacterSetsEnum.Digits,
+                    ],
+                } as GeneratorRecipe,
+            });
+
+        const item = builder.build();
+
+        const [field] = item.fields;
+        expect(field.generate).toEqual(true);
+        expect(field.recipe.characterSets).toStrictEqual([
+            GeneratorRecipe.CharacterSetsEnum.Digits,
+        ]);
+    });
 });
 
 describe("Use ENV Vars as default values", () => {
