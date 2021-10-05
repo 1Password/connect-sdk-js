@@ -52,12 +52,12 @@ const myVaultId = {vault_uuid};
 // Create an Item
 const newItem = new ItemBuilder()
     .setCategory("LOGIN")
-	.addField({
-		label: "Example",
-		value: "MySecret",
-		sectionName: "Demo Section",
-	})
-	.build();
+    .addField({
+        label: "Example",
+        value: "MySecret",
+        sectionName: "Demo Section",
+    })
+    .build();
 
 const createdItem = await op.createItem(myVaultId, newItem);
 
