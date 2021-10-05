@@ -18,7 +18,7 @@ export class GeneratorRecipe {
     * Length of the generated value
     */
     'length'?: number;
-    'characterSets'?: Set<GeneratorRecipe.CharacterSetsEnum>;
+    'characterSets'?: Array<GeneratorRecipe.CharacterSetsEnum>;
 
     static discriminator: string | undefined = undefined;
 
@@ -31,7 +31,7 @@ export class GeneratorRecipe {
         {
             "name": "characterSets",
             "baseName": "characterSets",
-            "type": "Set<GeneratorRecipe.CharacterSetsEnum>"
+            "type": "Array<GeneratorRecipe.CharacterSetsEnum>"
         }    ];
 
     static getAttributeTypeMap() {
