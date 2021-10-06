@@ -16,7 +16,7 @@
 # v1.0.4
 
 ## Fixes
- * Make the `characterSets` of the recipe serializable. {#37}
+ * Make the `characterSets` of the recipe serializable {#37}
 
 ---
 
