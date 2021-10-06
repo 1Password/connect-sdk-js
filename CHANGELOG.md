@@ -12,6 +12,14 @@
 
 ---
 
+[//]: # (START/v1.0.4)
+# v1.0.4
+
+## Fixes
+ * Make the `characterSets` of the recipe serializable. {#37}
+
+---
+
 [//]: # (START/v1.0.3)
 # v1.0.3
 
