@@ -19,6 +19,7 @@ export class GeneratorRecipe {
     */
     'length'?: number;
     'characterSets'?: Array<GeneratorRecipe.CharacterSetsEnum>;
+    'excludeCharacters'?: string;
 
     static discriminator: string | undefined = undefined;
 
@@ -32,7 +33,13 @@ export class GeneratorRecipe {
             "name": "characterSets",
             "baseName": "characterSets",
             "type": "Array<GeneratorRecipe.CharacterSetsEnum>"
-        }    ];
+        },
+        {
+            "name": "excludeCharacters",
+            "baseName": "excludeCharacters",
+            "type": "string"
+        }
+    ];
 
     static getAttributeTypeMap() {
         return GeneratorRecipe.attributeTypeMap;

@@ -124,27 +124,25 @@ export class ItemBuilder {
      * @returns {ItemBuilder}
      */
     public addField(opts: ItemFieldOptions = {}): ItemBuilder {
+
+        if (opts.generate && !validRecipe(opts.recipe)) {
+            throw TypeError(
+                `Field '${opts.label}' contains an invalid Recipe.`,
+            );
+        }
+
         const field: FullItemAllOfFields = {
             type: opts.type || FullItemAllOfFields.TypeEnum.String,
             purpose: opts.purpose || FullItemAllOfFields.PurposeEnum.Empty,
             label: opts.label,
             value: opts.value,
             generate: opts.generate || false,
-            recipe: opts.generate ? {
-                length: opts.recipe.length,
-                characterSets: [...new Set(opts.recipe.characterSets)]
-            } as GeneratorRecipe : undefined,
+            recipe: opts.generate && opts.recipe ? generatorRecipeFromConfig(opts.recipe): undefined
         };
 
         if (opts.sectionName) {
             const { id: sectionId } = this.getOrCreateSection(opts.sectionName);
             field.section = { id: sectionId };
-        }
-
-        if (opts.generate && !validRecipe(opts.recipe)) {
-            throw TypeError(
-                `Field '${opts.label}' contains an invalid Recipe.`,
-            );
         }
 
         this.item.fields.push(field);
@@ -203,7 +201,7 @@ export class ItemBuilder {
         this.item.category = category as FullItem.CategoryEnum;
         return this;
     }
-    
+
     /**
      * Creates a new Item Section if it does not exist. Otherwise, return the previously-created
      * Item Section.
@@ -229,6 +227,26 @@ export class ItemBuilder {
         };
         this.sections.set(normalizedName, section);
         return section;
+    }
+}
+
+/**
+ * Creates a well-formed GeneratorRecipe from the provided options.
+ * Namely, it removes duplicate values from the character set definitions.
+ * @param {Partial<GeneratorRecipe>} opts
+ * @return {GeneratorRecipe}
+ */
+const generatorRecipeFromConfig = (opts: Partial<GeneratorRecipe>): GeneratorRecipe => {
+
+    // excluded character setting cannot contain duplicate entries
+    const excludeCharacters = [...new Set(opts.excludeCharacters)].reduce(
+        (acc, curr) => acc + curr, ""
+    )
+
+    return {
+        ...opts,
+        characterSets: [...new Set(opts.characterSets)],
+        excludeCharacters
     }
 }
 
