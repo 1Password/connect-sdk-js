@@ -5,7 +5,7 @@
   * A user-friendly description of a new feature. {issue-number}
 
 ## Fixes
- * A user-friendly description of a fix. {issue-number}
+ * The field `TypeEnum.Totp` now points to the correct value.  {#40}
 
 ## Security
  * A user-friendly description of a security fix. {issue-number}

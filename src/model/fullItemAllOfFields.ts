@@ -93,7 +93,9 @@ export namespace FullItemAllOfFields {
         Email = <any> 'EMAIL',
         Concealed = <any> 'CONCEALED',
         Url = <any> 'URL',
-        Totp = <any> 'TOTP',
+        /** @deprecated use {@link TypeEnum.Otp} instead. */
+        Totp = <any> 'OTP',
+        Otp = <any> 'OTP',
         Date = <any> 'DATE',
         MonthYear = <any> 'MONTH_YEAR',
         Menu = <any> 'MENU'
