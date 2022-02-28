@@ -5,10 +5,18 @@
   * A user-friendly description of a new feature. {issue-number}
 
 ## Fixes
- * The field `TypeEnum.Totp` now points to the correct value.  {#40}
+ * A user-friendly description of a fix. {issue-number}
 
 ## Security
  * A user-friendly description of a security fix. {issue-number}
+
+---
+
+[//]: # (START/v1.0.5)
+# v1.0.5
+
+## Security
+ * Updated some dependencies of this SDK that have open security advisories. Issues found in those dependencies do not directly impact this SDK.
 
 ---
 
