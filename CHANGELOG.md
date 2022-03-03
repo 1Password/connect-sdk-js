@@ -15,6 +15,9 @@
 [//]: # (START/v1.0.5)
 # v1.0.5
 
+## Fixes
+ * The field `TypeEnum.Totp` now points to the correct value. {#40}
+
 ## Security
  * Updated some dependencies of this SDK that have open security advisories. Issues found in those dependencies do not directly impact this SDK.
 
