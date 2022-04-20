@@ -215,7 +215,7 @@ export class ItemBuilder {
      * @return {FullItemAllOfSections}
      */
     private getOrCreateSection(sectionName: string): FullItemAllOfSections {
-        const normalizedName = slugify(sectionName, { lower: true, locale: 'utf-8', trim: true });
+        const normalizedName = slugify(sectionName, { lower: true, remove: /[*+~.()'"!:@]/g});
 
         if (this.sections.has(normalizedName)) {
             return this.sections.get(normalizedName);

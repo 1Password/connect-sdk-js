@@ -133,7 +133,6 @@ describe("Test ItemBuilder", () => {
             .addSection("🔐 Secure")
             .build();
 
-        console.log(itemUtf8Sections.sections)
         expect(itemUtf8Sections.sections.length).toEqual(1);
         // sections are collapsed into one if normalized names are equal
         expect(itemUtf8Sections.sections[0].label).toEqual("🔐 Secure!");
