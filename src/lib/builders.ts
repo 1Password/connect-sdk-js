@@ -2,7 +2,7 @@ import * as crypto from "crypto";
 
 import Debug from "debug";
 import cloneDeep from "lodash.clonedeep";
-import slug from "slug";
+import slugify from "slugify";
 
 import {
     FullItem,
@@ -203,7 +203,7 @@ export class ItemBuilder {
         this.item.category = category as FullItem.CategoryEnum;
         return this;
     }
-    
+
     /**
      * Creates a new Item Section if it does not exist. Otherwise, return the previously-created
      * Item Section.
@@ -215,7 +215,7 @@ export class ItemBuilder {
      * @return {FullItemAllOfSections}
      */
     private getOrCreateSection(sectionName: string): FullItemAllOfSections {
-        const normalizedName = slug(sectionName, { lower: true });
+        const normalizedName = slugify("sectionName", { lower: true });
 
         if (this.sections.has(normalizedName)) {
             return this.sections.get(normalizedName);
