@@ -12,6 +12,21 @@
 
 ---
 
+[//]: # (START/v1.1.0)
+# v1.1.0
+
+## Features
+ * Field recipe now supports a set of characters that should be excluded when generating a password. This is achieved with the `excludeCharacters` property. {#43}
+
+## Fixes
+ * The SDK now works properly when used with [ncc](https://github.com/vercel/ncc)(#52)
+
+## Security
+ * Add shell escaping to GH Action to avoid command injection. (#51)
+ * Updated some dependencies of this SDK that have open security advisories. Issues found in those dependencies do not directly impact this SDK.
+
+---
+
 [//]: # (START/v1.0.5)
 # v1.0.5
 
