@@ -16,7 +16,7 @@
 # v1.1.0
 
 ## Features
- * Field recipe now supports a set of characters that should be excluded when generating a password. This is achieved with the `excludeCharacters` property. {#43}
+ * Field recipe now supports a set of characters that should be excluded when generating a password. This is achieved with the `excludeCharacters` property (requires Connect `v1.4.0` or later). {#43}
 
 ## Fixes
  * The SDK now works properly when used with [ncc](https://github.com/vercel/ncc)(#52)
