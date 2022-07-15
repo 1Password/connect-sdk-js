@@ -7,10 +7,12 @@
   "category": "LOGIN",
   "urls": [
     {
+      "label": "website-1",
       "primary": true,
       "url": "https://agilebits.com"
     },
     {
+      "label": "website-2",
       "url": "https://1password.ca"
     }
   ],
