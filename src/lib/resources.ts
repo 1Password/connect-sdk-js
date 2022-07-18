@@ -2,6 +2,7 @@ import { FullItem } from "../model/fullItem";
 import { Item as SimpleItem, ObjectSerializer } from "../model/models";
 import { Vault } from "../model/vault";
 import { RequestAdapter, Response } from "./requests";
+import * as QueryBuilder from "./utils";
 
 class OPResource {
     protected adapter: RequestAdapter;
@@ -33,10 +34,9 @@ export class Vaults extends OPResource {
      * @private
      */
      public async getVaultsByTitle(title: string): Promise<Vault[]> {
-        const filterValue = `title eq "${title}"`;
         const { data } = await this.adapter.sendRequest(
             "get",
-            `${this.basePath}?filter=${filterValue}`,
+            `${this.basePath}?${QueryBuilder.filterByTitle(title)}`,
         );
 
         return ObjectSerializer.deserialize(data, "Array<Vault>");
