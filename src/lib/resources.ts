@@ -141,7 +141,7 @@ export class Items extends OPResource {
     ): Promise<Response> {
         const queryPath = `${this.basePath(
             vaultId,
-        )}?filter=title eq "${title}"`;
+        )}?${QueryBuilder.filterByTitle(title)}`;
 
         const { data } = await this.adapter.sendRequest("get", queryPath);
 
