@@ -6,3 +6,4 @@ typings/
 dist/
 .code
 coverage/
+.vscode/
