@@ -60,6 +60,18 @@ class OPConnect {
     }
 
     /**
+     * Get a list of Vaults with a matching Title value.
+     *
+     * The Vault Title must be an exact-match.
+     *
+     * @param {string} vaultTitle
+     * @returns {Promise<Vault[]>}
+     */
+     public async getVaultsByTitle(vaultTitle: string): Promise<Vault[]> {
+        return this.vaults.getVaultsByTitle(vaultTitle);
+    }
+
+    /**
      * Get details about a specific vault.
      *
      * If the Service Account does not have permission to view the vault, an

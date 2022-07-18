@@ -26,6 +26,23 @@ export class Vaults extends OPResource {
     }
 
     /**
+     * Searches for all Vaults with exact match on title.
+     *
+     * @param {string} title
+     * @returns {Promise<Vault[]>}
+     * @private
+     */
+     public async getVaultsByTitle(title: string): Promise<Vault[]> {
+        const filterValue = `title eq "${title}"`;
+        const { data } = await this.adapter.sendRequest(
+            "get",
+            `${this.basePath}?filter=${filterValue}`,
+        );
+
+        return ObjectSerializer.deserialize(data, "Array<Vault>");
+    }
+
+    /**
      * Fetch basic information about all items in specified Vault
      *
      * @param vaultId
@@ -62,7 +79,7 @@ export class Items extends OPResource {
         item.vault = Object.assign(item.vault || {}, {
             id: vaultId
         });
-        
+
         const { data } = await this.adapter.sendRequest(
             "post",
             this.basePath(vaultId),
