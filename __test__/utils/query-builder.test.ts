@@ -19,7 +19,7 @@ describe("QueryBuilder", () => {
                 expect(value.includes("eq")).toBeTruthy();
             });
 
-            test("should contains provided title", () => {
+            test("should contain provided title", () => {
                 expect(value.includes(title)).toBeTruthy();
             });
         });
