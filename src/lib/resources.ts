@@ -2,7 +2,7 @@ import { FullItem } from "../model/fullItem";
 import { Item as SimpleItem, ObjectSerializer } from "../model/models";
 import { Vault } from "../model/vault";
 import { RequestAdapter, Response } from "./requests";
-import * as QueryBuilder from "./utils";
+import { QueryBuilder } from "./utils";
 
 class OPResource {
     protected adapter: RequestAdapter;
