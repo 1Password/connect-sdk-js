@@ -67,8 +67,8 @@ class OPConnect {
      * @param {string} vaultTitle
      * @returns {Promise<Vault[]>}
      */
-     public async getVaultsByTitle(vaultTitle: string): Promise<Vault[]> {
-        return this.vaults.getVaultsByTitle(vaultTitle);
+     public async listVaultsByTitle(vaultTitle: string): Promise<Vault[]> {
+        return this.vaults.listVaultsByTitle(vaultTitle);
     }
 
     /**

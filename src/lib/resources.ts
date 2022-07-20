@@ -33,7 +33,7 @@ export class Vaults extends OPResource {
      * @returns {Promise<Vault[]>}
      * @private
      */
-     public async getVaultsByTitle(title: string): Promise<Vault[]> {
+     public async listVaultsByTitle(title: string): Promise<Vault[]> {
         const { data } = await this.adapter.sendRequest(
             "get",
             `${this.basePath}?${QueryBuilder.filterByTitle(title)}`,

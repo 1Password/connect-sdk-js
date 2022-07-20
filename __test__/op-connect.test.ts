@@ -163,7 +163,7 @@ describe("Test OnePasswordConnect CRUD", () => {
             .reply(200, vaultsResponse)
 
         const op = OnePasswordConnect(testOpts);
-        const vaults: Vault[] = await op.getVaultsByTitle(title);
+        const vaults: Vault[] = await op.listVaultsByTitle(title);
 
         expect(vaults).toHaveLength(2);
         expect(vaults[0].name).toEqual(title);
