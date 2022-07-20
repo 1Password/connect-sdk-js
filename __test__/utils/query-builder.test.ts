@@ -1,4 +1,4 @@
-import * as QueryBuilder from "../../src/lib/utils";
+import { QueryBuilder } from "../../src/lib/utils";
 
 describe("QueryBuilder", () => {
     describe("filterByTitle", () => {
