@@ -169,6 +169,60 @@ describe("Test OnePasswordConnect CRUD", () => {
         expect(vaults[0].name).toEqual(title);
         expect(vaults[1].name).toEqual(title);
     });
+
+    describe("getVaultByTitle", () => {
+
+        test("should throw an error if no vaults found", async () => {
+            const op = OnePasswordConnect(testOpts);
+            const title = "awsome_title";
+
+            nock(mockServerUrl)
+                .get("/v1/vaults")
+                .query({
+                    filter: `title eq "${title}"`,
+                })
+                .reply(200, []);
+
+            await expect(() => op.getVaultByTitle(title)).rejects.toEqual({
+                status: 404,
+                message: "No Vaults found with title",
+            });
+        });
+
+        test("should throw an error if more than 1 vault found", async () => {
+            const op = OnePasswordConnect(testOpts);
+            const title = "awsome_title";
+
+            nock(mockServerUrl)
+                .get("/v1/vaults")
+                .query({
+                    filter: `title eq "${title}"`,
+                })
+                .reply(200, [{}, {}]);
+
+            await expect(() => op.getVaultByTitle(title)).rejects.toEqual({
+                status: 400,
+                message: "Found multiple Vaults with given title. Provide a more specific Item title",
+            });
+        });
+
+        test("should return vault", async () => {
+            const op = OnePasswordConnect(testOpts);
+            const title = "awsome_title";
+
+            nock(mockServerUrl)
+                .get("/v1/vaults")
+                .query({
+                    filter: `title eq "${title}"`,
+                })
+                .reply(200, [{ name: title } as Vault]);
+
+            const vault: Vault = await op.getVaultByTitle(title);
+
+            expect(vault.name).toEqual(title);
+        });
+
+    });
 });
 
 describe("Connector HTTP errors", () => {
