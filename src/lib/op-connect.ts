@@ -87,7 +87,7 @@ class OPConnect {
     /**
      * Get details about a specific vault with a matching Title value.
      *
-     * The Vault Title is case-sensitive and must be an exact-match.
+     * The Vault Title must be an exact-match.
      *
      * @param {string} vaultTitle
      * @returns {Promise<Vault>}

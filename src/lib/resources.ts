@@ -31,7 +31,6 @@ export class Vaults extends OPResource {
      *
      * @param {string} title
      * @returns {Promise<Vault[]>}
-     * @private
      */
      public async listVaultsByTitle(title: string): Promise<Vault[]> {
         const { data } = await this.adapter.sendRequest(
@@ -69,12 +68,11 @@ export class Vaults extends OPResource {
     }
 
     /**
-     * Searches for a Vault with a case-sensitive, exact match on title.
-     * If multiple Vaults with the same title are found, it returns an error.
+     * Searches for a Vault with exact match on title.
+     * If no Vaults or multiple Vaults with the same title are found, it returns an error.
      *
      * @param {string} title
      * @returns {Promise<Vault>}
-     * @private
      */
     public async getVaultByTitle(title: string): Promise<Vault> {
          const vaults: Vault[] = await this.listVaultsByTitle(title);
