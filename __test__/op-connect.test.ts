@@ -4,7 +4,7 @@ import {OPConfig} from "../src/lib/op-connect";
 import {ErrorResponse} from "../src/model/errorResponse";
 import {Item} from "../src/model/item";
 import CategoryEnum = Item.CategoryEnum;
-import { HttpErrorFactory } from "../dist/lib/utils";
+import { HttpErrorFactory } from "../src/lib/utils";
 
 // eslint-disable-next-line @typescript-eslint/tslint/config
 const mockServerUrl = "http://localhost:8000";
