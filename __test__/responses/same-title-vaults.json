@@ -1,0 +1,24 @@
+[
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "name": "Same title",
+      "description": "the same title example",
+      "attributeVersion": 1,
+      "contentVersion": 1,
+      "items": 0,
+      "type": "USER_CREATED",
+      "createdAt": "2020-09-25T17:17:04.365Z",
+      "updatedAt": "2020-09-25T17:17:04.365Z"
+    },
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "name": "Same title",
+      "description": "the same title example",
+      "attributeVersion": 1,
+      "contentVersion": 1,
+      "items": 0,
+      "type": "USER_CREATED",
+      "createdAt": "2020-09-25T17:17:04.365Z",
+      "updatedAt": "2020-09-25T17:17:04.365Z"
+    }
+  ]

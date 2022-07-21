@@ -2,6 +2,7 @@ import { FullItem } from "../model/fullItem";
 import { Item as SimpleItem, ObjectSerializer } from "../model/models";
 import { Vault } from "../model/vault";
 import { RequestAdapter, Response } from "./requests";
+import { QueryBuilder } from "./utils";
 
 class OPResource {
     protected adapter: RequestAdapter;
@@ -22,6 +23,22 @@ export class Vaults extends OPResource {
             "get",
             `${this.basePath}/`,
         );
+        return ObjectSerializer.deserialize(data, "Array<Vault>");
+    }
+
+    /**
+     * Search for all Vaults with exact match on title.
+     *
+     * @param {string} title
+     * @returns {Promise<Vault[]>}
+     * @private
+     */
+     public async listVaultsByTitle(title: string): Promise<Vault[]> {
+        const { data } = await this.adapter.sendRequest(
+            "get",
+            `${this.basePath}?${QueryBuilder.filterByTitle(title)}`,
+        );
+
         return ObjectSerializer.deserialize(data, "Array<Vault>");
     }
 
@@ -62,7 +79,7 @@ export class Items extends OPResource {
         item.vault = Object.assign(item.vault || {}, {
             id: vaultId
         });
-        
+
         const { data } = await this.adapter.sendRequest(
             "post",
             this.basePath(vaultId),
@@ -124,7 +141,7 @@ export class Items extends OPResource {
     ): Promise<Response> {
         const queryPath = `${this.basePath(
             vaultId,
-        )}?filter=title eq "${title}"`;
+        )}?${QueryBuilder.filterByTitle(title)}`;
 
         const { data } = await this.adapter.sendRequest("get", queryPath);
 
