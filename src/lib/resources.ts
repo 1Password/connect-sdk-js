@@ -81,7 +81,7 @@ export class Vaults extends OPResource {
 
          if (!vaults?.length) {
             return Promise.reject(HttpErrorFactory.noVaultsFoundByTitle());
-        }
+         }
 
         if (vaults.length > 1) {
             return Promise.reject(HttpErrorFactory.multipleVaultsFoundByTitle());
