@@ -85,6 +85,18 @@ class OPConnect {
     }
 
     /**
+     * Get details about a specific vault with a matching Title value.
+     *
+     * The Vault Title is case-sensitive and must be an exact-match.
+     *
+     * @param {string} vaultTitle
+     * @returns {Promise<Vault>}
+     */
+    public async getVaultByTitle(vaultTitle: string): Promise<Vault> {
+        return await this.vaults.getVaultByTitle(vaultTitle);
+    }
+
+    /**
      * Lists all Items inside a specific Vault.
      *
      * @param {string} vaultId

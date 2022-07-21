@@ -67,6 +67,35 @@ export class Vaults extends OPResource {
         );
         return ObjectSerializer.deserialize(data, "Vault");
     }
+
+    /**
+     * Searches for a Vault with a case-sensitive, exact match on title.
+     * If multiple Vaults with the same title are found, it returns an error.
+     *
+     * @param {string} title
+     * @returns {Promise<Vault>}
+     * @private
+     */
+    public async getVaultByTitle(title: string): Promise<Vault> {
+         const vaults: Vault[] = await this.listVaultsByTitle(title);
+
+         if (!vaults?.length) {
+            return Promise.reject({
+                status: 404,
+                message: "No Vaults found with title",
+            });
+        }
+
+        if (vaults.length > 1) {
+            return Promise.reject({
+                status: 400,
+                message:
+                    "Found multiple Vaults with given title. Provide a more specific Item title",
+            });
+        }
+
+        return vaults[0];
+    }
 }
 
 export class Items extends OPResource {
