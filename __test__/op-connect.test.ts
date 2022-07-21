@@ -39,19 +39,6 @@ describe("Test OnePasswordConnect CRUD", () => {
         expect(vaults[0] instanceof Vault).toBe(true);
     });
 
-    test("get vault", async () => {
-
-        const op = OnePasswordConnect(testOpts);
-
-        nock(mockServerUrl).get(`/v1/vaults/${VAULTID}`).replyWithFile(
-            200,
-            __dirname + "/responses/single-vault.json",
-        );
-
-        const vault = await op.getVault(VAULTID);
-        expect(vault instanceof Vault).toBe(true);
-    });
-
     test("list vault items", async () => {
         // assert multiple vault items are returned
 
@@ -295,14 +282,14 @@ describe("Connector HTTP errors", () => {
 
         // No token, unauthenticated
         try {
-            await op.getVault("1234");
+            await op.getVaultById("1234");
         } catch (error) {
             expect(error).toEqual({status: 401, message: "Invalid token"} as ErrorResponse);
         }
 
         // Token has wrong scopes
         try {
-            await op.getVault("1234");
+            await op.getVaultById("1234");
         } catch (error) {
             expect(error).toEqual({status: 403, message: "Vault not in scope"} as ErrorResponse);
         }
