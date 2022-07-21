@@ -27,7 +27,7 @@ export class Vaults extends OPResource {
     }
 
     /**
-     * Searches for all Vaults with exact match on title.
+     * Search for all Vaults with exact match on title.
      *
      * @param {string} title
      * @returns {Promise<Vault[]>}

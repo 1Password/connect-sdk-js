@@ -60,7 +60,7 @@ class OPConnect {
     }
 
     /**
-     * Get a list of Vaults with a matching Title value.
+     * Returns a list of Vaults with a matching Title value.
      *
      * The Vault Title must be an exact-match.
      *
