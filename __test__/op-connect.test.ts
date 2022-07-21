@@ -4,6 +4,7 @@ import {OPConfig} from "../src/lib/op-connect";
 import {ErrorResponse} from "../src/model/errorResponse";
 import {Item} from "../src/model/item";
 import CategoryEnum = Item.CategoryEnum;
+import { HttpErrorFactory } from "../dist/lib/utils";
 
 // eslint-disable-next-line @typescript-eslint/tslint/config
 const mockServerUrl = "http://localhost:8000";
@@ -183,10 +184,7 @@ describe("Test OnePasswordConnect CRUD", () => {
                 })
                 .reply(200, []);
 
-            await expect(() => op.getVaultByTitle(title)).rejects.toEqual({
-                status: 404,
-                message: "No Vaults found with title",
-            });
+            await expect(() => op.getVaultByTitle(title)).rejects.toEqual(HttpErrorFactory.noVaultsFoundByTitle());
         });
 
         test("should throw an error if more than 1 vault found", async () => {
@@ -200,10 +198,7 @@ describe("Test OnePasswordConnect CRUD", () => {
                 })
                 .reply(200, [{}, {}]);
 
-            await expect(() => op.getVaultByTitle(title)).rejects.toEqual({
-                status: 400,
-                message: "Found multiple Vaults with given title. Provide a more specific Item title",
-            });
+            await expect(() => op.getVaultByTitle(title)).rejects.toEqual(HttpErrorFactory.multipleVaultsFoundByTitle());
         });
 
         test("should return vault", async () => {
@@ -308,20 +303,14 @@ describe("Connector HTTP errors", () => {
         try {
             await op.getItemByTitle(VAULTID, title);
         } catch (error) {
-            expect(error).toEqual({
-                status: 400,
-                message: "Found multiple Items with given title. Provide a more specific Item title",
-            });
+            expect(error).toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
         }
 
         // Assert empty array returned by server throws error
         try {
             await op.getItemByTitle(VAULTID, title);
         } catch (error) {
-            expect(error).toEqual({
-                status: 404,
-                message: "No Items found with title",
-            });
+            expect(error).toEqual(HttpErrorFactory.noItemsFoundByTitle());
         }
 
         // Assert error thrown when object returned;
@@ -329,10 +318,7 @@ describe("Connector HTTP errors", () => {
         try {
             await op.getItemByTitle(VAULTID, title);
         } catch (error) {
-            expect(error).toEqual({
-                status: 404,
-                message: "No Items found with title",
-            });
+            expect(error).toEqual(HttpErrorFactory.noItemsFoundByTitle());
         }
     });
 });
