@@ -171,11 +171,11 @@ describe("Test OnePasswordConnect CRUD", () => {
         expect(vaults[1].name).toEqual(title);
     });
 
-    describe("getVaultByTitle", () => {
+    describe("get vault by title", () => {
+        const title = "awesome_title";
 
         test("should throw an error if no vaults found", async () => {
             const op = OnePasswordConnect(testOpts);
-            const title = "awsome_title";
 
             nock(mockServerUrl)
                 .get("/v1/vaults")
@@ -189,7 +189,6 @@ describe("Test OnePasswordConnect CRUD", () => {
 
         test("should throw an error if more than 1 vault found", async () => {
             const op = OnePasswordConnect(testOpts);
-            const title = "awsome_title";
 
             nock(mockServerUrl)
                 .get("/v1/vaults")
@@ -203,7 +202,6 @@ describe("Test OnePasswordConnect CRUD", () => {
 
         test("should return vault", async () => {
             const op = OnePasswordConnect(testOpts);
-            const title = "awsome_title";
 
             nock(mockServerUrl)
                 .get("/v1/vaults")
