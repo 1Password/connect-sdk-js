@@ -173,8 +173,7 @@ export class Items extends OPResource {
         );
 
         const items: Response[] = await Promise.all(
-            data.map((item) => item.id)
-                .map(itemId => this.getById(vaultId, itemId))
+            data.map(item => this.getById(vaultId, item.id))
         );
 
         return ObjectSerializer.deserialize(items.map(({ data }) => data), "Array<FullItem>");
