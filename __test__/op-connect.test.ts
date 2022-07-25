@@ -14,6 +14,8 @@ const VAULTID = "197dcc5e-606c-4c12-8ce2-d1b018c50260";
 
 const testOpts: OPConfig = {serverURL: mockServerUrl, token: mockToken};
 
+const op = OnePasswordConnect(testOpts);
+
 describe("Test OnePasswordConnect CRUD", () => {
 
     beforeEach((done) => {
@@ -26,8 +28,6 @@ describe("Test OnePasswordConnect CRUD", () => {
     });
 
     test("list vaults", async () => {
-        const op = OnePasswordConnect(testOpts);
-
         nock(mockServerUrl).get("/v1/vaults/").replyWithFile(
             200,
             __dirname + "/responses/vaults.json",
@@ -40,14 +40,10 @@ describe("Test OnePasswordConnect CRUD", () => {
     });
 
     test("list vault items", async () => {
-        // assert multiple vault items are returned
-
         nock(mockServerUrl).get(`/v1/vaults/${VAULTID}/items`).replyWithFile(
             200,
             __dirname + "/responses/vault-items.json",
         );
-
-        const op = OnePasswordConnect(testOpts);
 
         const vaultItems = await op.listItems(VAULTID);
 
@@ -59,7 +55,6 @@ describe("Test OnePasswordConnect CRUD", () => {
     });
 
     test("create vault item", async () => {
-
         const itemDetailResponse = await require("./responses/item-detail.json");
         itemDetailResponse.vault.id = VAULTID;
 
@@ -72,8 +67,6 @@ describe("Test OnePasswordConnect CRUD", () => {
         const item = new ItemBuilder()
             .setCategory(CategoryEnum.Login)
             .build();
-
-        const op = OnePasswordConnect(testOpts);
 
         const persistedItem = await op.createItem(VAULTID, item);
 
@@ -96,8 +89,6 @@ describe("Test OnePasswordConnect CRUD", () => {
             .put(`/v1/vaults/${VAULTID}/items/${itemID}`)
             .reply(200, (uri, requestBody) => requestBody);
 
-        const op = OnePasswordConnect(testOpts);
-
         const itemToBeUpdated = await op.getItem(VAULTID, itemID);
         itemToBeUpdated.title = "Updated Title";
         itemToBeUpdated.tags = ["tag1", "tag2"];
@@ -108,6 +99,7 @@ describe("Test OnePasswordConnect CRUD", () => {
         expect(updatedItem.title).toBe("Updated Title");
         expect(updatedItem.tags.sort()).toEqual(itemToBeUpdated.tags.sort());
     });
+
     test("delete vault item", async () => {
         const fakeItemId = "51c71c29-13d6-41b1-b724-9843bb8536c6";
 
@@ -115,7 +107,6 @@ describe("Test OnePasswordConnect CRUD", () => {
             .delete(`/v1/vaults/${VAULTID}/items/${fakeItemId}`)
             .reply(204);
 
-        const op = OnePasswordConnect(testOpts);
         await op.deleteItem(VAULTID, fakeItemId);
     });
 
@@ -133,7 +124,6 @@ describe("Test OnePasswordConnect CRUD", () => {
             .get(`/v1/vaults/${itemSearchResults[0].vault.id}/items/${itemSearchResults[0].id}`)
             .reply(200, fullItem);
 
-        const op = OnePasswordConnect(testOpts);
         const itemByTitle = await op.getItemByTitle(VAULTID, title);
         expect(itemByTitle instanceof FullItem).toEqual(true);
         expect(itemByTitle.title).toEqual(title);
@@ -151,7 +141,6 @@ describe("Test OnePasswordConnect CRUD", () => {
             })
             .reply(200, vaultsResponse)
 
-        const op = OnePasswordConnect(testOpts);
         const vaults: Vault[] = await op.listVaultsByTitle(title);
 
         expect(vaults).toHaveLength(2);
@@ -159,12 +148,10 @@ describe("Test OnePasswordConnect CRUD", () => {
         expect(vaults[1].name).toEqual(title);
     });
 
-    describe("getVaultByTitle", () => {
+    describe("get vault by title", () => {
+        const title = "awesome_title";
 
         test("should throw an error if no vaults found", async () => {
-            const op = OnePasswordConnect(testOpts);
-            const title = "awsome_title";
-
             nock(mockServerUrl)
                 .get("/v1/vaults")
                 .query({
@@ -176,9 +163,6 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
 
         test("should throw an error if more than 1 vault found", async () => {
-            const op = OnePasswordConnect(testOpts);
-            const title = "awsome_title";
-
             nock(mockServerUrl)
                 .get("/v1/vaults")
                 .query({
@@ -190,9 +174,6 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
 
         test("should return vault", async () => {
-            const op = OnePasswordConnect(testOpts);
-            const title = "awsome_title";
-
             nock(mockServerUrl)
                 .get("/v1/vaults")
                 .query({
@@ -207,7 +188,7 @@ describe("Test OnePasswordConnect CRUD", () => {
 
     });
 
-    describe("getVault", () => {
+    describe("get vault", () => {
         const op = OnePasswordConnect(testOpts);
 
         test.each([
@@ -313,8 +294,6 @@ describe("Connector HTTP errors", () => {
     test("assert error response structure", async () => {
         expect.assertions(4);
 
-        const op = OnePasswordConnect(testOpts);
-
         const scope = nock(mockServerUrl)
             .get("/v1/vaults/1234")
             .reply(401, {status: 401, message: "Invalid token"})
@@ -367,8 +346,6 @@ describe("Connector HTTP errors", () => {
             .get(getItemPath)
             .query(querystring)
             .reply(200, {});
-
-        const op = OnePasswordConnect(testOpts);
 
         // Assert multiple returned items throws an error
         try {
