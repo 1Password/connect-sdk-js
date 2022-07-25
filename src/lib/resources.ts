@@ -2,7 +2,7 @@ import { FullItem } from "../model/fullItem";
 import { Item as SimpleItem, ObjectSerializer } from "../model/models";
 import { Vault } from "../model/vault";
 import { RequestAdapter, Response } from "./requests";
-import { QueryBuilder } from "./utils";
+import { HttpErrorFactory, QueryBuilder } from "./utils";
 
 class OPResource {
     protected adapter: RequestAdapter;
@@ -31,7 +31,6 @@ export class Vaults extends OPResource {
      *
      * @param {string} title
      * @returns {Promise<Vault[]>}
-     * @private
      */
      public async listVaultsByTitle(title: string): Promise<Vault[]> {
         const { data } = await this.adapter.sendRequest(
@@ -66,6 +65,27 @@ export class Vaults extends OPResource {
             `${this.basePath}/${vaultId}`,
         );
         return ObjectSerializer.deserialize(data, "Vault");
+    }
+
+    /**
+     * Searches for a Vault with exact match on title.
+     * If no Vaults or multiple Vaults with the same title are found, it returns an error.
+     *
+     * @param {string} title
+     * @returns {Promise<Vault>}
+     */
+    public async getVaultByTitle(title: string): Promise<Vault> {
+         const vaults: Vault[] = await this.listVaultsByTitle(title);
+
+         if (!vaults?.length) {
+            return Promise.reject(HttpErrorFactory.noVaultsFoundByTitle());
+         }
+
+        if (vaults.length > 1) {
+            return Promise.reject(HttpErrorFactory.multipleVaultsFoundByTitle());
+        }
+
+        return vaults[0];
     }
 }
 
@@ -146,18 +166,11 @@ export class Items extends OPResource {
         const { data } = await this.adapter.sendRequest("get", queryPath);
 
         if (!data?.length) {
-            return Promise.reject({
-                status: 404,
-                message: "No Items found with title",
-            });
+            return Promise.reject(HttpErrorFactory.noItemsFoundByTitle());
         }
 
         if (data.length > 1) {
-            return Promise.reject({
-                status: 400,
-                message:
-                    "Found multiple Items with given title. Provide a more specific Item title",
-            });
+            return Promise.reject(HttpErrorFactory.multipleItemsFoundByTitle());
         }
 
         return this.getById(data[0].vault.id, data[0].id);
