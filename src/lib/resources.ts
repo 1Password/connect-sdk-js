@@ -55,9 +55,9 @@ export class Vaults extends OPResource {
     }
 
     /**
-     * Get metadata about a single vault
+     * Get metadata about a single vault.
      *
-     * @param vaultQuery
+     * @param {string} vaultQuery - the Vault's title or ID
      */
     public async getVault(vaultQuery: string): Promise<Vault> {
         if (isValidId(vaultQuery)) {
@@ -68,9 +68,9 @@ export class Vaults extends OPResource {
     }
 
     /**
-     * Get metadata about a single vault
+     * Get metadata about a single vault with the provided ID.
      *
-     * @param vaultId
+     * @param {string} vaultId
      */
     public async getVaultById(vaultId: string): Promise<Vault> {
         const { data } = await this.adapter.sendRequest(

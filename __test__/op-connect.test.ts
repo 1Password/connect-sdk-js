@@ -188,7 +188,7 @@ describe("Test OnePasswordConnect CRUD", () => {
 
     });
 
-    describe("getVault", () => {
+    describe("get vault", () => {
         const op = OnePasswordConnect(testOpts);
 
         test.each([
