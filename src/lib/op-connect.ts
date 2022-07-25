@@ -122,6 +122,17 @@ class OPConnect {
     }
 
     /**
+     * Returns a list of Items with a matching Title value.
+     *
+     * @param {string} vaultId
+     * @param {string} itemTitle
+     * @returns {Promise<FullItem[]>}
+     */
+    public async listItemsByTitle(vaultId: string, itemTitle: string): Promise<FullItem[]> {
+        return await this.items.listItemsByTitle(vaultId, itemTitle);
+    }
+
+    /**
      * Get details about a specific Item in a Vault.
      *
      * @param {string} vaultId

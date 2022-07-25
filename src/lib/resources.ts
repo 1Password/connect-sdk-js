@@ -160,6 +160,27 @@ export class Items extends OPResource {
     }
 
     /**
+     * Search for all Items with exact match on title.
+     *
+     * @param {string} vaultId
+     * @param {string} itemTitle
+     * @returns {Promise<FullItem[]>}
+     */
+    public async listItemsByTitle(vaultId: string, itemTitle: string): Promise<FullItem[]> {
+        const { data } = await this.adapter.sendRequest(
+            "get",
+            `${this.basePath(vaultId)}?${QueryBuilder.filterByTitle(itemTitle)}`,
+        );
+
+        const items: Response[] = await Promise.all(
+            data.map((item) => item.id)
+                .map(itemId => this.getById(vaultId, itemId))
+        );
+
+        return ObjectSerializer.deserialize(items.map(({ data }) => data), "Array<FullItem>");
+    }
+
+    /**
      * Searches for an Item with a case-sensitive, exact match on title.
      * If found, queries for complete item details and returns result.
      *
