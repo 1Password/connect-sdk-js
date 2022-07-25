@@ -228,7 +228,7 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
     });
 
-    describe("listItemsByTitle", () => {
+    describe("list items by title", () => {
         const title = "some title";
         const op = OnePasswordConnect(testOpts);
         const getItemsByTitleMock = (title: string) => nock(mockServerUrl)
