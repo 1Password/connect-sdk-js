@@ -5,6 +5,7 @@ import {ErrorResponse} from "../src/model/errorResponse";
 import {Item} from "../src/model/item";
 import CategoryEnum = Item.CategoryEnum;
 import { HttpErrorFactory } from "../src/lib/utils";
+import { ERROR_MESSAGE } from "../src/lib/constants";
 
 // eslint-disable-next-line @typescript-eslint/tslint/config
 const mockServerUrl = "http://localhost:8000";
@@ -36,16 +37,6 @@ describe("Test OnePasswordConnect CRUD", () => {
         expect(Array.isArray(vaults)).toBe(true);
         expect(vaults.length).toBeGreaterThanOrEqual(1);
         expect(vaults[0] instanceof Vault).toBe(true);
-    });
-
-    test("get vault", async () => {
-        nock(mockServerUrl).get(`/v1/vaults/${VAULTID}`).replyWithFile(
-            200,
-            __dirname + "/responses/single-vault.json",
-        );
-
-        const vault = await op.getVault(VAULTID);
-        expect(vault instanceof Vault).toBe(true);
     });
 
     test("list vault items", async () => {
@@ -196,6 +187,46 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
 
     });
+
+    describe("get vault", () => {
+        const op = OnePasswordConnect(testOpts);
+
+        test.each([
+            [undefined],
+            [null],
+            [""],
+        ])("should throw error if %s provided", async (vaultQuery) => {
+            await expect(() => op.getVault(vaultQuery))
+                .rejects.toThrowError(ERROR_MESSAGE.PROVIDE_VAULT_NAME_OR_ID);
+        });
+
+        test("should return vault by id", async () => {
+            const vaultId = "llriqid2uq6ucvxpe2nta4hcb1";
+
+            nock(mockServerUrl)
+                .get(`/v1/vaults/${vaultId}`)
+                .reply(200, { id: vaultId });
+
+            const vault: Vault = await op.getVault(vaultId);
+
+            expect(vault.id).toEqual(vaultId);
+        });
+
+        test("should return vault by title", async () => {
+            const vaultTitle = "some title";
+
+            nock(mockServerUrl)
+                .get(`/v1/vaults`)
+                .query({
+                    filter: `title eq "${vaultTitle}"`,
+                })
+                .reply(200, [{ name: vaultTitle }]);
+
+            const vault: Vault = await op.getVault(vaultTitle);
+
+            expect(vault.name).toEqual(vaultTitle);
+        });
+    });
 });
 
 describe("Connector HTTP errors", () => {
@@ -230,14 +261,14 @@ describe("Connector HTTP errors", () => {
 
         // No token, unauthenticated
         try {
-            await op.getVault("1234");
+            await op.getVaultById("1234");
         } catch (error) {
             expect(error).toEqual({status: 401, message: "Invalid token"} as ErrorResponse);
         }
 
         // Token has wrong scopes
         try {
-            await op.getVault("1234");
+            await op.getVaultById("1234");
         } catch (error) {
             expect(error).toEqual({status: 403, message: "Vault not in scope"} as ErrorResponse);
         }

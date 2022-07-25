@@ -6,6 +6,7 @@ import { Items, Vaults } from "./resources";
 import { HTTPClient, IRequestClient } from "./client";
 
 import { RequestAdapter } from "./requests";
+import { ERROR_MESSAGE } from "./constants";
 
 export interface OPConfig {
     serverURL: string;
@@ -72,16 +73,30 @@ class OPConnect {
     }
 
     /**
-     * Get details about a specific vault.
+     * Get details about a specific vault wih a matching ID or Title value.
      *
      * If the Service Account does not have permission to view the vault, an
      * error is returned.
      *
+     * @param {string} vaultQuery
+     * @returns {Promise<Vault>}
+     */
+    public async getVault(vaultQuery: string): Promise<Vault> {
+        if (!vaultQuery) {
+            throw new Error(ERROR_MESSAGE.PROVIDE_VAULT_NAME_OR_ID);
+        }
+
+        return this.vaults.getVault(vaultQuery);
+    }
+
+    /**
+     * Get details about a specific vault with a matching ID value.
+     *
      * @param {string} vaultId
      * @returns {Promise<Vault>}
      */
-    public async getVault(vaultId: string): Promise<Vault> {
-        return await this.vaults.getVault(vaultId);
+    public async getVaultById(vaultId: string): Promise<Vault> {
+        return await this.vaults.getVaultById(vaultId);
     }
 
     /**

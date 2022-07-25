@@ -2,7 +2,7 @@ import { FullItem } from "../model/fullItem";
 import { Item as SimpleItem, ObjectSerializer } from "../model/models";
 import { Vault } from "../model/vault";
 import { RequestAdapter, Response } from "./requests";
-import { HttpErrorFactory, QueryBuilder } from "./utils";
+import { HttpErrorFactory, isValidId, QueryBuilder } from "./utils";
 
 class OPResource {
     protected adapter: RequestAdapter;
@@ -55,11 +55,24 @@ export class Vaults extends OPResource {
     }
 
     /**
-     * Get metadata about a single vault
+     * Get metadata about a single vault.
      *
-     * @param vaultId
+     * @param {string} vaultQuery - the Vault's title or ID
      */
-    public async getVault(vaultId: string): Promise<Vault> {
+    public async getVault(vaultQuery: string): Promise<Vault> {
+        if (isValidId(vaultQuery)) {
+            return this.getVaultById(vaultQuery);
+        }
+
+        return this.getVaultByTitle(vaultQuery);
+    }
+
+    /**
+     * Get metadata about a single vault with the provided ID.
+     *
+     * @param {string} vaultId
+     */
+    public async getVaultById(vaultId: string): Promise<Vault> {
         const { data } = await this.adapter.sendRequest(
             "get",
             `${this.basePath}/${vaultId}`,
