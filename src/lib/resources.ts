@@ -133,16 +133,12 @@ export class Items extends OPResource {
         return ObjectSerializer.deserialize(data, "FullItem");
     }
 
-    public async get(vaultId: string, opts: GetItemOptions): Promise<FullItem> {
-        if (!(opts.itemId || opts.title) || (opts.itemId && opts.title)) {
-            throw TypeError("Items.get() requires itemId or title");
+    public async get(vaultId: string, itemQuery: string): Promise<FullItem> {
+        if (isValidId(itemQuery)) {
+            return this.getById(vaultId, itemQuery);
         }
 
-        const { data } = opts.itemId
-            ? await this.getById(vaultId, opts.itemId)
-            : await this.getByTitle(vaultId, opts.title);
-
-        return ObjectSerializer.deserialize(data, "FullItem");
+        return this.getByTitle(vaultId, itemQuery);
     }
 
     public async delete(vaultId: string, itemId: string): Promise<Response> {
@@ -152,11 +148,13 @@ export class Items extends OPResource {
         );
     }
 
-    private async getById(vaultId: string, itemId: string): Promise<Response> {
-        return await this.adapter.sendRequest(
+    private async getById(vaultId: string, itemId: string): Promise<FullItem> {
+        const { data } = await this.adapter.sendRequest(
             "get",
             this.basePath(vaultId, itemId),
         );
+
+        return ObjectSerializer.deserialize(data, "FullItem");
     }
 
     /**
@@ -172,11 +170,9 @@ export class Items extends OPResource {
             `${this.basePath(vaultId)}?${QueryBuilder.filterByTitle(itemTitle)}`,
         );
 
-        const items: Response[] = await Promise.all(
+        return Promise.all(
             data.map(item => this.getById(vaultId, item.id))
         );
-
-        return ObjectSerializer.deserialize(items.map(({ data }) => data), "Array<FullItem>");
     }
 
     /**
@@ -191,7 +187,7 @@ export class Items extends OPResource {
     private async getByTitle(
         vaultId: string,
         title: string,
-    ): Promise<Response> {
+    ): Promise<FullItem> {
         const queryPath = `${this.basePath(
             vaultId,
         )}?${QueryBuilder.filterByTitle(title)}`;

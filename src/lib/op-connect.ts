@@ -136,11 +136,26 @@ class OPConnect {
      * Get details about a specific Item in a Vault.
      *
      * @param {string} vaultId
+     * @param {string} itemQuery
+     * @returns {Promise<FullItem>}
+     */
+    public async getItem(vaultId: string, itemQuery: string): Promise<FullItem> {
+        if (!itemQuery) {
+            throw new Error(ERROR_MESSAGE.PROVIDE_ITEM_NAME_OR_ID);
+        }
+
+        return this.items.get(vaultId, itemQuery);
+    }
+
+    /**
+     * Get details about a specific Item in a Vault.
+     *
+     * @param {string} vaultId
      * @param {string} itemId
      * @returns {Promise<FullItem>}
      */
-    public async getItem(vaultId: string, itemId: string): Promise<FullItem> {
-        return await this.items.get(vaultId, { itemId });
+    public async getItemById(vaultId: string, itemId: string): Promise<FullItem> {
+        return this.items.get(vaultId, itemId);
     }
 
     /**
@@ -156,7 +171,7 @@ class OPConnect {
         vaultId: string,
         title: string,
     ): Promise<FullItem> {
-        return await this.items.get(vaultId, { title });
+        return this.items.get(vaultId, title);
     }
 
     /**

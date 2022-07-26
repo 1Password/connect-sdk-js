@@ -76,7 +76,7 @@ describe("Test OnePasswordConnect CRUD", () => {
     test("update vault item", async () => {
         const itemDetailResponse = await require("./responses/item-detail.json");
 
-        const itemID = "8f948af8-a116-4932-8cdf-82102f134cc4";
+        const itemID = "363tl3fu6cdc2b4yctxwpqmv2l";
 
         nock(mockServerUrl)
             .get(`/v1/vaults/${VAULTID}/items/${itemID}`)
