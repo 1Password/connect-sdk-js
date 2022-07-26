@@ -189,8 +189,6 @@ describe("Test OnePasswordConnect CRUD", () => {
     });
 
     describe("get vault", () => {
-        const op = OnePasswordConnect(testOpts);
-
         test.each([
             [undefined],
             [null],
@@ -230,7 +228,6 @@ describe("Test OnePasswordConnect CRUD", () => {
 
     describe("list items by title", () => {
         const title = "some title";
-        const op = OnePasswordConnect(testOpts);
         const getItemsByTitleMock = (title: string) => nock(mockServerUrl)
                 .get(`/v1/vaults/${VAULTID}/items/`)
                 .query({

@@ -160,7 +160,7 @@ export class Items extends OPResource {
     }
 
     /**
-     * Search for all Items with exact match on title.
+     * Search for all Items with exact match on Title.
      *
      * @param {string} vaultId
      * @param {string} itemTitle
