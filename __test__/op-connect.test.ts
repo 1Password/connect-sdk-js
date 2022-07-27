@@ -10,7 +10,8 @@ import { ERROR_MESSAGE } from "../src/lib/constants";
 // eslint-disable-next-line @typescript-eslint/tslint/config
 const mockServerUrl = "http://localhost:8000";
 const mockToken = "myToken";
-const VAULTID = "197dcc5e-606c-4c12-8ce2-d1b018c50260";
+const VAULT_ID = "197dcc5e-606c-4c12-8ce2-d1b018c50260";
+const ITEM_ID = "llriqid2uq6ucvxpe2nta4hcb1";
 
 const testOpts: OPConfig = {serverURL: mockServerUrl, token: mockToken};
 
@@ -40,12 +41,12 @@ describe("Test OnePasswordConnect CRUD", () => {
     });
 
     test("list vault items", async () => {
-        nock(mockServerUrl).get(`/v1/vaults/${VAULTID}/items`).replyWithFile(
+        nock(mockServerUrl).get(`/v1/vaults/${VAULT_ID}/items`).replyWithFile(
             200,
             __dirname + "/responses/vault-items.json",
         );
 
-        const vaultItems = await op.listItems(VAULTID);
+        const vaultItems = await op.listItems(VAULT_ID);
 
         expect(Array.isArray(vaultItems)).toBe(true);
         vaultItems.forEach((vaultItem) => {
@@ -56,10 +57,10 @@ describe("Test OnePasswordConnect CRUD", () => {
 
     test("create vault item", async () => {
         const itemDetailResponse = await require("./responses/item-detail.json");
-        itemDetailResponse.vault.id = VAULTID;
+        itemDetailResponse.vault.id = VAULT_ID;
 
         nock(mockServerUrl).post(
-            `/v1/vaults/${VAULTID}/items/`).reply(
+            `/v1/vaults/${VAULT_ID}/items/`).reply(
             200,
             itemDetailResponse,
         );
@@ -68,7 +69,7 @@ describe("Test OnePasswordConnect CRUD", () => {
             .setCategory(CategoryEnum.Login)
             .build();
 
-        const persistedItem = await op.createItem(VAULTID, item);
+        const persistedItem = await op.createItem(VAULT_ID, item);
 
         expect(persistedItem instanceof FullItem).toEqual(true);
     });
@@ -79,21 +80,21 @@ describe("Test OnePasswordConnect CRUD", () => {
         const itemID = "363tl3fu6cdc2b4yctxwpqmv2l";
 
         nock(mockServerUrl)
-            .get(`/v1/vaults/${VAULTID}/items/${itemID}`)
+            .get(`/v1/vaults/${VAULT_ID}/items/${itemID}`)
             .reply(200, (uri, requestBody) => {
                 const resp = JSON.parse(JSON.stringify(itemDetailResponse));
                 resp.id = itemID;
-                resp.vault.id = VAULTID;
+                resp.vault.id = VAULT_ID;
                 return resp;
             })
-            .put(`/v1/vaults/${VAULTID}/items/${itemID}`)
+            .put(`/v1/vaults/${VAULT_ID}/items/${itemID}`)
             .reply(200, (uri, requestBody) => requestBody);
 
-        const itemToBeUpdated = await op.getItem(VAULTID, itemID);
+        const itemToBeUpdated = await op.getItem(VAULT_ID, itemID);
         itemToBeUpdated.title = "Updated Title";
         itemToBeUpdated.tags = ["tag1", "tag2"];
 
-        const updatedItem = await op.updateItem(VAULTID, itemToBeUpdated);
+        const updatedItem = await op.updateItem(VAULT_ID, itemToBeUpdated);
 
         expect(updatedItem instanceof FullItem).toEqual(true);
         expect(updatedItem.title).toBe("Updated Title");
@@ -104,10 +105,10 @@ describe("Test OnePasswordConnect CRUD", () => {
         const fakeItemId = "51c71c29-13d6-41b1-b724-9843bb8536c6";
 
         nock(mockServerUrl)
-            .delete(`/v1/vaults/${VAULTID}/items/${fakeItemId}`)
+            .delete(`/v1/vaults/${VAULT_ID}/items/${fakeItemId}`)
             .reply(204);
 
-        await op.deleteItem(VAULTID, fakeItemId);
+        await op.deleteItem(VAULT_ID, fakeItemId);
     });
 
     test("get item by title", async () => {
@@ -116,7 +117,7 @@ describe("Test OnePasswordConnect CRUD", () => {
         const title = "Bank of 1Password";
 
         nock(mockServerUrl)
-            .get(`/v1/vaults/${VAULTID}/items/`)
+            .get(`/v1/vaults/${VAULT_ID}/items/`)
             .query({
                 filter: `title eq "${title}"`,
             })
@@ -124,7 +125,7 @@ describe("Test OnePasswordConnect CRUD", () => {
             .get(`/v1/vaults/${itemSearchResults[0].vault.id}/items/${itemSearchResults[0].id}`)
             .reply(200, fullItem);
 
-        const itemByTitle = await op.getItemByTitle(VAULTID, title);
+        const itemByTitle = await op.getItemByTitle(VAULT_ID, title);
         expect(itemByTitle instanceof FullItem).toEqual(true);
         expect(itemByTitle.title).toEqual(title);
 
@@ -229,17 +230,17 @@ describe("Test OnePasswordConnect CRUD", () => {
     describe("list items by title", () => {
         const title = "some title";
         const getItemsByTitleMock = (title: string) => nock(mockServerUrl)
-                .get(`/v1/vaults/${VAULTID}/items/`)
+                .get(`/v1/vaults/${VAULT_ID}/items/`)
                 .query({
                     filter: `title eq "${title}"`,
                 });
         const getFullItemMock = (itemId: string) =>
-            nock(mockServerUrl).get(`/v1/vaults/${VAULTID}/items/${itemId}`);
+            nock(mockServerUrl).get(`/v1/vaults/${VAULT_ID}/items/${itemId}`);
 
         test("should return empty array if nothing found", async () => {
             getItemsByTitleMock(title).reply(200, []);
 
-            const result: FullItem[] = await op.listItemsByTitle(VAULTID, title);
+            const result: FullItem[] = await op.listItemsByTitle(VAULT_ID, title);
 
             expect(result).toHaveLength(0);
         });
@@ -249,7 +250,7 @@ describe("Test OnePasswordConnect CRUD", () => {
 
             getItemsByTitleMock(title).replyWithError(badRequestError);
 
-            await expect(() => op.listItemsByTitle(VAULTID, title)).rejects.toEqual(badRequestError);
+            await expect(() => op.listItemsByTitle(VAULT_ID, title)).rejects.toEqual(badRequestError);
         });
 
         test("should return 2 items", async () => {
@@ -260,13 +261,77 @@ describe("Test OnePasswordConnect CRUD", () => {
             getFullItemMock(item1.id).reply(200, item1);
             getFullItemMock(item2.id).reply(200, item2);
 
-            const result: FullItem[] = await op.listItemsByTitle(VAULTID, title);
+            const result: FullItem[] = await op.listItemsByTitle(VAULT_ID, title);
 
             expect(result).toHaveLength(2);
             expect(result[0].id).toEqual(item1.id);
             expect(result[1].id).toEqual(item2.id);
         });
-    })
+    });
+
+    describe("get item", () => {
+        test.each([
+            [undefined],
+            [null],
+            [""],
+        ])("should throw error if %s provided", async (itemQuery) => {
+            await expect(() => op.getItem(VAULT_ID, itemQuery))
+                .rejects.toThrowError(ERROR_MESSAGE.PROVIDE_ITEM_NAME_OR_ID);
+        });
+
+        test("should return item by id", async () => {
+            nock(mockServerUrl)
+                .get(`/v1/vaults/${VAULT_ID}/items/${ITEM_ID}`)
+                .reply(200, { id: ITEM_ID });
+
+            const item: FullItem = await op.getItem(VAULT_ID, ITEM_ID);
+
+            expect(item.id).toEqual(ITEM_ID);
+        });
+
+        test("should return item by title", async () => {
+            const itemTitle = "some title";
+            const itemMock: FullItem = { id: ITEM_ID, title: itemTitle, vault: { id: VAULT_ID } } as FullItem;
+
+            nock(mockServerUrl)
+                .get(`/v1/vaults/${VAULT_ID}/items/`)
+                .query({
+                    filter: `title eq "${itemTitle}"`,
+                })
+                .reply(200, [itemMock]);
+
+            nock(mockServerUrl)
+                .get(`/v1/vaults/${VAULT_ID}/items/${ITEM_ID}`)
+                .reply(200, itemMock);
+
+            const item: FullItem = await op.getItem(VAULT_ID, itemTitle);
+
+            expect(item.title).toEqual(itemTitle);
+        });
+    });
+
+    describe("get item by id", () => {
+        test("should find item by id", async () => {
+            nock(mockServerUrl)
+                .get(`/v1/vaults/${VAULT_ID}/items/${ITEM_ID}`)
+                .reply(200, { id: ITEM_ID });
+
+            const item: Item = await op.getItemById(VAULT_ID, ITEM_ID);
+
+            expect(item.id).toEqual(ITEM_ID);
+        });
+
+        test("should re-throw api error", async () => {
+            const notFoundError = { status: 404, message: "Item not found" };
+
+            nock(mockServerUrl)
+                .get(`/v1/vaults/${VAULT_ID}/items/${ITEM_ID}`)
+                .replyWithError(notFoundError);
+
+            await expect(() => op.getItemById(VAULT_ID, ITEM_ID))
+                .rejects.toEqual(notFoundError);
+        });
+    });
 });
 
 describe("Connector HTTP errors", () => {
@@ -329,7 +394,7 @@ describe("Connector HTTP errors", () => {
         const fullItem = await require("./responses/item-detail.json");
         const title = "Bank";
         const querystring = {filter: `title eq "${title}"`};
-        const getItemPath = `/v1/vaults/${VAULTID}/items/`;
+        const getItemPath = `/v1/vaults/${VAULT_ID}/items/`;
 
         nock(mockServerUrl)
             .get(getItemPath)
@@ -346,14 +411,14 @@ describe("Connector HTTP errors", () => {
 
         // Assert multiple returned items throws an error
         try {
-            await op.getItemByTitle(VAULTID, title);
+            await op.getItemByTitle(VAULT_ID, title);
         } catch (error) {
             expect(error).toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
         }
 
         // Assert empty array returned by server throws error
         try {
-            await op.getItemByTitle(VAULTID, title);
+            await op.getItemByTitle(VAULT_ID, title);
         } catch (error) {
             expect(error).toEqual(HttpErrorFactory.noItemsFoundByTitle());
         }
@@ -361,7 +426,7 @@ describe("Connector HTTP errors", () => {
         // Assert error thrown when object returned;
         // expect array when querying by Title
         try {
-            await op.getItemByTitle(VAULTID, title);
+            await op.getItemByTitle(VAULT_ID, title);
         } catch (error) {
             expect(error).toEqual(HttpErrorFactory.noItemsFoundByTitle());
         }
