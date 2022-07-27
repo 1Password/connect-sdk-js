@@ -142,7 +142,7 @@ export class Items extends OPResource {
      */
     public async get(vaultId: string, itemQuery: string): Promise<FullItem> {
         if (isValidId(itemQuery)) {
-            return this.getFullItemById(vaultId, itemQuery);
+            return this.getById(vaultId, itemQuery);
         }
 
         return this.getByTitle(vaultId, itemQuery);
@@ -170,7 +170,6 @@ export class Items extends OPResource {
      * @param {string} vaultId
      * @param {string} title
      * @returns {Promise<void>}
-     * @private
      */
     public async deleteByTitle(vaultId: string, title: string): Promise<Response> {
         const item: SimpleItem = await this.getSimpleItemByTitle(vaultId, title);
@@ -192,7 +191,7 @@ export class Items extends OPResource {
         );
 
         return Promise.all(
-            data.map(item => this.getFullItemById(vaultId, item.id))
+            data.map(item => this.getById(vaultId, item.id))
         );
     }
 
@@ -210,7 +209,7 @@ export class Items extends OPResource {
     ): Promise<FullItem> {
         const item: SimpleItem = await this.getSimpleItemByTitle(vaultId, title);
 
-        return this.getFullItemById(item.vault.id, item.id);
+        return this.getById(item.vault.id, item.id);
     }
 
     private async getSimpleItemByTitle(vaultId: string, title: string): Promise<SimpleItem> {
@@ -230,18 +229,4 @@ export class Items extends OPResource {
 
         return ObjectSerializer.deserialize(data[0], "Item");
     }
-
-    private async getFullItemById(vaultId: string, itemId: string): Promise<FullItem> {
-        const { data } = await this.adapter.sendRequest(
-            "get",
-            this.basePath(vaultId, itemId),
-        );
-
-        return ObjectSerializer.deserialize(data, "FullItem");
-    }
 }
-
-// Either itemId OR title must be supplied
-type GetItemOptions =
-    | { itemId: string; title?: never }
-    | { title: string; itemId?: never };
