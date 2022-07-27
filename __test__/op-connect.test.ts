@@ -189,8 +189,6 @@ describe("Test OnePasswordConnect CRUD", () => {
     });
 
     describe("get vault", () => {
-        const op = OnePasswordConnect(testOpts);
-
         test.each([
             [undefined],
             [null],
@@ -227,6 +225,48 @@ describe("Test OnePasswordConnect CRUD", () => {
             expect(vault.name).toEqual(vaultTitle);
         });
     });
+
+    describe("list items by title", () => {
+        const title = "some title";
+        const getItemsByTitleMock = (title: string) => nock(mockServerUrl)
+                .get(`/v1/vaults/${VAULTID}/items/`)
+                .query({
+                    filter: `title eq "${title}"`,
+                });
+        const getFullItemMock = (itemId: string) =>
+            nock(mockServerUrl).get(`/v1/vaults/${VAULTID}/items/${itemId}`);
+
+        test("should return empty array if nothing found", async () => {
+            getItemsByTitleMock(title).reply(200, []);
+
+            const result: FullItem[] = await op.listItemsByTitle(VAULTID, title);
+
+            expect(result).toHaveLength(0);
+        });
+
+        test("should re-throw api error", async () => {
+            const badRequestError = { status: 400, message: "Some bad request" };
+
+            getItemsByTitleMock(title).replyWithError(badRequestError);
+
+            await expect(() => op.listItemsByTitle(VAULTID, title)).rejects.toEqual(badRequestError);
+        });
+
+        test("should return 2 items", async () => {
+            const item1 = { id: "1" } as Item;
+            const item2 = { id: "2" } as Item;
+
+            getItemsByTitleMock(title).reply(200, [item1, item2]);
+            getFullItemMock(item1.id).reply(200, item1);
+            getFullItemMock(item2.id).reply(200, item2);
+
+            const result: FullItem[] = await op.listItemsByTitle(VAULTID, title);
+
+            expect(result).toHaveLength(2);
+            expect(result[0].id).toEqual(item1.id);
+            expect(result[1].id).toEqual(item2.id);
+        });
+    })
 });
 
 describe("Connector HTTP errors", () => {
