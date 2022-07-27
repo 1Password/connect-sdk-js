@@ -142,7 +142,7 @@ export class Items extends OPResource {
      */
     public async get(vaultId: string, itemQuery: string): Promise<FullItem> {
         if (isValidId(itemQuery)) {
-            return this.getById(vaultId, itemQuery);
+            return this.getFullItemById(vaultId, itemQuery);
         }
 
         return this.getByTitle(vaultId, itemQuery);
@@ -155,13 +155,18 @@ export class Items extends OPResource {
         );
     }
 
-    private async getById(vaultId: string, itemId: string): Promise<FullItem> {
-        const { data } = await this.adapter.sendRequest(
-            "get",
-            this.basePath(vaultId, itemId),
-        );
+    /**
+     * Deletes an item with exact match on title.
+     *
+     * @param {string} vaultId
+     * @param {string} title
+     * @returns {Promise<void>}
+     * @private
+     */
+    public async deleteByTitle(vaultId: string, title: string): Promise<Response> {
+        const item: SimpleItem = await this.getSimpleItemByTitle(vaultId, title);
 
-        return ObjectSerializer.deserialize(data, "FullItem");
+        return this.delete(vaultId, item.id);
     }
 
     /**
@@ -178,12 +183,12 @@ export class Items extends OPResource {
         );
 
         return Promise.all(
-            data.map(item => this.getById(vaultId, item.id))
+            data.map(item => this.getFullItemById(vaultId, item.id))
         );
     }
 
     /**
-     * Searches for an Item with a case-sensitive, exact match on title.
+     * Searches for an Item with exact match on title.
      * If found, queries for complete item details and returns result.
      *
      * @param {string} vaultId
@@ -195,6 +200,12 @@ export class Items extends OPResource {
         vaultId: string,
         title: string,
     ): Promise<FullItem> {
+        const item: SimpleItem = await this.getSimpleItemByTitle(vaultId, title);
+
+        return this.getFullItemById(item.vault.id, item.id);
+    }
+
+    private async getSimpleItemByTitle(vaultId: string, title: string): Promise<SimpleItem> {
         const queryPath = `${this.basePath(
             vaultId,
         )}?${QueryBuilder.filterByTitle(title)}`;
@@ -209,7 +220,16 @@ export class Items extends OPResource {
             return Promise.reject(HttpErrorFactory.multipleItemsFoundByTitle());
         }
 
-        return this.getById(data[0].vault.id, data[0].id);
+        return ObjectSerializer.deserialize(data[0], "Item");
+    }
+
+    private async getFullItemById(vaultId: string, itemId: string): Promise<FullItem> {
+        const { data } = await this.adapter.sendRequest(
+            "get",
+            this.basePath(vaultId, itemId),
+        );
+
+        return ObjectSerializer.deserialize(data, "FullItem");
     }
 }
 

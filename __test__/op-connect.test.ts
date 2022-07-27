@@ -106,13 +106,11 @@ describe("Test OnePasswordConnect CRUD", () => {
     });
 
     test("delete vault item", async () => {
-        const fakeItemId = "51c71c29-13d6-41b1-b724-9843bb8536c6";
-
         nock(mockServerUrl)
-            .delete(`/v1/vaults/${VAULT_ID}/items/${fakeItemId}`)
+            .delete(`/v1/vaults/${VAULT_ID}/items/${ITEM_ID}`)
             .reply(204);
 
-        await op.deleteItem(VAULT_ID, fakeItemId);
+        await op.deleteItem(VAULT_ID, ITEM_ID);
     });
 
     test("get item by title", async () => {
@@ -328,6 +326,42 @@ describe("Test OnePasswordConnect CRUD", () => {
 
             await expect(() => op.getItemById(VAULT_ID, ITEM_ID))
                 .rejects.toEqual(notFoundError);
+        });
+    });
+
+    describe("delete item by title", () => {
+        const itemTitle = 'itemTitle';
+
+        test("should reject if no items found", async () => {
+            apiMock.getItemByTitle(itemTitle)
+                .reply(200, []);
+
+            apiMock.deleteItemById()
+                .reply(204);
+
+            await expect(() => op.deleteItemByTitle(VAULT_ID, itemTitle))
+                .rejects.toEqual(HttpErrorFactory.noItemsFoundByTitle());
+        });
+
+        test("should reject if more than 1 item with given title found", async () => {
+            apiMock.getItemByTitle(itemTitle)
+                .reply(200, [{ id: ITEM_ID }, {}]);
+
+            apiMock.deleteItemById()
+                .reply(204);
+
+            await expect(() => op.deleteItemByTitle(VAULT_ID, itemTitle))
+                .rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
+        });
+
+        test("should finish successfully", async () => {
+            apiMock.getItemByTitle(itemTitle)
+                .reply(200, [{ id: ITEM_ID }]);
+
+            apiMock.deleteItemById()
+                .reply(204);
+
+            await op.deleteItemByTitle(VAULT_ID, itemTitle);
         });
     });
 });

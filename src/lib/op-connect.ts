@@ -161,7 +161,7 @@ class OPConnect {
     /**
      * Get details about a specific Item with a matching Title value.
      *
-     * The Item Title is case-sensitive and must be an exact-match.
+     * The Item Title must be an exact-match.
      *
      * @param {string} vaultId
      * @param {string} title
@@ -214,5 +214,18 @@ class OPConnect {
     public async deleteItem(vaultId: string, itemId: string): Promise<void> {
         await this.items.delete(vaultId, itemId);
         return;
+    }
+
+    /**
+     * Delete a specific item with a matching Title value.
+     *
+     * The Item Title must be an exact-match.
+     *
+     * @param {string} vaultId
+     * @param {string} itemTitle
+     * @returns {Promise<void>}
+     */
+    public async deleteItemByTitle(vaultId: string, itemTitle: string): Promise<void> {
+          await this.items.deleteByTitle(vaultId, itemTitle);
     }
 }
