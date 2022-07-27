@@ -6,26 +6,30 @@ import {Item} from "../src/model/item";
 import CategoryEnum = Item.CategoryEnum;
 import { HttpErrorFactory } from "../src/lib/utils";
 import { ERROR_MESSAGE } from "../src/lib/constants";
+import { ApiMock } from "./mocks";
 
 // eslint-disable-next-line @typescript-eslint/tslint/config
 const mockServerUrl = "http://localhost:8000";
 const mockToken = "myToken";
-const VAULT_ID = "197dcc5e-606c-4c12-8ce2-d1b018c50260";
-const ITEM_ID = "llriqid2uq6ucvxpe2nta4hcb1";
+const VAULT_ID = ApiMock.VAULT_ID;
+const ITEM_ID = ApiMock.ITEM_ID;
 
 const testOpts: OPConfig = {serverURL: mockServerUrl, token: mockToken};
 
 const op = OnePasswordConnect(testOpts);
+const apiMock = new ApiMock(mockServerUrl);
 
 describe("Test OnePasswordConnect CRUD", () => {
 
     beforeEach((done) => {
         if (!nock.isActive()) nock.activate();
+        if (!apiMock.nock.isActive()) apiMock.nock.activate();
         done();
     });
 
     afterEach(() => {
         nock.restore();
+        apiMock.nock.restore();
     });
 
     test("list vaults", async () => {
@@ -280,8 +284,7 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
 
         test("should return item by id", async () => {
-            nock(mockServerUrl)
-                .get(`/v1/vaults/${VAULT_ID}/items/${ITEM_ID}`)
+            apiMock.getItemById()
                 .reply(200, { id: ITEM_ID });
 
             const item: FullItem = await op.getItem(VAULT_ID, ITEM_ID);
@@ -293,15 +296,10 @@ describe("Test OnePasswordConnect CRUD", () => {
             const itemTitle = "some title";
             const itemMock: FullItem = { id: ITEM_ID, title: itemTitle, vault: { id: VAULT_ID } } as FullItem;
 
-            nock(mockServerUrl)
-                .get(`/v1/vaults/${VAULT_ID}/items/`)
-                .query({
-                    filter: `title eq "${itemTitle}"`,
-                })
+            apiMock.getItemByTitle(itemTitle)
                 .reply(200, [itemMock]);
 
-            nock(mockServerUrl)
-                .get(`/v1/vaults/${VAULT_ID}/items/${ITEM_ID}`)
+            apiMock.getItemById()
                 .reply(200, itemMock);
 
             const item: FullItem = await op.getItem(VAULT_ID, itemTitle);
