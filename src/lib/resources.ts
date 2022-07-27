@@ -155,7 +155,7 @@ export class Items extends OPResource {
         );
     }
 
-    private async getById(vaultId: string, itemId: string): Promise<FullItem> {
+    public async getById(vaultId: string, itemId: string): Promise<FullItem> {
         const { data } = await this.adapter.sendRequest(
             "get",
             this.basePath(vaultId, itemId),
@@ -189,9 +189,8 @@ export class Items extends OPResource {
      * @param {string} vaultId
      * @param {string} title
      * @returns {Promise<FullItem>}
-     * @private
      */
-    private async getByTitle(
+    public async getByTitle(
         vaultId: string,
         title: string,
     ): Promise<FullItem> {

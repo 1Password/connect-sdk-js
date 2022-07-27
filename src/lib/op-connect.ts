@@ -155,7 +155,7 @@ class OPConnect {
      * @returns {Promise<FullItem>}
      */
     public async getItemById(vaultId: string, itemId: string): Promise<FullItem> {
-        return this.items.get(vaultId, itemId);
+        return this.items.getById(vaultId, itemId);
     }
 
     /**
@@ -171,7 +171,7 @@ class OPConnect {
         vaultId: string,
         title: string,
     ): Promise<FullItem> {
-        return this.items.get(vaultId, title);
+        return this.items.getByTitle(vaultId, title);
     }
 
     /**
