@@ -133,6 +133,13 @@ export class Items extends OPResource {
         return ObjectSerializer.deserialize(data, "FullItem");
     }
 
+    /**
+     * Get details about a specific Item in a Vault.
+     *
+     * @param {string} vaultId
+     * @param {string} itemQuery - the Item's title or ID
+     * @returns {Promise<FullItem>}
+     */
     public async get(vaultId: string, itemQuery: string): Promise<FullItem> {
         if (isValidId(itemQuery)) {
             return this.getById(vaultId, itemQuery);

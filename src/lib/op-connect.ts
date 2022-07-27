@@ -148,7 +148,7 @@ class OPConnect {
     }
 
     /**
-     * Get details about a specific Item in a Vault.
+     * Get details about a specific Item with a matching ID value.
      *
      * @param {string} vaultId
      * @param {string} itemId
@@ -159,7 +159,7 @@ class OPConnect {
     }
 
     /**
-     * Get details about a specific item with a matching Title value.
+     * Get details about a specific Item with a matching Title value.
      *
      * The Item Title is case-sensitive and must be an exact-match.
      *
