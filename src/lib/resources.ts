@@ -155,6 +155,15 @@ export class Items extends OPResource {
         );
     }
 
+    public async getById(vaultId: string, itemId: string): Promise<FullItem> {
+        const { data } = await this.adapter.sendRequest(
+            "get",
+            this.basePath(vaultId, itemId),
+        );
+
+        return ObjectSerializer.deserialize(data, "FullItem");
+    }
+
     /**
      * Deletes an item with exact match on title.
      *
@@ -194,9 +203,8 @@ export class Items extends OPResource {
      * @param {string} vaultId
      * @param {string} title
      * @returns {Promise<FullItem>}
-     * @private
      */
-    private async getByTitle(
+    public async getByTitle(
         vaultId: string,
         title: string,
     ): Promise<FullItem> {
