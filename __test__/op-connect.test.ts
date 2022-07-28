@@ -308,8 +308,7 @@ describe("Test OnePasswordConnect CRUD", () => {
 
     describe("get item by id", () => {
         test("should find item by id", async () => {
-            nock(mockServerUrl)
-                .get(`/v1/vaults/${VAULT_ID}/items/${ITEM_ID}`)
+            apiMock.getItemById()
                 .reply(200, { id: ITEM_ID });
 
             const item: Item = await op.getItemById(VAULT_ID, ITEM_ID);
@@ -320,8 +319,7 @@ describe("Test OnePasswordConnect CRUD", () => {
         test("should re-throw api error", async () => {
             const notFoundError = { status: 404, message: "Item not found" };
 
-            nock(mockServerUrl)
-                .get(`/v1/vaults/${VAULT_ID}/items/${ITEM_ID}`)
+            apiMock.getItemById()
                 .replyWithError(notFoundError);
 
             await expect(() => op.getItemById(VAULT_ID, ITEM_ID))
