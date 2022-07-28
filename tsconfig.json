@@ -8,5 +8,5 @@
     "esModuleInterop": true,
     "declaration": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "__test__/**/*"]
 }
