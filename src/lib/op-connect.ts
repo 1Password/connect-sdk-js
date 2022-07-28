@@ -205,15 +205,31 @@ class OPConnect {
     }
 
     /**
-     * Deletes a single Item matching the given Item ID.
+     * Delete a specific item with a matching ID or Title.
+     *
+     * The Item Title must be an exact-match.
+     *
+     * @param {string} vaultId
+     * @param {string} itemQuery
+     * @returns {Promise<void>}
+     */
+    public async deleteItem(vaultId: string, itemQuery: string): Promise<void> {
+        if (!itemQuery) {
+            throw new Error(ERROR_MESSAGE.PROVIDE_ITEM_NAME_OR_ID);
+        }
+
+        await this.items.delete(vaultId, itemQuery);
+    }
+
+    /**
+     * Delete a specific item with a matching ID value.
      *
      * @param {string} vaultId
      * @param {string} itemId
      * @returns {Promise<void>}
      */
-    public async deleteItem(vaultId: string, itemId: string): Promise<void> {
-        await this.items.delete(vaultId, itemId);
-        return;
+    public async deleteItemById(vaultId: string, itemId: string): Promise<void> {
+        await this.items.deleteById(vaultId, itemId);
     }
 
     /**

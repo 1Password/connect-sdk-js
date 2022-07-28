@@ -21,7 +21,7 @@ export class ApiMock {
         return this.scope.get(this.pathBuilder.itemById(itemId, vaultId));
     }
 
-    getItemByTitle(title: string, itemId?: string, vaultId?: string): nock.Interceptor {
+    listItemsByTitle(title: string, itemId?: string, vaultId?: string): nock.Interceptor {
         return this.scope.get(this.pathBuilder.items(vaultId))
                 .query({
                     filter: `title eq "${title}"`,
