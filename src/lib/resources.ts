@@ -148,8 +148,32 @@ export class Items extends OPResource {
         return this.getByTitle(vaultId, itemQuery);
     }
 
-    public async delete(vaultId: string, itemId: string): Promise<Response> {
-        return await this.adapter.sendRequest(
+    /**
+     * Deletes an Item with exact match on Title or ID.
+     *
+     * @param {string} vaultId
+     * @param {string} itemQuery
+     * @returns {Promise<void>}
+     * @private
+     */
+    public async delete(vaultId: string, itemQuery: string): Promise<Response> {
+        if (isValidId(itemQuery)) {
+            return this.deleteById(vaultId, itemQuery);
+        }
+
+        return this.deleteByTitle(vaultId, itemQuery);
+    }
+
+    /**
+     * Deletes an item with exact match on ID.
+     *
+     * @param {string} vaultId
+     * @param {string} itemId
+     * @returns {Promise<void>}
+     * @private
+     */
+    public async deleteById(vaultId: string, itemId: string): Promise<Response> {
+        return this.adapter.sendRequest(
             "delete",
             this.basePath(vaultId, itemId),
         );
@@ -174,7 +198,7 @@ export class Items extends OPResource {
     public async deleteByTitle(vaultId: string, title: string): Promise<Response> {
         const item: SimpleItem = await this.getSimpleItemByTitle(vaultId, title);
 
-        return this.delete(vaultId, item.id);
+        return this.deleteById(vaultId, item.id);
     }
 
     /**

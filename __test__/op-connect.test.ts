@@ -13,6 +13,7 @@ const mockServerUrl = "http://localhost:8000";
 const mockToken = "myToken";
 const VAULT_ID = ApiMock.VAULT_ID;
 const ITEM_ID = ApiMock.ITEM_ID;
+const itemTitle = 'itemTitle';
 
 const testOpts: OPConfig = {serverURL: mockServerUrl, token: mockToken};
 
@@ -29,7 +30,7 @@ describe("Test OnePasswordConnect CRUD", () => {
 
     afterEach(() => {
         nock.restore();
-        apiMock.nock.restore();
+        apiMock.nock.cleanAll();
     });
 
     test("list vaults", async () => {
@@ -103,14 +104,6 @@ describe("Test OnePasswordConnect CRUD", () => {
         expect(updatedItem instanceof FullItem).toEqual(true);
         expect(updatedItem.title).toBe("Updated Title");
         expect(updatedItem.tags.sort()).toEqual(itemToBeUpdated.tags.sort());
-    });
-
-    test("delete vault item", async () => {
-        nock(mockServerUrl)
-            .delete(`/v1/vaults/${VAULT_ID}/items/${ITEM_ID}`)
-            .reply(204);
-
-        await op.deleteItem(VAULT_ID, ITEM_ID);
     });
 
     test("get item by title", async () => {
@@ -291,10 +284,9 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
 
         test("should return item by title", async () => {
-            const itemTitle = "some title";
             const itemMock: FullItem = { id: ITEM_ID, title: itemTitle, vault: { id: VAULT_ID } } as FullItem;
 
-            apiMock.getItemByTitle(itemTitle)
+            apiMock.listItemsByTitle(itemTitle)
                 .reply(200, [itemMock]);
 
             apiMock.getItemById()
@@ -328,10 +320,8 @@ describe("Test OnePasswordConnect CRUD", () => {
     });
 
     describe("delete item by title", () => {
-        const itemTitle = 'itemTitle';
-
         test("should reject if no items found", async () => {
-            apiMock.getItemByTitle(itemTitle)
+            apiMock.listItemsByTitle(itemTitle)
                 .reply(200, []);
 
             apiMock.deleteItemById()
@@ -342,7 +332,7 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
 
         test("should reject if more than 1 item with given title found", async () => {
-            apiMock.getItemByTitle(itemTitle)
+            apiMock.listItemsByTitle(itemTitle)
                 .reply(200, [{ id: ITEM_ID }, {}]);
 
             apiMock.deleteItemById()
@@ -353,13 +343,67 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
 
         test("should finish successfully", async () => {
-            apiMock.getItemByTitle(itemTitle)
+            apiMock.listItemsByTitle(itemTitle)
                 .reply(200, [{ id: ITEM_ID }]);
 
             apiMock.deleteItemById()
                 .reply(204);
 
             await op.deleteItemByTitle(VAULT_ID, itemTitle);
+        });
+    });
+
+    describe("delete item by id", () => {
+        test("should throw error if delete not existing item", async () => {
+            apiMock.deleteItemById()
+                .reply(404);
+
+            await expect(() => op.deleteItemById(VAULT_ID, ITEM_ID))
+                .rejects.toThrowError();
+        });
+
+        test("should finish successfully ", async () => {
+            apiMock.deleteItemById().reply(204);
+            await op.deleteItemById(VAULT_ID, ITEM_ID);
+        });
+    });
+
+    describe("delete item", () => {
+        test.each([
+            [undefined],
+            [null],
+            [""],
+        ])("should throw error if %s provided", async (itemQuery) => {
+            await expect(() => op.deleteItem(VAULT_ID, itemQuery))
+                .rejects.toThrowError(ERROR_MESSAGE.PROVIDE_ITEM_NAME_OR_ID);
+        });
+
+        test("should throw an error if 2 items found by title", async () => {
+            apiMock.listItemsByTitle(itemTitle).reply(200, [{}, {}]);
+
+            await expect(() => op.deleteItem(VAULT_ID, itemTitle))
+                .rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
+        });
+
+        test("should throw an error if no items found by title", async () => {
+            apiMock.listItemsByTitle(itemTitle).reply(200, []);
+
+            await expect(() => op.deleteItem(VAULT_ID, itemTitle))
+                .rejects.toEqual(HttpErrorFactory.noItemsFoundByTitle());
+        });
+
+        test("should finish successfully if valid item id provided", async () => {
+            apiMock.deleteItemById().reply(204);
+            await op.deleteItem(VAULT_ID, ITEM_ID);
+        });
+
+        test("should finish successfully if existing item title provided", async () => {
+            apiMock.listItemsByTitle(itemTitle)
+                .reply(200, [{ id: ITEM_ID, title: itemTitle }]);
+            apiMock.deleteItemById()
+                .reply(204);
+
+            await op.deleteItem(VAULT_ID, itemTitle);
         });
     });
 });
