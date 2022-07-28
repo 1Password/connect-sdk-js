@@ -27,6 +27,10 @@ export class ApiMock {
                     filter: `title eq "${title}"`,
                 });
     }
+
+    deleteItemById(itemId?: string, vaultId?: string): nock.Interceptor {
+        return this.scope.delete(this.pathBuilder.itemById(itemId, vaultId));
+    }
 }
 
 class PathBuilder {

@@ -165,6 +165,19 @@ export class Items extends OPResource {
     }
 
     /**
+     * Deletes an item with exact match on title.
+     *
+     * @param {string} vaultId
+     * @param {string} title
+     * @returns {Promise<void>}
+     */
+    public async deleteByTitle(vaultId: string, title: string): Promise<Response> {
+        const item: SimpleItem = await this.getSimpleItemByTitle(vaultId, title);
+
+        return this.delete(vaultId, item.id);
+    }
+
+    /**
      * Search for all Items with exact match on Title.
      *
      * @param {string} vaultId
@@ -183,7 +196,7 @@ export class Items extends OPResource {
     }
 
     /**
-     * Searches for an Item with a case-sensitive, exact match on title.
+     * Searches for an Item with exact match on title.
      * If found, queries for complete item details and returns result.
      *
      * @param {string} vaultId
@@ -194,6 +207,12 @@ export class Items extends OPResource {
         vaultId: string,
         title: string,
     ): Promise<FullItem> {
+        const item: SimpleItem = await this.getSimpleItemByTitle(vaultId, title);
+
+        return this.getById(item.vault.id, item.id);
+    }
+
+    private async getSimpleItemByTitle(vaultId: string, title: string): Promise<SimpleItem> {
         const queryPath = `${this.basePath(
             vaultId,
         )}?${QueryBuilder.filterByTitle(title)}`;
@@ -208,11 +227,6 @@ export class Items extends OPResource {
             return Promise.reject(HttpErrorFactory.multipleItemsFoundByTitle());
         }
 
-        return this.getById(data[0].vault.id, data[0].id);
+        return ObjectSerializer.deserialize(data[0], "Item");
     }
 }
-
-// Either itemId OR title must be supplied
-type GetItemOptions =
-    | { itemId: string; title?: never }
-    | { title: string; itemId?: never };
