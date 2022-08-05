@@ -254,6 +254,6 @@ class OPConnect {
      * @returns {Promise<ItemFile[]>}
      */
     public async listFiles(vaultId: string, itemId: string): Promise<ItemFile[]> {
-        return await this.items.listFiles(vaultId, itemId);
+        return this.items.listFiles(vaultId, itemId);
     }
 }
