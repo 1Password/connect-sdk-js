@@ -3,6 +3,7 @@ import { Item as SimpleItem, ObjectSerializer } from "../model/models";
 import { Vault } from "../model/vault";
 import { RequestAdapter, Response } from "./requests";
 import { HttpErrorFactory, isValidId, QueryBuilder } from "./utils";
+import { ItemFile } from "../model/itemFile";
 
 class OPResource {
     protected adapter: RequestAdapter;
@@ -252,5 +253,21 @@ export class Items extends OPResource {
         }
 
         return ObjectSerializer.deserialize(data[0], "Item");
+    }
+
+    /**
+     * Get a list of files an Item contains.
+     *
+     * @param {string} vaultId
+     * @param {string} itemId
+     * @returns {Promise<ItemFile[]>}
+     */
+    public async listFiles(vaultId: string, itemId: string): Promise<ItemFile[]> {
+        const { data } = await this.adapter.sendRequest(
+            "get",
+            `${this.basePath(vaultId, itemId)}/files`
+        );
+
+        return ObjectSerializer.deserialize(data, "Array<ItemFile>");
     }
 }

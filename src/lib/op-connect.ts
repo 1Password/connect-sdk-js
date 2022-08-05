@@ -1,6 +1,7 @@
 import { FullItem } from "../model/fullItem";
 import { Item as SimpleItem } from "../model/item";
 import { Vault } from "../model/vault";
+import { ItemFile } from "../model/itemFile";
 import { Items, Vaults } from "./resources";
 
 import { HTTPClient, IRequestClient } from "./client";
@@ -243,5 +244,16 @@ class OPConnect {
      */
     public async deleteItemByTitle(vaultId: string, itemTitle: string): Promise<void> {
           await this.items.deleteByTitle(vaultId, itemTitle);
+    }
+
+    /**
+     * Get a list of files an Item contains.
+     *
+     * @param {string} vaultId
+     * @param {string} itemId
+     * @returns {Promise<ItemFile[]>}
+     */
+    public async listFiles(vaultId: string, itemId: string): Promise<ItemFile[]> {
+        return await this.items.listFiles(vaultId, itemId);
     }
 }
