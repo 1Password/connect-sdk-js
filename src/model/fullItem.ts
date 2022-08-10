@@ -10,12 +10,11 @@
  * Do not edit the class manually.
  */
 
-import { FullItemAllOf } from './fullItemAllOf';
 import { FullItemAllOfFields } from './fullItemAllOfFields';
 import { FullItemAllOfSections } from './fullItemAllOfSections';
-import { Item } from './item';
 import { ItemUrls } from './itemUrls';
 import { ItemVault } from './itemVault';
+import { ItemFile } from "./itemFile";
 
 export class FullItem {
     'id'?: string;
@@ -32,6 +31,7 @@ export class FullItem {
     'lastEditedBy'?: string;
     'sections'?: Array<FullItemAllOfSections>;
     'fields'?: Array<FullItemAllOfFields>;
+    'files'?: Array<ItemFile>;
 
     static discriminator: string | undefined = undefined;
 
@@ -105,6 +105,11 @@ export class FullItem {
             "name": "fields",
             "baseName": "fields",
             "type": "Array<FullItemAllOfFields>"
+        },
+        {
+            "name": "files",
+            "baseName": "files",
+            "type": "Array<ItemFile>"
         }    ];
 
     static getAttributeTypeMap() {

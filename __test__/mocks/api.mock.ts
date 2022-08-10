@@ -31,6 +31,10 @@ export class ApiMock {
     deleteItemById(itemId?: string, vaultId?: string): nock.Interceptor {
         return this.scope.delete(this.pathBuilder.itemById(itemId, vaultId));
     }
+
+    listItemFiles(vaultId?: string, itemId?: string): nock.Interceptor {
+        return this.scope.get(this.pathBuilder.listFiles(vaultId, itemId));
+    }
 }
 
 class PathBuilder {
@@ -56,6 +60,10 @@ class PathBuilder {
 
     itemById(itemId?: string, vaultId?: string): string {
         return `${this.items(vaultId)}${itemId || this.ITEM_ID}`;
+    }
+
+    listFiles(vaultId?: string, itemId?: string): string {
+        return `${this.items(vaultId)}${itemId || this.ITEM_ID}/files`;
     }
 }
 

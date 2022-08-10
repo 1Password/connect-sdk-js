@@ -7,6 +7,7 @@ import CategoryEnum = Item.CategoryEnum;
 import { HttpErrorFactory } from "../src/lib/utils";
 import { ERROR_MESSAGE } from "../src/lib/constants";
 import { ApiMock } from "./mocks";
+import { ItemFile } from "../dist/model/itemFile";
 
 // eslint-disable-next-line @typescript-eslint/tslint/config
 const mockServerUrl = "http://localhost:8000";
@@ -406,6 +407,32 @@ describe("Test OnePasswordConnect CRUD", () => {
             await op.deleteItem(VAULT_ID, itemTitle);
         });
     });
+
+    describe("list files", () => {
+        test("should throw error if invalid itemId provided", async () => {
+            const itemId = "invalid_item_id";
+            apiMock.listItemFiles(undefined, itemId).replyWithError("No items found");
+
+            await expect(() => op.listFiles(VAULT_ID, itemId))
+                .rejects.toThrowError("No items found");
+        });
+
+        test("should return empty array if item with no files", async () => {
+            apiMock.listItemFiles().reply(200, []);
+
+            const files: ItemFile[] = await op.listFiles(VAULT_ID, ITEM_ID);
+
+            expect(files).toHaveLength(0);
+        });
+
+        test("should return item with single file", async () => {
+            apiMock.listItemFiles().reply(200, [{} as ItemFile]);
+
+            const files: ItemFile[] = await op.listFiles(VAULT_ID, ITEM_ID);
+
+            expect(files).toHaveLength(1);
+        });
+    })
 });
 
 describe("Connector HTTP errors", () => {
