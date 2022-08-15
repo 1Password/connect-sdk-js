@@ -1,4 +1,4 @@
-import * as crypto from "crypto";
+import { v4 as uuidv4 } from 'uuid';
 
 import Debug from "debug";
 import cloneDeep from "lodash.clonedeep";
@@ -222,7 +222,7 @@ export class ItemBuilder {
         // Note about Section IDs: these do NOT have to be cryptographically random.
         // Section IDs are only unique within an Item.
         const section: FullItemAllOfSections = {
-            id: generateSectionId(),
+            id: generateId(),
             label: sectionName,
         };
         this.sections.set(normalizedName, section);
@@ -275,12 +275,10 @@ const validRecipe = (recipe: GeneratorRecipe): boolean => {
 };
 
 /**
- * Create a sectionID from random bytes.
- *
- * Section IDs do not need to be cryptographically random.
+ * Create a valid 1password id.
  *
  * @param {number} length
  * @returns {string}
  */
-const generateSectionId = (length?: number): string =>
-    crypto.randomBytes(length || 13).toString("hex");
+const generateId = (length: number = 26): string =>
+    uuidv4().replaceAll("-", "").slice(0, length);
