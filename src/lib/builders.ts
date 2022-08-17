@@ -281,4 +281,4 @@ const validRecipe = (recipe: GeneratorRecipe): boolean => {
  * @returns {string}
  */
 const generateId = (length: number = 26): string =>
-    uuidv4().replaceAll("-", "").slice(0, length);
+    uuidv4().replace(/-/g, "").slice(0, length);
