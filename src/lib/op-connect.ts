@@ -185,11 +185,11 @@ class OPConnect {
      * @param {string} title
      * @returns {Promise<FullItem[]>}
      */
-     public async getItemsByTitleSearch(
+     public async listItemsByTitleSearch(
         vaultId: string,
         title: string,
     ): Promise<FullItem []> {
-        return this.items.getItemsByTitleSearch(vaultId, title);
+        return this.items.listItemsByTitleSearch(vaultId, title);
     }
 
     /**

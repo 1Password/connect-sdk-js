@@ -263,7 +263,7 @@ export class Items extends OPResource {
      * @param {string} itemTitle
      * @returns {Promise<FullItem[]>}
      */
-      public async getItemsByTitleSearch(
+      public async listItemsByTitleSearch(
         vaultId: string,
         itemTitle: string,
     ): Promise<FullItem[]> {
