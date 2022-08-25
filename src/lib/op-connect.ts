@@ -175,6 +175,23 @@ class OPConnect {
         return this.items.getByTitle(vaultId, title);
     }
 
+
+    /**
+     * Get details about all Item which contains a given Title value.
+     *
+     * The Item Title doesn't have to match exactly instead must contain some value.
+     *
+     * @param {string} vaultId
+     * @param {string} title
+     * @returns {Promise<FullItem[]>}
+     */
+     public async listItemsByTitleSearch(
+        vaultId: string,
+        title: string,
+    ): Promise<FullItem []> {
+        return this.items.listItemsByTitleSearch(vaultId, title);
+    }
+
     /**
      * Creates a new Item inside the specified Vault.
      *
