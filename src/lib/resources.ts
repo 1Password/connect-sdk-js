@@ -255,6 +255,28 @@ export class Items extends OPResource {
         return ObjectSerializer.deserialize(data[0], "Item");
     }
 
+     /**
+     * Search by title for all Items which contains a given title.
+     *  If found, queries for complete item details and returns results
+     *
+     * @param {string} vaultId
+     * @param {string} itemTitle
+     * @returns {Promise<FullItem[]>}
+     */
+      public async getItemsByTitleSearch(
+        vaultId: string,
+        itemTitle: string,
+    ): Promise<FullItem[]> {
+        const { data } = await this.adapter.sendRequest(
+            "get",
+            `${this.basePath(vaultId)}?${QueryBuilder.searchByTitle(
+                itemTitle,
+            )}`,
+        );
+
+        return Promise.all(data.map((item: SimpleItem) => this.getById(vaultId, item.id)));
+    }
+
     /**
      * Get a list of files an Item contains.
      *
