@@ -12,6 +12,22 @@
 
 ---
 
+[//]: # (START/v1.2.0)
+# v1.2.0
+
+## Features
+ * Return `label` property in ItemUrl object. {#66}
+ * Add functionality to fetch multiple vaults {#67}
+ * Add functionality to fetch single vault by title {#68}
+ * Three separate methods are available to fetch single vault: `getVault`, `getVaultById`, `getVaultByTitle` {#69}
+ * Add functionality to fetch multiple items by title {#70}
+ * Three separate methods are available to fetch a single item: `getItem`, `getItemById`, `getItemByTitle` {#71}
+ * Add functionality to remove single item by title {#72, #74}
+ * Three separate methods are available to delete a single item: `deleteItem`, `deleteItemById`, `deleteItemByTitle` {#75}
+ * Add functionality to fetch item's files {#76}
+
+---
+
 [//]: # (START/v1.1.0)
 # v1.1.0
 
