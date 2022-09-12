@@ -176,6 +176,20 @@ class OPConnect {
     }
 
     /**
+     * Get Item's OTP with exact match on Title or ID.
+     *
+     * @param {string} vaultId
+     * @param {string} itemQuery
+     * @returns {Promise<string>}
+     */
+     public async getItemOTP(
+        vaultId: string,
+        itemQuery: string,
+    ): Promise<string> {
+        return this.items.getOTP(vaultId, itemQuery);
+    }
+
+    /**
      * Creates a new Item inside the specified Vault.
      *
      * @param {string} vaultId

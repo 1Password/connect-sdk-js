@@ -1,9 +1,13 @@
-import { FullItem } from "../model/fullItem";
-import { Item as SimpleItem, ObjectSerializer } from "../model/models";
-import { Vault } from "../model/vault";
+import {
+    Item as SimpleItem,
+    ObjectSerializer,
+    FullItem,
+    FullItemAllOfFields,
+    ItemFile,
+    Vault,
+} from "../model/models";
 import { RequestAdapter, Response } from "./requests";
-import { HttpErrorFactory, isValidId, QueryBuilder } from "./utils";
-import { ItemFile } from "../model/itemFile";
+import { ErrorMessageFactory, HttpErrorFactory, isValidId, QueryBuilder } from "./utils";
 
 class OPResource {
     protected adapter: RequestAdapter;
@@ -269,5 +273,29 @@ export class Items extends OPResource {
         );
 
         return ObjectSerializer.deserialize(data, "Array<ItemFile>");
+    }
+
+
+    /**
+     * Get Item's OTP with exact match on Title or ID.
+     *
+     * @param {string} vaultId
+     * @param {string} itemQuery
+     * @returns {Promise<string>}
+     */
+    public async getOTP(vaultId: string, itemQuery: string): Promise<string> {
+        const item: FullItem = await this.get(vaultId, itemQuery);
+
+        return this.extractOTP(item);
+    }
+
+    private extractOTP(item: FullItem): string {
+        const otp: string = item?.fields?.find(({ type }) => type === FullItemAllOfFields.TypeEnum.Otp)?.otp;
+
+        if (!otp) {
+            throw new Error(ErrorMessageFactory.noOTPFoundForItem(item.id));
+        }
+
+        return otp;
     }
 }
