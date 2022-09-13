@@ -1,5 +1,6 @@
 import { FullItem, GeneratorRecipe, ItemBuilder } from "../src";
 import { FullItemAllOfFields } from "../src/model/fullItemAllOfFields";
+import { isValidSectionId } from './../src/lib/utils';
 import CategoryEnum = FullItem.CategoryEnum;
 
 describe("Test ItemBuilder", () => {
@@ -97,6 +98,16 @@ describe("Test ItemBuilder", () => {
         const itemWithCategory = builder.build();
 
         expect(itemWithCategory.category).toEqual(CategoryEnum.Login);
+    });
+
+    test("sections have valid id", () => {
+        const itemOneSection = new ItemBuilder()
+            .setCategory(CategoryEnum.Login)
+            .addSection("section 1")
+            .build();
+
+        expect(itemOneSection.sections.length).toEqual(1);
+        expect(isValidSectionId(itemOneSection.sections[0].id)).toBeTruthy();
     });
 
     test("sections have unique names", () => {
