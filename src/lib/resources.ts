@@ -2,11 +2,9 @@ import {
     Item as SimpleItem,
     ObjectSerializer,
     FullItem,
-    FullItemAllOfFields,
     ItemFile,
     Vault,
 } from "../model/models";
-import { ItemHelper } from "./helpers";
 import { RequestAdapter, Response } from "./requests";
 import { ErrorMessageFactory, HttpErrorFactory, isValidId, QueryBuilder } from "./utils";
 
