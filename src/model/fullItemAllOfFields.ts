@@ -32,6 +32,7 @@ export class FullItemAllOfFields {
     * For fields with a purpose of `PASSWORD` this is the entropy of the value
     */
     'entropy'?: number;
+    'otp'?: string;
 
     static discriminator: string | undefined = undefined;
 
@@ -80,6 +81,11 @@ export class FullItemAllOfFields {
             "name": "entropy",
             "baseName": "entropy",
             "type": "number"
+        },
+        {
+            "name": "otp",
+            "baseName": "totp",
+            "type": "string"
         }    ];
 
     static getAttributeTypeMap() {

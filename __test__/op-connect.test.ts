@@ -4,10 +4,11 @@ import {OPConfig} from "../src/lib/op-connect";
 import {ErrorResponse} from "../src/model/errorResponse";
 import {Item} from "../src/model/item";
 import CategoryEnum = Item.CategoryEnum;
-import { HttpErrorFactory } from "../src/lib/utils";
+import { ErrorMessageFactory, HttpErrorFactory } from "../src/lib/utils";
 import { ERROR_MESSAGE } from "../src/lib/constants";
 import { ApiMock } from "./mocks";
 import { ItemFile } from "../dist/model/itemFile";
+import { FullItemAllOfFields } from "../src/model/models";
 
 // eslint-disable-next-line @typescript-eslint/tslint/config
 const mockServerUrl = "http://localhost:8000";
@@ -15,6 +16,7 @@ const mockToken = "myToken";
 const VAULT_ID = ApiMock.VAULT_ID;
 const ITEM_ID = ApiMock.ITEM_ID;
 const itemTitle = 'itemTitle';
+const OTP = '123456';
 
 const testOpts: OPConfig = {serverURL: mockServerUrl, token: mockToken};
 
@@ -432,7 +434,30 @@ describe("Test OnePasswordConnect CRUD", () => {
 
             expect(files).toHaveLength(1);
         });
-    })
+    });
+
+    describe("get item otp", () => {
+        test("should throw error if request to connect returns an error", async () => {
+            apiMock.getItemById().reply(404);
+
+            await expect(() => op.getItemOTP(VAULT_ID, ITEM_ID))
+                .rejects.toThrowError();
+        });
+
+        test("should throw error if item has no OTP", async () => {
+            apiMock.getItemById().reply(200, { id: ITEM_ID });
+
+            await expect(() => op.getItemOTP(VAULT_ID, ITEM_ID))
+                .rejects.toThrowError(ErrorMessageFactory.noOTPFoundForItem(ITEM_ID));
+        });
+
+        test("should return OTP", async () => {
+            apiMock.getItemById().reply(200, { id: ITEM_ID, fields: [{ type: FullItemAllOfFields.TypeEnum.Otp, totp: OTP }] });
+            const otp: string = await op.getItemOTP(VAULT_ID, ITEM_ID);
+
+            expect(otp).toEqual(OTP);
+        });
+    });
 });
 
 describe("Connector HTTP errors", () => {
