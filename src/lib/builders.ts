@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import Debug from "debug";
 import cloneDeep from "lodash.clonedeep";
 import slugify from "slugify";
@@ -12,6 +10,7 @@ import {
     ItemUrls,
     ItemVault,
 } from "../model/models";
+import { generateSectionId } from './utils';
 
 const debug = Debug("opconnect:builder");
 
@@ -222,7 +221,7 @@ export class ItemBuilder {
         // Note about Section IDs: these do NOT have to be cryptographically random.
         // Section IDs are only unique within an Item.
         const section: FullItemAllOfSections = {
-            id: generateId(),
+            id: generateSectionId(),
             label: sectionName,
         };
         this.sections.set(normalizedName, section);
@@ -273,12 +272,3 @@ const validRecipe = (recipe: GeneratorRecipe): boolean => {
     }
     return true;
 };
-
-/**
- * Create a valid 1password id.
- *
- * @param {number} length
- * @returns {string}
- */
-const generateId = (length: number = 26): string =>
-    uuidv4().replace(/-/g, "").slice(0, length);
