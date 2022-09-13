@@ -179,6 +179,9 @@ class OPConnect {
      * Get Item's OTP.
      * itemQuery param can be an item's Title or ID.
      *
+     * If there are more than one OTP field in an item
+     * it always returns the first/main one.
+     *
      * @param {string} vaultId
      * @param {string} itemQuery
      * @returns {Promise<string>}
