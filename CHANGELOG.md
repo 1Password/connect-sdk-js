@@ -19,12 +19,23 @@
  * Return `label` property in ItemUrl object. {#66}
  * Add functionality to fetch multiple vaults {#67}
  * Add functionality to fetch single vault by title {#68}
- * Three separate methods are available to fetch single vault: `getVault`, `getVaultById`, `getVaultByTitle` {#69}
+ * Enable fetching a single vault with three separate methods: {#69}
+    - `getVault` - get the vault based on its ID or name
+    - `getVaultById` - get the vault with the provided ID
+    - `getVaultByTitle` - get the vault with the provided title. Note: The title has to be unique. If multiple vaults have the same title, consider getting the item by its ID instead.
  * Add functionality to fetch multiple items by title {#70}
- * Three separate methods are available to fetch a single item: `getItem`, `getItemById`, `getItemByTitle` {#71}
+ * Enable fetching a single item with three separate methods: {#71}
+    - `getItem` - get the item based on its ID or name
+    - `getItemById` - get the item with the provided ID
+    - `getItemByTitle` - get the item with the provided title. Note: The title has to be unique. If multiple items have the same title, consider getting the item by its ID instead.
  * Add functionality to remove single item by title {#72, #74}
- * Three separate methods are available to delete a single item: `deleteItem`, `deleteItemById`, `deleteItemByTitle` {#75}
+ * Three separate methods are available to delete a single item:  {#75}
+    - `deleteItem` - delete the item based on its ID or name
+    - `deleteItemById` - delete the item with the provided ID
+    - `deleteItemByTitle` - delete the item with the provided title. Note: The title has to be unique. If multiple items have the same title, consider getting the item by its ID instead.
  * Add functionality to fetch item's files {#76}
+ * Retire of `crypto` library {#78}
+ * Add functionality to fetch Item's OTP {#81}
 
 ---
 
