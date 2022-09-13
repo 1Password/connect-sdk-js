@@ -11,3 +11,6 @@ export const ERROR_MESSAGE = {
     NO_OTP_FOR_THE_ITEM: "No OTP found for the Item",
 }
 
+export const ID_PREFIX = {
+    SECTION: "Section_",
+};

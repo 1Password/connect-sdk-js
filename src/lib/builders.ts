@@ -1,5 +1,3 @@
-import * as crypto from "crypto";
-
 import Debug from "debug";
 import cloneDeep from "lodash.clonedeep";
 import slugify from "slugify";
@@ -12,6 +10,7 @@ import {
     ItemUrls,
     ItemVault,
 } from "../model/models";
+import { generateSectionId } from './utils';
 
 const debug = Debug("opconnect:builder");
 
@@ -273,14 +272,3 @@ const validRecipe = (recipe: GeneratorRecipe): boolean => {
     }
     return true;
 };
-
-/**
- * Create a sectionID from random bytes.
- *
- * Section IDs do not need to be cryptographically random.
- *
- * @param {number} length
- * @returns {string}
- */
-const generateSectionId = (length?: number): string =>
-    crypto.randomBytes(length || 13).toString("hex");
