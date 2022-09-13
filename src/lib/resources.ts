@@ -6,6 +6,7 @@ import {
     ItemFile,
     Vault,
 } from "../model/models";
+import { ItemHelper } from "./helpers";
 import { RequestAdapter, Response } from "./requests";
 import { ErrorMessageFactory, HttpErrorFactory, isValidId, QueryBuilder } from "./utils";
 
@@ -277,20 +278,19 @@ export class Items extends OPResource {
 
 
     /**
-     * Get Item's OTP with exact match on Title or ID.
+     * Get Item's OTP.
+     * itemQuery param can be an item's Title or ID.
      *
+     * If there are more than one OTP field in an item
+     * it always returns the first/main one.
+     * 
      * @param {string} vaultId
      * @param {string} itemQuery
      * @returns {Promise<string>}
      */
     public async getOTP(vaultId: string, itemQuery: string): Promise<string> {
         const item: FullItem = await this.get(vaultId, itemQuery);
-
-        return this.extractOTP(item);
-    }
-
-    private extractOTP(item: FullItem): string {
-        const otp: string = item?.fields?.find(({ type }) => type === FullItemAllOfFields.TypeEnum.Otp)?.otp;
+        const otp = ItemHelper.extractOTP(item);
 
         if (!otp) {
             throw new Error(ErrorMessageFactory.noOTPFoundForItem(item.id));

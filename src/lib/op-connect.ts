@@ -176,7 +176,8 @@ class OPConnect {
     }
 
     /**
-     * Get Item's OTP with exact match on Title or ID.
+     * Get Item's OTP.
+     * itemQuery param can be an item's Title or ID.
      *
      * @param {string} vaultId
      * @param {string} itemQuery
