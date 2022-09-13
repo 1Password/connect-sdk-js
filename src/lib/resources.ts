@@ -283,14 +283,14 @@ export class Items extends OPResource {
      *
      * If there are more than one OTP field in an item
      * it always returns the first/main one.
-     * 
+     *
      * @param {string} vaultId
      * @param {string} itemQuery
      * @returns {Promise<string>}
      */
     public async getOTP(vaultId: string, itemQuery: string): Promise<string> {
         const item: FullItem = await this.get(vaultId, itemQuery);
-        const otp = ItemHelper.extractOTP(item);
+        const otp = item.extractOTP();
 
         if (!otp) {
             throw new Error(ErrorMessageFactory.noOTPFoundForItem(item.id));
