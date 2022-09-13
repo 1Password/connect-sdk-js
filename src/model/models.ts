@@ -8,6 +8,7 @@ export * from './generatorRecipe';
 export * from './item';
 export * from './itemUrls';
 export * from './itemVault';
+export * from './itemFile';
 export * from './vault';
 
 import { ErrorResponse } from './errorResponse';

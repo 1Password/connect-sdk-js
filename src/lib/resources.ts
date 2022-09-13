@@ -1,9 +1,12 @@
-import { FullItem } from "../model/fullItem";
-import { Item as SimpleItem, ObjectSerializer } from "../model/models";
-import { Vault } from "../model/vault";
+import {
+    Item as SimpleItem,
+    ObjectSerializer,
+    FullItem,
+    ItemFile,
+    Vault,
+} from "../model/models";
 import { RequestAdapter, Response } from "./requests";
-import { HttpErrorFactory, isValidId, QueryBuilder } from "./utils";
-import { ItemFile } from "../model/itemFile";
+import { ErrorMessageFactory, HttpErrorFactory, isValidId, QueryBuilder } from "./utils";
 
 class OPResource {
     protected adapter: RequestAdapter;
@@ -269,5 +272,28 @@ export class Items extends OPResource {
         );
 
         return ObjectSerializer.deserialize(data, "Array<ItemFile>");
+    }
+
+
+    /**
+     * Get Item's OTP.
+     * itemQuery param can be an item's Title or ID.
+     *
+     * If there are more than one OTP field in an item
+     * it always returns the first/main one.
+     *
+     * @param {string} vaultId
+     * @param {string} itemQuery
+     * @returns {Promise<string>}
+     */
+    public async getOTP(vaultId: string, itemQuery: string): Promise<string> {
+        const item: FullItem = await this.get(vaultId, itemQuery);
+        const otp = item.extractOTP();
+
+        if (!otp) {
+            throw new Error(ErrorMessageFactory.noOTPFoundForItem(item.id));
+        }
+
+        return otp;
     }
 }
