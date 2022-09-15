@@ -193,6 +193,24 @@ class OPConnect {
     }
 
     /**
+     * Get Item's OTP.
+     * itemQuery param can be an item's Title or ID.
+     *
+     * If there are more than one OTP field in an item
+     * it always returns the first/main one.
+     *
+     * @param {string} vaultId
+     * @param {string} itemQuery
+     * @returns {Promise<string>}
+     */
+     public async getItemOTP(
+        vaultId: string,
+        itemQuery: string,
+    ): Promise<string> {
+        return this.items.getOTP(vaultId, itemQuery);
+    }
+
+    /**
      * Creates a new Item inside the specified Vault.
      *
      * @param {string} vaultId
