@@ -34,3 +34,9 @@ export class HttpErrorFactory {
         }
     }
 }
+
+export class ErrorMessageFactory {
+    static noOTPFoundForItem(itemId = ""): string {
+        return `${ERROR_MESSAGE.NO_OTP_FOR_THE_ITEM} ${itemId}`;
+    }
+}

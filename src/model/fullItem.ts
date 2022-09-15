@@ -115,6 +115,18 @@ export class FullItem {
     static getAttributeTypeMap() {
         return FullItem.attributeTypeMap;
     }
+
+    /**
+     * Returns OTP from an Item.
+     *
+     * If there are more than one OTP field in an item
+     * it always returns the first/main one.
+     *
+     * @returns {string}
+     */
+     public extractOTP(): string {
+        return this.fields?.find(({ type }) => type === FullItemAllOfFields.TypeEnum.Otp)?.otp || "";
+    }
 }
 
 export namespace FullItem {
