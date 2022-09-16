@@ -134,6 +134,21 @@ class OPConnect {
     }
 
     /**
+     * Returns a list of Items that contain provided string.
+     *
+     *
+     * @param {string} vaultId
+     * @param {string} titleSearchStr
+     * @returns {Promise<FullItem[]>}
+     */
+    public async listItemsByTitleContains(
+        vaultId: string,
+        titleSearchStr: string,
+    ): Promise<FullItem[]> {
+        return this.items.listItemsByTitleContains(vaultId, titleSearchStr);
+    }
+
+    /**
      * Get details about a specific Item in a Vault.
      *
      * @param {string} vaultId
@@ -173,23 +188,6 @@ class OPConnect {
         title: string,
     ): Promise<FullItem> {
         return this.items.getByTitle(vaultId, title);
-    }
-
-
-    /**
-     * Get details about all Item which contains a given Title value.
-     *
-     * The Item Title doesn't have to match exactly instead must contain some value.
-     *
-     * @param {string} vaultId
-     * @param {string} title
-     * @returns {Promise<FullItem[]>}
-     */
-     public async listItemsByTitleSearch(
-        vaultId: string,
-        title: string,
-    ): Promise<FullItem []> {
-        return this.items.listItemsByTitleSearch(vaultId, title);
     }
 
     /**
