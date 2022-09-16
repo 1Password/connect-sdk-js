@@ -459,21 +459,14 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
     });
 
-    describe("List items by title search", () => {
+    describe("List items by title contains", () => {
         const title = "some title";
         // Search all items by title which contains  the given value `title`
-        const getItemsByTitleMock = (title: string) => nock(mockServerUrl)
-                .get(`/v1/vaults/${VAULT_ID}/items/`)
-                .query({
-                    filter: `title co "${title}"`,
-                });
-        const getFullItemMock = (itemId: string) =>
-            nock(mockServerUrl).get(`/v1/vaults/${VAULT_ID}/items/${itemId}`);
 
         test("should return empty array if nothing found", async () => {
-            getItemsByTitleMock(title).reply(200, []);
+            apiMock.listItemsByTitleContains(title).reply(200, []);
 
-            const result: FullItem[] = await op.listItemsByTitleSearch(VAULT_ID, title);
+            const result: FullItem[] = await op.listItemsByTitleContains(VAULT_ID, title);
 
             expect(result).toHaveLength(0);
         });
@@ -481,20 +474,21 @@ describe("Test OnePasswordConnect CRUD", () => {
         test("should re-throw api error", async () => {
             const badRequestError = { status: 400, message: "Some bad request" };
 
-            getItemsByTitleMock(title).replyWithError(badRequestError);
+            apiMock.listItemsByTitleContains(title).replyWithError(badRequestError);
 
-            await expect(() => op.listItemsByTitleSearch(VAULT_ID, title)).rejects.toEqual(badRequestError);
+            await expect(() => op.listItemsByTitleContains(VAULT_ID, title)).rejects.toEqual(badRequestError);
         });
 
         test("should return 2 items", async () => {
             const item1 = { id: "1" } as Item;
             const item2 = { id: "2" } as Item;
 
-            getItemsByTitleMock(title).reply(200, [item1, item2]);
-            getFullItemMock(item1.id).reply(200, item1);
-            getFullItemMock(item2.id).reply(200, item2);
+            apiMock.listItemsByTitleContains(title).reply(200, [item1, item2]);
+            
+            apiMock.getItemById(item1.id).reply(200, item1);
+            apiMock.getItemById(item2.id).reply(200, item2);
 
-            const result: FullItem[] = await op.listItemsByTitleSearch(VAULT_ID, title);
+            const result: FullItem[] = await op.listItemsByTitleContains(VAULT_ID, title);
 
             expect(result).toHaveLength(2);
             expect(result[0].id).toEqual(item1.id);

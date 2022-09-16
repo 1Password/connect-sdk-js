@@ -36,7 +36,7 @@ export class ApiMock {
         return this.scope.get(this.pathBuilder.listFiles(vaultId, itemId));
     }
 
-    listItemsByTitleSearch(title: string, itemId?: string, vaultId?: string): nock.Interceptor {
+    listItemsByTitleContains(title: string, itemId?: string, vaultId?: string): nock.Interceptor {
         return this.scope.get(this.pathBuilder.items(vaultId))
                 .query({
                     filter: `title co "${title}"`,
