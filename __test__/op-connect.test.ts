@@ -461,7 +461,6 @@ describe("Test OnePasswordConnect CRUD", () => {
 
     describe("List items by title contains", () => {
         const title = "some title";
-        // Search all items by title which contains  the given value `title`
 
         test("should return empty array if nothing found", async () => {
             apiMock.listItemsByTitleContains(title).reply(200, []);
