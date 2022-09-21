@@ -12,6 +12,14 @@
 
 ---
 
+[//]: # (START/v1.3.0)
+# v1.3.0
+
+## Features
+ * Add functionality to fetch a list of the items by title containing provided string {#82}
+
+---
+
 [//]: # (START/v1.2.0)
 # v1.2.0
 
