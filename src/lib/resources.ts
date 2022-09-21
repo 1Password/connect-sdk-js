@@ -224,6 +224,27 @@ export class Items extends OPResource {
     }
 
     /**
+     * Search for the Items in which the Title contains a provided string.
+     *
+     * @param {string} vaultId
+     * @param {string} titleSearchStr
+     * @returns {Promise<FullItem[]>}
+     */
+    public async listItemsByTitleContains(
+        vaultId: string,
+        titleSearchStr: string,
+    ): Promise<FullItem[]> {
+        const { data } = await this.adapter.sendRequest(
+            "get",
+            `${this.basePath(vaultId)}?${QueryBuilder.searchByTitle(
+                titleSearchStr,
+            )}`,
+        );
+
+        return Promise.all(data.map((item: SimpleItem) => this.getById(vaultId, item.id)));
+    }
+
+    /**
      * Searches for an Item with exact match on title.
      * If found, queries for complete item details and returns result.
      *
