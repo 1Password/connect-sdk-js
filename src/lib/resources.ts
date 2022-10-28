@@ -2,6 +2,7 @@ import {
     Item as SimpleItem,
     ObjectSerializer,
     FullItem,
+    Item,
     ItemFile,
     Vault,
 } from "../model/models";
@@ -316,5 +317,50 @@ export class Items extends OPResource {
         }
 
         return otp;
+    }
+}
+
+export class Files extends OPResource {
+    private vaults: Vaults;
+    private items: Items;
+
+    constructor(adapter: RequestAdapter, vaults: Vaults, items: Items) {
+        super(adapter);
+        this.vaults = vaults;
+        this.items = items;
+    }
+
+    /**
+     * Get an Item's specific File with a matching ID value.
+     *
+     * @param {string} vaultQuery - the Vaults's title or ID
+     * @param {string} itemQuery - the Item's title or ID
+     * @param {string} fileId - File's ID
+     * @returns {Promise<ItemFile>}
+     * @private
+     */
+     async getById(vaultQuery: string, itemQuery: string, fileId: string): Promise<ItemFile> {
+        const url = await this.generateFileUrl(vaultQuery, itemQuery, fileId);
+        const { data } = await this.adapter.sendRequest("get", url);
+
+        return ObjectSerializer.deserialize(data, "ItemFile");
+    }
+
+    private async generateFileUrl(vaultQuery: string, itemQuery: string, fileId: string): Promise<string> {
+        let url = "v1/vaults";
+        const vaultId = await this.returnResourceId<Vault>(vaultQuery, this.vaults.getVaultByTitle);
+        const itemId = await this.returnResourceId<Item>(itemQuery, this.items.getByTitle);
+        url += `/${vaultId}/${itemId}/${fileId}`;
+
+        return url;
+    }
+
+    private async returnResourceId<T>(query: string, fetchByTitleFunc: (...params) => Promise<T>): Promise<string> {
+        if (!isValidId(query)) {
+            const resource: T = await fetchByTitleFunc(query);
+            return resource['id'];
+        }
+
+        return query;
     }
 }
