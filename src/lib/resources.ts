@@ -354,6 +354,10 @@ export class Files extends OPResource {
     }
 
     private async generateSingleFileUrl(vaultQuery: string, itemQuery: string, fileId: string): Promise<string> {
+        if (!fileId) {
+            throw new Error(ErrorMessageFactory.noFileIdProvided());
+        }
+
         let url = await this.generateFilesUrl(vaultQuery, itemQuery);
         url += fileId;
 

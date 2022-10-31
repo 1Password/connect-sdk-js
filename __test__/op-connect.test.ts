@@ -479,6 +479,11 @@ describe("Test OnePasswordConnect CRUD", () => {
     });
 
     describe("get file by id", () => {
+        test.each(["", null, undefined])
+            ("should throw error if %s provides as file id", async (fileId) => {
+                await expect(() => op.getFileById(vaultTitle, itemTitle, fileId)).rejects.toThrowError(new Error(ErrorMessageFactory.noFileIdProvided()));
+            });
+
         test("should throw error if invalid vault id provided", async () => {
             apiMock.listVaultsByTitle(vaultTitle).replyWithError("something went wrong");
 
