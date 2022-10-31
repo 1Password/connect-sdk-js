@@ -284,12 +284,12 @@ class OPConnect {
     /**
      * Get a list of files an Item contains.
      *
-     * @param {string} vaultId
-     * @param {string} itemId
+     * @param {string} vaultQuery - the Vaults's title or ID
+     * @param {string} itemQuery - the Item's title or ID
      * @returns {Promise<ItemFile[]>}
      */
-    public async listFiles(vaultId: string, itemId: string): Promise<ItemFile[]> {
-        return this.items.listFiles(vaultId, itemId);
+    public async listFiles(vaultQuery: string, itemQuery: string): Promise<ItemFile[]> {
+        return this.files.listFiles(vaultQuery, itemQuery);
     }
 
     /**
