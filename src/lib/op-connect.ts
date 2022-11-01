@@ -2,7 +2,7 @@ import { FullItem } from "../model/fullItem";
 import { Item as SimpleItem } from "../model/item";
 import { Vault } from "../model/vault";
 import { ItemFile } from "../model/itemFile";
-import { Items, Vaults } from "./resources";
+import { Files, Items, Vaults } from "./resources";
 
 import { HTTPClient, IRequestClient } from "./client";
 
@@ -38,6 +38,7 @@ export const newConnectClient = (opts: OPConfig): OPConnect => {
 class OPConnect {
     private vaults: Vaults;
     private items: Items;
+    private files: Files;
 
     private readonly httpAdapter: RequestAdapter;
 
@@ -49,6 +50,7 @@ class OPConnect {
 
         this.vaults = new Vaults(this.httpAdapter);
         this.items = new Items(this.httpAdapter);
+        this.files = new Files(this.httpAdapter, this.vaults, this.items);
     }
 
     /**
@@ -146,7 +148,7 @@ class OPConnect {
         titleSearchStr: string,
     ): Promise<FullItem[]> {
         return this.items.listItemsByTitleContains(vaultId, titleSearchStr);
-    } 
+    }
 
     /**
      * Get details about a specific Item in a Vault.
@@ -282,11 +284,23 @@ class OPConnect {
     /**
      * Get a list of files an Item contains.
      *
-     * @param {string} vaultId
-     * @param {string} itemId
+     * @param {string} vaultQuery - the Vaults's title or ID
+     * @param {string} itemQuery - the Item's title or ID
      * @returns {Promise<ItemFile[]>}
      */
-    public async listFiles(vaultId: string, itemId: string): Promise<ItemFile[]> {
-        return this.items.listFiles(vaultId, itemId);
+    public async listFiles(vaultQuery: string, itemQuery: string): Promise<ItemFile[]> {
+        return this.files.listFiles(vaultQuery, itemQuery);
+    }
+
+    /**
+     * Get an Item's specific File with a matching ID value.
+     *
+     * @param {string} vaultQuery - the Vaults's title or ID
+     * @param {string} itemQuery - the Item's title or ID
+     * @param {string} fileId - File's ID
+     * @returns {Promise<ItemFile>}
+     */
+    public async getFileById(vaultQuery: string, itemQuery: string, fileId: string): Promise<ItemFile> {
+        return this.files.getById(vaultQuery, itemQuery, fileId);
     }
 }

@@ -9,6 +9,7 @@ export const ERROR_MESSAGE = {
     PROVIDE_ITEM_NAME_OR_ID: "Please provide either the item name or its ID.",
 
     NO_OTP_FOR_THE_ITEM: "No OTP found for the Item",
+    NO_FILE_ID_PROVIDED: "No fileId provided",
 }
 
 export const ID_PREFIX = {

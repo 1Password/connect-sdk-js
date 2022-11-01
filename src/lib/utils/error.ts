@@ -39,4 +39,8 @@ export class ErrorMessageFactory {
     static noOTPFoundForItem(itemId = ""): string {
         return `${ERROR_MESSAGE.NO_OTP_FOR_THE_ITEM} ${itemId}`;
     }
+
+    static noFileIdProvided(): string {
+        return ERROR_MESSAGE.NO_FILE_ID_PROVIDED;
+    }
 }

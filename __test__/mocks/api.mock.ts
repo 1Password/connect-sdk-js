@@ -3,6 +3,7 @@ import nock from "nock";
 export class ApiMock {
     static VAULT_ID = 'llriqid2uq6ucvxpe21vaultid';
     static ITEM_ID =  "llriqid2uq6ucvxpe2n1itemid";
+    static FILE_ID =  "llriqid2uq6ucvxpe2n1fileid";
 
     public nock: any;
     private scope: nock.Scope;
@@ -14,6 +15,7 @@ export class ApiMock {
         this.pathBuilder = new PathBuilder({
             vaultId: ApiMock.VAULT_ID,
             itemId: ApiMock.ITEM_ID,
+            fileId: ApiMock.FILE_ID,
         })
     }
 
@@ -21,11 +23,11 @@ export class ApiMock {
         return this.scope.get(this.pathBuilder.itemById(itemId, vaultId));
     }
 
-    listItemsByTitle(title: string, itemId?: string, vaultId?: string): nock.Interceptor {
+    listItemsByTitle(title: string, vaultId?: string): nock.Interceptor {
         return this.scope.get(this.pathBuilder.items(vaultId))
-                .query({
-                    filter: `title eq "${title}"`,
-                });
+            .query({
+                filter: `title eq "${title}"`,
+            });
     }
 
     deleteItemById(itemId?: string, vaultId?: string): nock.Interceptor {
@@ -33,24 +35,37 @@ export class ApiMock {
     }
 
     listItemFiles(vaultId?: string, itemId?: string): nock.Interceptor {
-        return this.scope.get(this.pathBuilder.listFiles(vaultId, itemId));
+        return this.scope.get(this.pathBuilder.files(vaultId, itemId));
     }
 
-    listItemsByTitleContains(title: string, itemId?: string, vaultId?: string): nock.Interceptor {
+    listItemsByTitleContains(title: string, vaultId?: string): nock.Interceptor {
         return this.scope.get(this.pathBuilder.items(vaultId))
-                .query({
-                    filter: `title co "${title}"`,
-                });
+            .query({
+                filter: `title co "${title}"`,
+            });
+    }
+
+    listVaultsByTitle(title: string): nock.Interceptor {
+        return this.scope.get(this.pathBuilder.vaults())
+            .query({
+                filter: `title eq "${title}"`,
+            });
+    }
+
+    getFileById(fileId?: string, vaultId?: string, itemId?: string): nock.Interceptor {
+        return this.scope.get(this.pathBuilder.fileById(vaultId, itemId, fileId));
     }
 }
 
 class PathBuilder {
     private readonly VAULT_ID: string;
     private readonly ITEM_ID: string;
+    private readonly FILE_ID: string;
 
     constructor(options: Options) {
         this.VAULT_ID = options.vaultId;
         this.ITEM_ID = options.itemId;
+        this.FILE_ID = options.fileId;
     }
 
     vaults(): string {
@@ -69,12 +84,17 @@ class PathBuilder {
         return `${this.items(vaultId)}${itemId || this.ITEM_ID}`;
     }
 
-    listFiles(vaultId?: string, itemId?: string): string {
-        return `${this.items(vaultId)}${itemId || this.ITEM_ID}/files`;
+    files(vaultId?: string, itemId?: string): string {
+        return `${this.itemById(itemId, vaultId)}/files/`;
+    }
+
+    fileById(fileId?: string, vaultId?: string, itemId?: string): string {
+        return `${this.files(vaultId, itemId)}${fileId || this.FILE_ID}`;
     }
 }
 
 interface Options {
     vaultId: string;
     itemId: string;
+    fileId: string;
 }

@@ -2,6 +2,7 @@ import {
     Item as SimpleItem,
     ObjectSerializer,
     FullItem,
+    Item,
     ItemFile,
     Vault,
 } from "../model/models";
@@ -39,7 +40,7 @@ export class Vaults extends OPResource {
      public async listVaultsByTitle(title: string): Promise<Vault[]> {
         const { data } = await this.adapter.sendRequest(
             "get",
-            `${this.basePath}?${QueryBuilder.filterByTitle(title)}`,
+            `${this.basePath}/?${QueryBuilder.filterByTitle(title)}`,
         );
 
         return ObjectSerializer.deserialize(data, "Array<Vault>");
@@ -261,7 +262,7 @@ export class Items extends OPResource {
         return this.getById(item.vault.id, item.id);
     }
 
-    private async getSimpleItemByTitle(vaultId: string, title: string): Promise<SimpleItem> {
+    public async getSimpleItemByTitle(vaultId: string, title: string): Promise<SimpleItem> {
         const queryPath = `${this.basePath(
             vaultId,
         )}?${QueryBuilder.filterByTitle(title)}`;
@@ -277,22 +278,6 @@ export class Items extends OPResource {
         }
 
         return ObjectSerializer.deserialize(data[0], "Item");
-    }
-
-    /**
-     * Get a list of files an Item contains.
-     *
-     * @param {string} vaultId
-     * @param {string} itemId
-     * @returns {Promise<ItemFile[]>}
-     */
-    public async listFiles(vaultId: string, itemId: string): Promise<ItemFile[]> {
-        const { data } = await this.adapter.sendRequest(
-            "get",
-            `${this.basePath(vaultId, itemId)}/files`
-        );
-
-        return ObjectSerializer.deserialize(data, "Array<ItemFile>");
     }
 
 
@@ -316,5 +301,84 @@ export class Items extends OPResource {
         }
 
         return otp;
+    }
+}
+
+export class Files extends OPResource {
+    private vaults: Vaults;
+    private items: Items;
+
+    constructor(adapter: RequestAdapter, vaults: Vaults, items: Items) {
+        super(adapter);
+        this.vaults = vaults;
+        this.items = items;
+    }
+
+    /**
+     * Get a list of files an Item contains.
+     *
+     * @param {string} vaultQuery - the Vaults's title or ID
+     * @param {string} itemQuery  - the Item's title or ID
+     * @returns {Promise<ItemFile[]>}
+     */
+     public async listFiles(vaultQuery: string, itemQuery: string): Promise<ItemFile[]> {
+        const url = await this.generateFilesUrl(vaultQuery, itemQuery);
+        const { data } = await this.adapter.sendRequest("get", url);
+
+        return ObjectSerializer.deserialize(data, "Array<ItemFile>");
+    }
+
+    /**
+     * Get an Item's specific File with a matching ID value.
+     *
+     * @param {string} vaultQuery - the Vaults's title or ID
+     * @param {string} itemQuery - the Item's title or ID
+     * @param {string} fileId - File's ID
+     * @returns {Promise<ItemFile>}
+     * @private
+     */
+     async getById(vaultQuery: string, itemQuery: string, fileId: string): Promise<ItemFile> {
+        const url = await this.generateSingleFileUrl(vaultQuery, itemQuery, fileId);
+        const { data } = await this.adapter.sendRequest("get", url);
+
+        return ObjectSerializer.deserialize(data, "ItemFile");
+    }
+
+    private async generateFilesUrl(vaultQuery: string, itemQuery: string): Promise<string> {
+        let url = "v1/vaults";
+        const vaultId = await this.vaultIdFromQuery(vaultQuery);
+        const itemId = await this.itemIdFromQuery(vaultId, itemQuery);
+        url += `/${vaultId}/items/${itemId}/files/`;
+
+        return url;
+    }
+
+    private async generateSingleFileUrl(vaultQuery: string, itemQuery: string, fileId: string): Promise<string> {
+        if (!fileId) {
+            throw new Error(ErrorMessageFactory.noFileIdProvided());
+        }
+
+        let url = await this.generateFilesUrl(vaultQuery, itemQuery);
+        url += fileId;
+
+        return url;
+    }
+
+    private async vaultIdFromQuery(query: string): Promise<string> {
+        if (!isValidId(query)) {
+            const vault: Vault = await this.vaults.getVaultByTitle(query);
+            return vault.id;
+        }
+
+        return query;
+    }
+
+    private async itemIdFromQuery(vaultId: string, query: string): Promise<string> {
+        if (!isValidId(query)) {
+            const item: Item = await this.items.getSimpleItemByTitle(vaultId, query);
+            return item.id;
+        }
+
+        return query;
     }
 }
