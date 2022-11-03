@@ -1,3 +1,4 @@
+import { Stream } from "stream";
 import {
     Item as SimpleItem,
     ObjectSerializer,
@@ -317,7 +318,7 @@ export class Files extends OPResource {
     /**
      * Get a list of files an Item contains.
      *
-     * @param {string} vaultQuery - the Vaults's title or ID
+     * @param {string} vaultQuery - the Vault's title or ID
      * @param {string} itemQuery  - the Item's title or ID
      * @returns {Promise<ItemFile[]>}
      */
@@ -331,7 +332,7 @@ export class Files extends OPResource {
     /**
      * Get an Item's specific File with a matching ID value.
      *
-     * @param {string} vaultQuery - the Vaults's title or ID
+     * @param {string} vaultQuery - the Vault's title or ID
      * @param {string} itemQuery - the Item's title or ID
      * @param {string} fileId - File's ID
      * @returns {Promise<ItemFile>}
@@ -342,6 +343,36 @@ export class Files extends OPResource {
         const { data } = await this.adapter.sendRequest("get", url);
 
         return ObjectSerializer.deserialize(data, "ItemFile");
+    }
+
+    /**
+     * Get an Item File's content.
+     *
+     * @param {string} vaultQuery - the Vault's title or ID
+     * @param {string} itemQuery - the Item's title or ID
+     * @param {string} fileId - File's ID
+     * @returns {Promise<string>}
+     */
+    public async getFileContent(vaultQuery: string, itemQuery: string, fileId: string): Promise<string> {
+        const url = await this.generateFileContentUrl(vaultQuery, itemQuery, fileId);
+        const { data }: { data: Stream } = await this.adapter.sendRequest("get", url, { responseType: "stream" });
+
+        return this.streamToString(data);
+    }
+
+    /**
+     * Get an Item File's content stream.
+     *
+     * @param {string} vaultQuery - the Vault's title or ID
+     * @param {string} itemQuery - the Item's title or ID
+     * @param {string} fileId - File's ID
+     * @returns {Promise<Stream>}
+     */
+    public async getFileContentStream(vaultQuery: string, itemQuery: string, fileId: string): Promise<Stream> {
+        const url = await this.generateFileContentUrl(vaultQuery, itemQuery, fileId);
+        const { data }: { data: Stream } = await this.adapter.sendRequest("get", url, { responseType: "stream" });
+
+        return data;
     }
 
     private async generateFilesUrl(vaultQuery: string, itemQuery: string): Promise<string> {
@@ -364,6 +395,13 @@ export class Files extends OPResource {
         return url;
     }
 
+    private async generateFileContentUrl(vaultQuery: string, itemQuery: string, fileId: string): Promise<string> {
+        let url: string = await this.generateSingleFileUrl(vaultQuery, itemQuery, fileId);
+        url += "/content";
+
+        return url;
+    }
+
     private async vaultIdFromQuery(query: string): Promise<string> {
         if (!isValidId(query)) {
             const vault: Vault = await this.vaults.getVaultByTitle(query);
@@ -380,5 +418,23 @@ export class Files extends OPResource {
         }
 
         return query;
+    }
+
+    private streamToString(stream: Stream): Promise<string> {
+        return new Promise((resolve, reject) => {
+            let content = '';
+
+            stream.on('error', (err) => {
+                reject(err);
+            });
+
+            stream.on('data', (chunk) => {
+                content += Buffer.from(chunk).toString();
+            });
+
+            stream.on('end', () => {
+                resolve(content);
+            });
+        })
     }
 }

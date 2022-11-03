@@ -38,6 +38,7 @@ export class HTTPClient implements IRequestClient {
             headers: Object.assign({}, this.defaultHeaders, opts.headers, {
                 authorization: `Bearer ${opts.authToken}`,
             }),
+            responseType: opts.responseType,
         } as AxiosRequestConfig;
 
         const response = await this.axios.request(requestCfg);

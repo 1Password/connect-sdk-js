@@ -1,3 +1,4 @@
+import { Stream } from 'stream';
 import { FullItem } from "../model/fullItem";
 import { Item as SimpleItem } from "../model/item";
 import { Vault } from "../model/vault";
@@ -284,7 +285,7 @@ class OPConnect {
     /**
      * Get a list of files an Item contains.
      *
-     * @param {string} vaultQuery - the Vaults's title or ID
+     * @param {string} vaultQuery - the Vault's title or ID
      * @param {string} itemQuery - the Item's title or ID
      * @returns {Promise<ItemFile[]>}
      */
@@ -295,12 +296,36 @@ class OPConnect {
     /**
      * Get an Item's specific File with a matching ID value.
      *
-     * @param {string} vaultQuery - the Vaults's title or ID
+     * @param {string} vaultQuery - the Vault's title or ID
      * @param {string} itemQuery - the Item's title or ID
      * @param {string} fileId - File's ID
      * @returns {Promise<ItemFile>}
      */
     public async getFileById(vaultQuery: string, itemQuery: string, fileId: string): Promise<ItemFile> {
         return this.files.getById(vaultQuery, itemQuery, fileId);
+    }
+
+    /**
+     * Get an Item File's content.
+     *
+     * @param {string} vaultQuery - the Vault's title or ID
+     * @param {string} itemQuery - the Item's title or ID
+     * @param {string} fileId - File's ID
+     * @returns {Promise<string>}
+     */
+    public async getFileContent(vaultQuery: string, itemQuery: string, fileId: string): Promise<string> {
+        return this.files.getFileContent(vaultQuery, itemQuery, fileId);
+    }
+
+    /**
+     * Get an Item File's content stream.
+     *
+     * @param {string} vaultQuery - the Vault's title or ID
+     * @param {string} itemQuery - the Item's title or ID
+     * @param {string} fileId - File's ID
+     * @returns {Promise<Stream>}
+     */
+    public async getFileContentStream(vaultQuery: string, itemQuery: string, fileId: string): Promise<Stream> {
+        return this.files.getFileContentStream(vaultQuery, itemQuery, fileId);
     }
 }
