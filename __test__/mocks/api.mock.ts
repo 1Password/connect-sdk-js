@@ -55,6 +55,10 @@ export class ApiMock {
     getFileById(fileId?: string, vaultId?: string, itemId?: string): nock.Interceptor {
         return this.scope.get(this.pathBuilder.fileById(vaultId, itemId, fileId));
     }
+
+    getFileContent(fileId?: string, vaultId?: string, itemId?: string): nock.Interceptor {
+        return this.scope.get(this.pathBuilder.fileContent(vaultId, itemId, fileId));
+    }
 }
 
 class PathBuilder {
@@ -90,6 +94,10 @@ class PathBuilder {
 
     fileById(fileId?: string, vaultId?: string, itemId?: string): string {
         return `${this.files(vaultId, itemId)}${fileId || this.FILE_ID}`;
+    }
+
+    fileContent(fileId?: string, vaultId?: string, itemId?: string): string {
+        return `${this.fileById(vaultId, itemId)}/content`;
     }
 }
 
