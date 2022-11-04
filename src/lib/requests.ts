@@ -1,3 +1,4 @@
+import { ResponseType } from "axios";
 import Debug from "debug";
 import { URL } from "url";
 
@@ -75,6 +76,7 @@ export interface RequestOptions {
     data?: { [key: string]: any } | string;
     headers?: { [key: string]: string | number };
     timeout?: number;
+    responseType?: ResponseType;
 }
 
 export interface Response<T = any> {

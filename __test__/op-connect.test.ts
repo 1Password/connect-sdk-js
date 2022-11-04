@@ -1,4 +1,5 @@
 import nock from "nock";
+import { Stream, Readable } from "stream";
 import {FullItem, ItemBuilder, OnePasswordConnect, Vault} from "../src";
 import {OPConfig} from "../src/lib/op-connect";
 import {ErrorResponse} from "../src/model/errorResponse";
@@ -524,6 +525,108 @@ describe("Test OnePasswordConnect CRUD", () => {
 
             const file: ItemFile = await op.getFileById(VAULT_ID, ITEM_ID, FILE_ID);
             expect(file.id).toEqual(FILE_ID);
+        });
+    });
+
+    describe('get file content', () => {
+        const FILE_CONTENT = "File content... 🖖🚀";
+
+        describe('as a string', () => {
+            test.each(["", null, undefined])
+            ("should throw error if %s provides as file id", async (fileId) => {
+                await expect(() => op.getFileContent(vaultTitle, itemTitle, fileId)).rejects.toThrowError(new Error(ErrorMessageFactory.noFileIdProvided()));
+            });
+
+            test("should throw error if invalid vault id provided", async () => {
+                apiMock.listVaultsByTitle(vaultTitle).replyWithError("something went wrong");
+
+                await expect(() => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
+            });
+
+            test("should throw error if there is more than one vault with provided title", async () => {
+                apiMock.listVaultsByTitle(vaultTitle).reply(200, [{}, {}]);
+
+                await expect(() => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleVaultsFoundByTitle());
+            });
+
+            test("should throw error if invalid item id provided", async () => {
+                apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
+                apiMock.listItemsByTitle(itemTitle).replyWithError("something went wrong");
+
+                await expect(() => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
+            });
+
+            test("should throw error if there is more than one item with provided title", async () => {
+                apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
+                apiMock.listItemsByTitle(itemTitle).reply(200, [{}, {}]);
+
+                await expect(() => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
+            });
+
+            test("should return file content when search by vault and item title", async () => {
+                apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
+                apiMock.listItemsByTitle(itemTitle).reply(200, [{ id: ITEM_ID, vault: { id: VAULT_ID } }]);
+                apiMock.getFileContent().reply(200, () => Readable.from(FILE_CONTENT));
+
+                const content: string = await op.getFileContent(VAULT_ID, ITEM_ID, FILE_ID);
+                expect(content).toEqual(FILE_CONTENT);
+            });
+
+            test("should return file content when search by vault and item id", async () => {
+                apiMock.getFileContent().reply(200, () => Readable.from(FILE_CONTENT));
+
+                const content: string = await op.getFileContent(VAULT_ID, ITEM_ID, FILE_ID);
+                expect(content).toEqual(FILE_CONTENT);
+            });
+        });
+
+        describe('as a stream', () => {
+            test.each(["", null, undefined])
+            ("should throw error if %s provides as file id", async (fileId) => {
+                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, fileId)).rejects.toThrowError(new Error(ErrorMessageFactory.noFileIdProvided()));
+            });
+
+            test("should throw error if invalid vault id provided", async () => {
+                apiMock.listVaultsByTitle(vaultTitle).replyWithError("something went wrong");
+
+                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
+            });
+
+            test("should throw error if there is more than one vault with provided title", async () => {
+                apiMock.listVaultsByTitle(vaultTitle).reply(200, [{}, {}]);
+
+                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleVaultsFoundByTitle());
+            });
+
+            test("should throw error if invalid item id provided", async () => {
+                apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
+                apiMock.listItemsByTitle(itemTitle).replyWithError("something went wrong");
+
+                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
+            });
+
+            test("should throw error if there is more than one item with provided title", async () => {
+                apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
+                apiMock.listItemsByTitle(itemTitle).reply(200, [{}, {}]);
+
+                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
+            });
+
+            test("should return file stream when search by vault and item title", async () => {
+                apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
+                apiMock.listItemsByTitle(itemTitle).reply(200, [{ id: ITEM_ID, vault: { id: VAULT_ID } }]);
+                apiMock.getFileContent().reply(200, () => Readable.from(FILE_CONTENT));
+
+                const fileStream: Stream = await op.getFileContentStream(VAULT_ID, ITEM_ID, FILE_ID);
+                expect(fileStream).toBeInstanceOf(Readable);
+            });
+
+            test("should return file stream when search by vault and item id", async () => {
+                apiMock.getFileContent().reply(200, () => Readable.from(FILE_CONTENT));
+
+                const fileStream: Stream = await op.getFileContentStream(VAULT_ID, ITEM_ID, FILE_ID);
+                expect(fileStream).toBeInstanceOf(Readable);
+            });
         });
     });
 });
