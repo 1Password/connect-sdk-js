@@ -36,7 +36,7 @@ export const newConnectClient = (opts: OPConfig): OPConnect => {
     return new OPConnect(opts);
 };
 
-class OPConnect {
+export class OPConnect {
     private vaults: Vaults;
     private items: Items;
     private files: Files;
