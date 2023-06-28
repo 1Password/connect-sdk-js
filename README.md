@@ -1,10 +1,13 @@
-# 1Password Connect Node SDK
+<!-- Image sourced from https://blog.1password.com/introducing-secrets-automation/ -->
+<img alt="" role="img" src="assets/connect-illustration.svg"/>
+
+# 1Password Connect SDK JS
 
 [![codecov](https://codecov.io/gh/1Password/connect-sdk-js/branch/main/graph/badge.svg?token=m0PJVEn5m4)](https://codecov.io/gh/1Password/connect-sdk-js)
 
-The 1Password Connect Node SDK provides your JavaScript & TypeScript applications access to the 1Password Connect API hosted on your infrastructure and leverage the power of [1Password Secrets Automation](https://1password.com/secrets)
+The 1Password Connect SDK JS provides your JavaScript and TypeScript applications access to the 1Password Connect API hosted on your infrastructure and leverages the power of [1Password Secrets Automation](https://1password.com/product/secrets/).
 
-The library can be used by NodeJS applications, tools, and other automations to access and manage items in 1Password Vaults.
+This library can be used by Node.js applications, tools, and other automations to access and manage items in 1Password vaults.
 
 ## Installation
 
