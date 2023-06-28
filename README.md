@@ -25,21 +25,13 @@ Refer to [QUICKSTART.md](/QUICKSTART.md) for code examples on how to get started
 
 ## Development
 
-### Running Tests
+From the root of the repo you can run the following `make` commands. You can also run `make help` to list out all available commands and their descriptions.
 
-From repository root:
-
-```shell script
+```sh
+make build
+make install
 make test
 ```
-
-### Building
-
-```shell script
-make build
-```
-
----
 
 # About 1Password
 
