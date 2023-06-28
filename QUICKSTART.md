@@ -1,6 +1,6 @@
-## Usage
+# Quickstart
 
-#### Creating an API client
+## Creating an API Client
 
 ```typescript
 import { OnePasswordConnect, ItemBuilder } from "@1password/connect";
@@ -13,7 +13,7 @@ const op = OnePasswordConnect({
 });
 ```
 
-#### Retrieving Vaults
+## Working with Vaults
 
 ```typescript
 // Get all vaults
@@ -23,7 +23,7 @@ let allVaults = await op.listVaults();
 let vault = await op.getVault({ vault_id });
 ```
 
-#### Interacting with Items
+## Working with Items
 
 ```typescript
 const myVaultId = { vault_uuid };
@@ -54,7 +54,7 @@ const updatedItem = await op.updateItem(myVaultId, myItem);
 await op.deleteItem(myVaultId, updatedItem.id);
 ```
 
-### Custom HTTPClient
+## Custom HTTPClient
 
 You may provide a custom HTTPClient class to customize how the library sends requests to the server.
 
@@ -79,7 +79,7 @@ You can use a custom client to:
 -   add additional logging
 -   use your own node HTTP request library
 
-#### Defining `ClientRequestOptions`
+### Defining `ClientRequestOptions`
 
 The `HTTPClient.request(method, url, opts)` method requires an options argument. The following table describes each option:
 
