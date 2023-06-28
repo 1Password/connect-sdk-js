@@ -8,14 +8,13 @@ The library can be used by NodeJS applications, tools, and other automations to 
 
 ## Installation
 
-You can install the SDK using npm
+You can install the SDK using npm or Yarn.
 
-```
+```sh
 npm install @1password/connect
 ```
 
-or using Yarn
-```
+```sh
 yarn add @1password/connect
 ```
 
