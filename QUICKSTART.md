@@ -83,13 +83,13 @@ You can use a custom client to:
 
 The `HTTPClient.request(method, url, opts)` method requires an options argument. The following table describes each option:
 
-| Option      | Description                                                              | Required |
-| :---------- | :----------------------------------------------------------------------- | -------: |
-| `authToken` | The token used to authenticate the client to a 1Password Connect API.    |  **Yes** |
-| `params`    | Object with string key-value pairs to be used as querystring parameters  |       No |
-| `data`      | A string or object made up of key-value pairs. Defines the request body. |       No |
-| `headers`   | Object with string key-value pairs. Merged with default headers.         |       No |
-| `timeout`   | Sets timeout value for the HTTP request.                                 |       No |
+| Option      | Required | Description                                                               |
+| :---------- | :------: | :------------------------------------------------------------------------ |
+| `authToken` |   Yes    | The token used to authenticate the client to a 1Password Connect API.     |
+| `params`    |    No    | Object with string key-value pairs to be used as query string parameters. |
+| `data`      |    No    | A string or object made up of key-value pairs. Defines the request body.  |
+| `headers`   |    No    | Object with string key-value pairs. Merged with default headers.          |
+| `timeout`   |    No    | Sets timeout value for the HTTP request.                                  |
 
 ### Logging with `debug`
 
