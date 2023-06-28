@@ -21,7 +21,7 @@ yarn add @1password/connect
 
 ## Getting Started
 
-Refer to [QUICKSTART.md](QUICKSTART.md) for code examples on how to get started using this library.
+Refer to [QUICKSTART.md](/QUICKSTART.md) for code examples on how to get started using this library.
 
 ## Development
 
