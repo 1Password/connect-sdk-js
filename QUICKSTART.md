@@ -1,9 +1,9 @@
 # Quickstart
 
-## Creating an API Client
+## Creating a Connect API Client
 
-```typescript
-import { OnePasswordConnect, ItemBuilder } from "@1password/connect";
+```ts
+import { OnePasswordConnect } from "@1password/connect";
 
 // Create new connector with HTTP Pooling
 const op = OnePasswordConnect({
@@ -15,20 +15,24 @@ const op = OnePasswordConnect({
 
 ## Working with Vaults
 
-```typescript
-// Get all vaults
-let allVaults = await op.listVaults();
+```ts
+// Get a list of all vaults
+const vaults = await op.listVaults();
 
 // Get a specific vault
-let vault = await op.getVault({ vault_id });
+const vault1 = await op.getVault("vaultId _or_ vaultTitle");
+const vault2 = await op.getVaultById("vaultId");
+const vault3 = await op.getVaultByTitle("Vault Title");
 ```
 
 ## Working with Items
 
-```typescript
-const myVaultId = { vault_uuid };
+```ts
+import { ItemBuilder } from "@1password/connect";
 
-// Create an Item
+const vaultId = "vaultId";
+
+// Create an item
 const newItem = new ItemBuilder()
     .setCategory("LOGIN")
     .addField({
@@ -38,20 +42,19 @@ const newItem = new ItemBuilder()
     })
     .build();
 
-const createdItem = await op.createItem(myVaultId, newItem);
+const createdItem = await op.createItem(vaultId, newItem);
 
-// Get an Item
-const item = await op.getItem(myVaultId, { item_uuid });
+// Get an item
+const item = await op.getItem(vaultId, "itemId _or_ itemTitle");
+const itemById = await op.getItemById("itemId");
+const itemByName = await op.getItemByTitle(vaultId, "Item Title");
 
-// Get Item by name
-const namedItem = await op.getItemByTitle(myVaultId, "Example Title");
+// Update an item
+item.title = "New Item Title";
+const updatedItem = await op.updateItem(vaultId, item);
 
-// Update an Item
-item.title = "New Title";
-const updatedItem = await op.updateItem(myVaultId, myItem);
-
-// Delete an Item
-await op.deleteItem(myVaultId, updatedItem.id);
+// Delete an item
+await op.deleteItem(vaultId, updatedItem.id);
 ```
 
 ## Custom HTTPClient
