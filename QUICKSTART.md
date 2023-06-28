@@ -56,12 +56,11 @@ await op.deleteItem(myVaultId, updatedItem.id);
 
 ## Custom HTTPClient
 
-You may provide a custom HTTPClient class to customize how the library sends requests to the server.
+You can provide a custom HTTPClient class to customize how the library sends requests to the server. The HTTPClient must implement the `IRequestClient` interface:
 
-The HTTPClient must implement the `IRequestClient` interface:
-
-```typescript
+```ts
 import { ClientRequestOptions } from "./client";
+
 interface IRequestClient {
     defaultTimeout: number;
 
@@ -75,9 +74,9 @@ interface IRequestClient {
 
 You can use a custom client to:
 
--   handle proxy network access
--   add additional logging
--   use your own node HTTP request library
+-   Handle proxy network access.
+-   Add additional logging.
+-   Use your own Node.js HTTP request library.
 
 ### Defining `ClientRequestOptions`
 
