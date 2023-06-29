@@ -27,7 +27,7 @@ npm install @1password/connect
 yarn add @1password/connect
 ```
 
-## Getting Started
+## Get Started
 
 Refer to [QUICKSTART.md](/QUICKSTART.md) for code examples on how to start using this library.
 
@@ -40,6 +40,12 @@ make build
 make install
 make test
 ```
+
+## 💙 Community & Support
+
+-   File an [issue](https://github.com/1Password/connect-sdk-js/issues) for bugs and feature requests.
+-   Join the [Developer Slack workspace](https://join.slack.com/t/1password-devs/shared_invite/zt-1halo11ps-6o9pEv96xZ3LtX_VE0fJQA).
+-   Subscribe to the [Developer Newsletter](https://1password.com/dev-subscribe/).
 
 ## Security
 
