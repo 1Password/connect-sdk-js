@@ -1,5 +1,5 @@
 <!-- Image sourced from https://blog.1password.com/introducing-secrets-automation/ -->
-<img alt="" role="img" src="assets/connect-illustration.svg"/>
+<img alt="" role="img" src="https://blog.1password.com/posts/2021/secrets-automation-launch/header.svg"/>
 
 <header style="text-align: center;">
 	<h1 style="margin-top: 20px; border-bottom: none;">1Password Connect SDK JS</h1>
