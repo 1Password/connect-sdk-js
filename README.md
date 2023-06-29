@@ -1,7 +1,15 @@
 <!-- Image sourced from https://blog.1password.com/introducing-secrets-automation/ -->
 <img alt="" role="img" src="assets/connect-illustration.svg"/>
 
-# 1Password Connect SDK JS
+<header style="text-align: center;">
+	<h1 style="margin-top: 20px; border-bottom: none;">1Password Connect SDK JS</h1>
+	<p>Access your 1Password items in your JavaScript/TypeScript applications through your self-hosted <a href="https://developer.1password.com/docs/connect">1Password Connect server</a>.</p>
+	<a href="/QUICKSTART.md">
+		<img alt="Get started" src="https://user-images.githubusercontent.com/45081667/226940040-16d3684b-60f4-4d95-adb2-5757a8f1bc15.png" height="37"/>
+	</a>
+</header>
+
+<hr/>
 
 [![codecov](https://codecov.io/gh/1Password/connect-sdk-js/branch/main/graph/badge.svg?token=m0PJVEn5m4)](https://codecov.io/gh/1Password/connect-sdk-js)
 
@@ -23,7 +31,7 @@ yarn add @1password/connect
 
 ## Getting Started
 
-Refer to [QUICKSTART.md](/QUICKSTART.md) for code examples on how to get started using this library.
+Refer to [QUICKSTART.md](/QUICKSTART.md) for code examples on how to start using this library.
 
 ## Development
 
@@ -35,7 +43,7 @@ make install
 make test
 ```
 
-# Security
+## Security
 
 1Password requests you practice responsible disclosure if you discover a vulnerability. Please submit discoveries via [BugCrowd](https://bugcrowd.com/agilebits).
 
