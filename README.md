@@ -1,150 +1,53 @@
-# 1Password Connect Node SDK
+<!-- Image sourced from https://blog.1password.com/introducing-secrets-automation/ -->
+<img alt="" role="img" src="https://blog.1password.com/posts/2021/secrets-automation-launch/header.svg"/>
 
-[![codecov](https://codecov.io/gh/1Password/connect-sdk-js/branch/main/graph/badge.svg?token=m0PJVEn5m4)](https://codecov.io/gh/1Password/connect-sdk-js)
-
-The 1Password Connect Node SDK provides your JavaScript & TypeScript applications access to the 1Password Connect API hosted on your infrastructure and leverage the power of [1Password Secrets Automation](https://1password.com/secrets)
-
-The library can be used by NodeJS applications, tools, and other automations to access and manage items in 1Password Vaults.
-
-## Installation
-
-You can install the SDK using npm
-
-```
-npm install @1password/connect
-```
-
-or using Yarn
-```
-yarn add @1password/connect
-```
-
-## Usage
-
-#### Creating an API client
-
-```typescript
-import { OnePasswordConnect, ItemBuilder } from "@1password/connect";
-
-// Create new connector with HTTP Pooling
-const op = OnePasswordConnect({
-	serverURL: "http://localhost:8080",
-	token: "my-token",
-	keepAlive: true,
-});
-```
-
-#### Retrieving Vaults
-
-```typescript
-// Get all vaults
-let allVaults = await op.listVaults();
-
-// Get a specific vault
-let vault = await op.getVault({vault_id});
-```
-
-#### Interacting with Items
-
-```typescript
-const myVaultId = {vault_uuid};
-
-// Create an Item
-const newItem = new ItemBuilder()
-    .setCategory("LOGIN")
-    .addField({
-        label: "Example",
-        value: "MySecret",
-        sectionName: "Demo Section",
-    })
-    .build();
-
-const createdItem = await op.createItem(myVaultId, newItem);
-
-// Get an Item
-const item = await op.getItem(myVaultId, {item_uuid});
-
-// Get Item by name
-const namedItem = await op.getItemByTitle(myVaultId, "Example Title");
-
-// Update an Item
-item.title = "New Title";
-const updatedItem = await op.updateItem(myVaultId, myItem);
-
-// Delete an Item
-await op.deleteItem(myVaultId, updatedItem.id);
-```
-
-### Custom HTTPClient
-
-You may provide a custom HTTPClient class to customize how the library sends requests to the server.
-
-The HTTPClient must implement the `IRequestClient` interface:
-
-```typescript
-import { ClientRequestOptions } from "./client";
-interface IRequestClient {
-	defaultTimeout: number;
-
-	request(
-		method: HTTPMethod,
-		url: string,
-		opts: ClientRequestOptions,
-	): Promise<Response>;
-}
-```
-
-You can use a custom client to:
-
--   handle proxy network access
--   add additional logging
--   use your own node HTTP request library
-
-#### Defining `ClientRequestOptions`
-
-The `HTTPClient.request(method, url, opts)` method requires an options argument. The following table describes each option:
-
-| Option      | Description                                                              | Required |
-| :---------- | :----------------------------------------------------------------------- | -------: |
-| `authToken` | The token used to authenticate the client to a 1Password Connect API.    |  **Yes** |
-| `params`    | Object with string key-value pairs to be used as querystring parameters  |       No |
-| `data`      | A string or object made up of key-value pairs. Defines the request body. |       No |
-| `headers`   | Object with string key-value pairs. Merged with default headers.         |       No |
-| `timeout`   | Sets timeout value for the HTTP request.                                 |       No |
-
-### Logging with `debug`
-
-The 1Password Connect JS client uses the [`debug`](https://www.npmjs.com/package/debug) library to log runtime information.
-
-All log messages are defined under the `opconnect` namespace. To print log statements, include the `opconnect` namespace when defining the `DEBUG` environment variable:
-
-```
-DEBUG=opconnect:*
-```
-
-## Development
-
-### Running Tests
-
-From repository root:
-
-```shell script
-make test
-```
-
-### Building
-
-```shell script
-make build
-```
+<header style="text-align: center;">
+	<h1 style="margin-top: 20px; border-bottom: none;">1Password Connect SDK JS</h1>
+	<p>Access your 1Password items in your JavaScript/TypeScript applications through your self-hosted <a href="https://developer.1password.com/docs/connect">1Password Connect server</a>.</p>
+	<a href="/QUICKSTART.md">
+		<img alt="Get started" src="https://user-images.githubusercontent.com/45081667/226940040-16d3684b-60f4-4d95-adb2-5757a8f1bc15.png" height="37"/>
+	</a>
+</header>
 
 ---
 
-# About 1Password
+The 1Password Connect SDK JS provides your JavaScript and TypeScript applications access to the 1Password Connect API hosted on your infrastructure and leverages the power of [1Password Secrets Automation](https://1password.com/product/secrets/).
 
-**[1Password](https://1password.com/)** is the world’s most-loved password manager. By combining industry-leading security and award-winning design, the company provides private, secure, and user-friendly password management to businesses and consumers globally. More than 60,000 business customers trust 1Password as their enterprise password manager.
+This library can be used by Node.js applications, tools, and other automations to access and manage items in 1Password vaults.
 
-# Security
+## Installation
+
+You can install the SDK using npm or Yarn.
+
+```sh
+npm install @1password/connect
+```
+
+```sh
+yarn add @1password/connect
+```
+
+## Get Started
+
+Refer to [QUICKSTART.md](/QUICKSTART.md) for code examples on how to start using this library.
+
+## Development
+
+From the root of the repo you can run the following `make` commands. You can also run `make help` to list out all available commands and their descriptions.
+
+```sh
+make build
+make install
+make test
+```
+
+## 💙 Community & Support
+
+-   File an [issue](https://github.com/1Password/connect-sdk-js/issues) for bugs and feature requests.
+-   Join the [Developer Slack workspace](https://join.slack.com/t/1password-devs/shared_invite/zt-1halo11ps-6o9pEv96xZ3LtX_VE0fJQA).
+-   Subscribe to the [Developer Newsletter](https://1password.com/dev-subscribe/).
+
+## Security
 
 1Password requests you practice responsible disclosure if you discover a vulnerability. Please submit discoveries via [BugCrowd](https://bugcrowd.com/agilebits).
 
