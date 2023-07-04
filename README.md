@@ -1,13 +1,13 @@
 <!-- Image sourced from https://blog.1password.com/introducing-secrets-automation/ -->
 <img alt="" role="img" src="https://blog.1password.com/posts/2021/secrets-automation-launch/header.svg"/>
 
-<header style="text-align: center;">
-	<h1 style="margin-top: 20px; border-bottom: none;">1Password Connect SDK JS</h1>
+<div align="center">
+	<h1>1Password Connect SDK JS</h1>
 	<p>Access your 1Password items in your JavaScript/TypeScript applications through your self-hosted <a href="https://developer.1password.com/docs/connect">1Password Connect server</a>.</p>
 	<a href="/QUICKSTART.md">
 		<img alt="Get started" src="https://user-images.githubusercontent.com/45081667/226940040-16d3684b-60f4-4d95-adb2-5757a8f1bc15.png" height="37"/>
 	</a>
-</header>
+</div>
 
 ---
 
