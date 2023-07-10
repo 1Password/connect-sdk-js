@@ -15,7 +15,7 @@ The 1Password Connect SDK JS provides your JavaScript and TypeScript application
 
 This library can be used by Node.js applications, tools, and other automations to access and manage items in 1Password vaults.
 
-## Installation
+## 💾 Installation
 
 You can install the SDK using npm or Yarn.
 
@@ -27,11 +27,11 @@ npm install @1password/connect
 yarn add @1password/connect
 ```
 
-## Get Started
+## ✨ Get Started
 
 Refer to [QUICKSTART.md](/QUICKSTART.md) for code examples on how to start using this library.
 
-## Development
+## 🛠️ Development
 
 From the root of the repo you can run the following `make` commands. You can also run `make help` to list out all available commands and their descriptions.
 
@@ -47,7 +47,7 @@ make test
 -   Join the [Developer Slack workspace](https://join.slack.com/t/1password-devs/shared_invite/zt-1halo11ps-6o9pEv96xZ3LtX_VE0fJQA).
 -   Subscribe to the [Developer Newsletter](https://1password.com/dev-subscribe/).
 
-## Security
+## 🔐 Security
 
 1Password requests you practice responsible disclosure if you discover a vulnerability. Please submit discoveries via [BugCrowd](https://bugcrowd.com/agilebits).
 
