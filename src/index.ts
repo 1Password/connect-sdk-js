@@ -10,7 +10,7 @@ export {
     CategoryEnum as ItemCategory,
 };
 
-export { newConnectClient as OnePasswordConnect } from "./lib/op-connect";
+export { newConnectClient as OnePasswordConnect, OPConnect } from "./lib/op-connect";
 
 export { FullItem, Vault, GeneratorRecipe } from "./model/models";
 export {
