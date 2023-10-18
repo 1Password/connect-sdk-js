@@ -12,6 +12,19 @@
 
 ---
 
+[//]: # (START/v1.4.0)
+# v1.4.0
+
+## Features
+  * Export the `OPConnect` class to make it consumable for end users. Credit and thanks go to @simhnna for this contribution. {#94}
+  * Add `getFileContent` and `getFileContentStream` methods to the op-connect client. {#64}
+  * Add `getFileById` method to the op-connect client. {#63}
+
+## Security
+ * Address various security vulnerabilities with package dependencies. {#89, #90, #92, #100, #102, #103, #104}
+
+---
+
 [//]: # (START/v1.3.0)
 # v1.3.0
 
