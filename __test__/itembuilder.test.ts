@@ -43,14 +43,14 @@ describe("Test ItemBuilder", () => {
             .build();
 
         const { urls } = newItem;
-        expect(urls.length).toEqual(2);
+        expect(urls?.length).toEqual(2);
 
         // Assert:
         //  - the **LAST** url to be set as "primary" is given that attribute
         //  - there is only 1 url with the `primary: true` attr
         let primaryUrls = 0;
         let primaryUrl;
-        urls.forEach((url) => {
+        urls?.forEach((url) => {
             if (url.primary) {
                 primaryUrl = url.href;
                 primaryUrls++;
@@ -92,7 +92,7 @@ describe("Test ItemBuilder", () => {
         // Invalid category -> ERROR
         expect(() => {
             builder.setCategory("invalid");
-        }).toThrowError(TypeError);
+        }).toThrow(TypeError);
 
         builder.setCategory(CategoryEnum.Login);
         const itemWithCategory = builder.build();
@@ -106,7 +106,7 @@ describe("Test ItemBuilder", () => {
             .addSection("section 1")
             .build();
 
-        expect(itemOneSection.sections.length).toEqual(1);
+        expect(itemOneSection.sections?.length).toEqual(1);
         expect(isValidSectionId(itemOneSection.sections[0].id)).toBeTruthy();
     });
 
@@ -213,7 +213,7 @@ describe("Test ItemBuilder", () => {
     });
 
     describe("Field GeneratorRecipe Configuration", () => {
-        // @ts-expect-error
+        // @ts-ignore
         const invalidRecipe: GeneratorRecipe = {
             length: 6,
             characterSets: new Array("adfioadhfg"),
@@ -268,7 +268,7 @@ describe("Test ItemBuilder", () => {
                     generate: true,
                     recipe: invalidRecipe,
                 });
-            }).toThrowError();
+            }).toThrow();
         });
 
         it("does not throw invalid recipe error if generate = false", () => {
@@ -279,7 +279,7 @@ describe("Test ItemBuilder", () => {
                     generate: false,
                     recipe: invalidRecipe,
                 });
-            }).not.toThrowError();
+            }).not.toThrow();
 
             const item = builder.build();
             expect(item.fields.length).toEqual(1);
@@ -342,6 +342,6 @@ describe("Use ENV Vars as default values", () => {
         const builder = new ItemBuilder();
         expect(() => {
             builder.build();
-        }).toThrowError();
+        }).toThrow();
     });
 });

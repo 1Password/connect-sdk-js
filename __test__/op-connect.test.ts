@@ -109,7 +109,7 @@ describe("Test OnePasswordConnect CRUD", () => {
 
         expect(updatedItem instanceof FullItem).toEqual(true);
         expect(updatedItem.title).toBe("Updated Title");
-        expect(updatedItem.tags.sort()).toEqual(itemToBeUpdated.tags.sort());
+        expect(updatedItem.tags?.sort()).toEqual(itemToBeUpdated.tags.sort());
     });
 
     test("get item by title", async () => {
@@ -175,8 +175,9 @@ describe("Test OnePasswordConnect CRUD", () => {
             [null],
             [""],
         ])("should throw error if %s provided", async (vaultQuery) => {
+            // @ts-ignore
             await expect(() => op.getVault(vaultQuery))
-                .rejects.toThrowError(ERROR_MESSAGE.PROVIDE_VAULT_NAME_OR_ID);
+                .rejects.toThrow(ERROR_MESSAGE.PROVIDE_VAULT_NAME_OR_ID);
         });
 
         test("should return vault by id", async () => {
@@ -218,7 +219,7 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
 
         test("should re-throw api error", async () => {
-            const badRequestError = { status: 400, message: "Some bad request" };
+            const badRequestError = new Error('Some bad request');
 
             getItemsByTitleMock(title).replyWithError(badRequestError);
 
@@ -230,8 +231,8 @@ describe("Test OnePasswordConnect CRUD", () => {
             const item2 = { id: "2" } as Item;
 
             getItemsByTitleMock(title).reply(200, [item1, item2]);
-            getFullItemMock(item1.id).reply(200, item1);
-            getFullItemMock(item2.id).reply(200, item2);
+            getFullItemMock(item1.id!).reply(200, item1);
+            getFullItemMock(item2.id!).reply(200, item2);
 
             const result: FullItem[] = await op.listItemsByTitle(VAULT_ID, title);
 
@@ -247,8 +248,9 @@ describe("Test OnePasswordConnect CRUD", () => {
             [null],
             [""],
         ])("should throw error if %s provided", async (itemQuery) => {
+            // @ts-ignore
             await expect(() => op.getItem(VAULT_ID, itemQuery))
-                .rejects.toThrowError(ERROR_MESSAGE.PROVIDE_ITEM_NAME_OR_ID);
+                .rejects.toThrow(ERROR_MESSAGE.PROVIDE_ITEM_NAME_OR_ID);
         });
 
         test("should return item by id", async () => {
@@ -286,7 +288,7 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
 
         test("should re-throw api error", async () => {
-            const notFoundError = { status: 404, message: "Item not found" };
+            const notFoundError = new Error('Item not found');
 
             apiMock.getItemById()
                 .replyWithError(notFoundError);
@@ -336,7 +338,7 @@ describe("Test OnePasswordConnect CRUD", () => {
                 .reply(404);
 
             await expect(() => op.deleteItemById(VAULT_ID, ITEM_ID))
-                .rejects.toThrowError();
+                .rejects.toThrow();
         });
 
         test("should finish successfully ", async () => {
@@ -351,8 +353,9 @@ describe("Test OnePasswordConnect CRUD", () => {
             [null],
             [""],
         ])("should throw error if %s provided", async (itemQuery) => {
+            // @ts-ignore
             await expect(() => op.deleteItem(VAULT_ID, itemQuery))
-                .rejects.toThrowError(ERROR_MESSAGE.PROVIDE_ITEM_NAME_OR_ID);
+                .rejects.toThrow(ERROR_MESSAGE.PROVIDE_ITEM_NAME_OR_ID);
         });
 
         test("should throw an error if 2 items found by title", async () => {
@@ -425,14 +428,14 @@ describe("Test OnePasswordConnect CRUD", () => {
             apiMock.getItemById().reply(404);
 
             await expect(() => op.getItemOTP(VAULT_ID, ITEM_ID))
-                .rejects.toThrowError();
+                .rejects.toThrow();
         });
 
         test("should throw error if item has no OTP", async () => {
             apiMock.getItemById().reply(200, { id: ITEM_ID });
 
             await expect(() => op.getItemOTP(VAULT_ID, ITEM_ID))
-                .rejects.toThrowError(ErrorMessageFactory.noOTPFoundForItem(ITEM_ID));
+                .rejects.toThrow(ErrorMessageFactory.noOTPFoundForItem(ITEM_ID));
         });
 
         test("should return OTP", async () => {
@@ -455,7 +458,7 @@ describe("Test OnePasswordConnect CRUD", () => {
         });
 
         test("should re-throw api error", async () => {
-            const badRequestError = { status: 400, message: "Some bad request" };
+            const badRequestError = new Error('Some bad request');
 
             apiMock.listItemsByTitleContains(title).replyWithError(badRequestError);
 
@@ -482,7 +485,8 @@ describe("Test OnePasswordConnect CRUD", () => {
     describe("get file by id", () => {
         test.each(["", null, undefined])
             ("should throw error if %s provides as file id", async (fileId) => {
-                await expect(() => op.getFileById(vaultTitle, itemTitle, fileId)).rejects.toThrowError(new Error(ErrorMessageFactory.noFileIdProvided()));
+                // @ts-ignore
+                await expect(() => op.getFileById(vaultTitle, itemTitle, fileId)).rejects.toThrow(new Error(ErrorMessageFactory.noFileIdProvided()));
             });
 
         test("should throw error if invalid vault id provided", async () => {
@@ -534,7 +538,8 @@ describe("Test OnePasswordConnect CRUD", () => {
         describe('as a string', () => {
             test.each(["", null, undefined])
             ("should throw error if %s provides as file id", async (fileId) => {
-                await expect(() => op.getFileContent(vaultTitle, itemTitle, fileId)).rejects.toThrowError(new Error(ErrorMessageFactory.noFileIdProvided()));
+                // @ts-ignore
+                await expect(() => op.getFileContent(vaultTitle, itemTitle, fileId)).rejects.toThrow(new Error(ErrorMessageFactory.noFileIdProvided()));
             });
 
             test("should throw error if invalid vault id provided", async () => {
@@ -583,7 +588,8 @@ describe("Test OnePasswordConnect CRUD", () => {
         describe('as a stream', () => {
             test.each(["", null, undefined])
             ("should throw error if %s provides as file id", async (fileId) => {
-                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, fileId)).rejects.toThrowError(new Error(ErrorMessageFactory.noFileIdProvided()));
+                // @ts-ignore
+                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, fileId)).rejects.toThrow(new Error(ErrorMessageFactory.noFileIdProvided()));
             });
 
             test("should throw error if invalid vault id provided", async () => {
@@ -643,10 +649,12 @@ describe("Connector HTTP errors", () => {
     });
 
     test("factory requires serverURL and token", () => {
-
-        expect(() => OnePasswordConnect({serverURL: undefined, token: undefined})).toThrowError();
-        expect(() => OnePasswordConnect({serverURL: mockServerUrl, token: undefined})).toThrowError();
-        expect(() => OnePasswordConnect({serverURL: undefined, token: mockToken})).toThrowError();
+        // @ts-ignore 
+        expect(() => OnePasswordConnect({serverURL: undefined, token: undefined})).toThrow();
+        // @ts-ignore 
+        expect(() => OnePasswordConnect({serverURL: mockServerUrl, token: undefined})).toThrow();
+        // @ts-ignore 
+        expect(() => OnePasswordConnect({serverURL: undefined, token: mockToken})).toThrow();
 
     });
 
