@@ -9,8 +9,9 @@ jest.mock("../src/lib/client", () => ({
     }));
 
 test("Assert Token and Server URL are required", () => {
+    // @ts-ignore
     expect(() => new RequestAdapter(new HTTPClient(), {serverURL: undefined, token: undefined}))
-        .toThrowError("Options serverURL and token are required.");
+        .toThrow("Options serverURL and token are required.");
 });
 
 describe("Assert Adapter delegates calls to Client", () => {
