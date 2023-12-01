@@ -12,6 +12,17 @@
 
 ---
 
+[//]: # (START/v1.4.1)
+# v1.4.1
+
+## Fixes
+ * Remove unused packages from devDependencies. {#110}
+
+## Security
+ * Update all dependencies and fix security vulnerabilities identified by `npm audit`. Credit and thanks go to @gevalo1 for this contribution. {#109}
+
+---
+
 [//]: # (START/v1.4.0)
 # v1.4.0
 
