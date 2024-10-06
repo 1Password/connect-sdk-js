@@ -61,6 +61,16 @@ describe("Test ItemBuilder", () => {
         expect(primaryUrls).toEqual(1);
     });
 
+    test("url with label", () => {
+        const newItem = new ItemBuilder()
+            .setCategory(CategoryEnum.Login)
+            .addUrl({ label: "1Password", href: "1password.com", primary: true })
+            .build();
+
+        const { urls } = newItem;
+        expect(urls?.[0].label).toEqual("1Password");
+    });
+
     test("toggle item.favorite attribute", () => {
         // Never called => undefined
         const itemNotFavorite = new ItemBuilder()
