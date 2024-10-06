@@ -8,7 +8,7 @@ import CategoryEnum = Item.CategoryEnum;
 import { ErrorMessageFactory, HttpErrorFactory } from "../src/lib/utils";
 import { ERROR_MESSAGE } from "../src/lib/constants";
 import { ApiMock } from "./mocks";
-import { ItemFile } from "../dist/model/itemFile";
+import { ItemFile } from "../src/model/itemFile";
 import { FullItemAllOfFields } from "../src/model/models";
 
 // eslint-disable-next-line @typescript-eslint/tslint/config
