@@ -24,6 +24,11 @@ export interface ItemFieldOptions {
     recipe?: GeneratorRecipe;
 }
 
+interface BuilderUrls {
+    primaryUrl: string;
+    itemUrls: ItemUrls[];
+}
+
 export class ItemBuilder {
     /**
      * Empty Item under construction.
@@ -38,7 +43,7 @@ export class ItemBuilder {
      * @private
      */
     private sections: Map<string, FullItemAllOfSections>;
-    private urls: { [key: string]: any };
+    private urls: BuilderUrls;
 
     public constructor() {
         this.reset();
@@ -54,10 +59,10 @@ export class ItemBuilder {
 
         this.item.sections = Array.from(this.sections.values());
 
-        this.item.urls = this.urls.hrefs.map((href) =>
+        this.item.urls = this.urls.itemUrls.map(({ label, href }) =>
             this.urls.primaryUrl === href
-                ? ({ primary: true, href } as ItemUrls)
-                : ({ href } as ItemUrls),
+                ? { primary: true, label, href }
+                : { label, href },
         );
         const builtItem = cloneDeep(this.item);
         debug(
@@ -78,7 +83,7 @@ export class ItemBuilder {
         this.item.tags = [];
 
         this.sections = new Map();
-        this.urls = { primaryUrl: "", hrefs: [] };
+        this.urls = { primaryUrl: "", itemUrls: [] };
     }
 
     /**
@@ -182,8 +187,9 @@ export class ItemBuilder {
      * @returns {ItemBuilder}
      */
     public addUrl(url: ItemUrls): ItemBuilder {
-        if (url.primary) this.urls.primaryUrl = url.href;
-        this.urls.hrefs.push(url.href);
+        const { primary, label, href } = url;
+        if (primary) this.urls.primaryUrl = href;
+        this.urls.itemUrls.push({ label, href });
         return this;
     }
 
