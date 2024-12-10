@@ -49,6 +49,6 @@ make test
 
 ## 🔐 Security
 
-1Password requests you practice responsible disclosure if you discover a vulnerability. Please submit discoveries via [BugCrowd](https://bugcrowd.com/agilebits).
+1Password requests you practice responsible disclosure if you discover a vulnerability.
 
-For information about security practices, please visit our [Security homepage](https://1password.com/security/).
+Please file requests by sending an email to bugbounty@agilebits.com.
