@@ -19,3 +19,5 @@ export {
     ClientConfig,
 } from "./lib/client";
 export { ItemBuilder } from "./lib/builders";
+
+export { HttpError } from './lib/utils/error'
