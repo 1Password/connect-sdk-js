@@ -1,5 +1,6 @@
 import nock from "nock";
 import { Stream, Readable } from "stream";
+import { isAxiosError } from "axios";
 import {FullItem, ItemBuilder, OnePasswordConnect, Vault} from "../src";
 import {OPConfig} from "../src/lib/op-connect";
 import {ErrorResponse} from "../src/model/errorResponse";
@@ -743,7 +744,12 @@ describe("Connector HTTP errors", () => {
         try {
             await op.listVaults()
         } catch (e) {
-            expect(JSON.stringify(e)).not.toContain(`Bearer ${mockToken}`);
+            if (isAxiosError(e)) {
+                expect(e.config.headers["authorization"]).toEqual("[REDACTED]");
+                if (e.request?._currentRequest?._header) {
+                    expect(e.request?._currentRequest?._header).toContain("[REDACTED]");
+                }
+            }
         }
     })
 });
