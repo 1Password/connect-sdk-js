@@ -1,30 +1,33 @@
 name: Pull Request QA
 
 on:
-    pull_request:
-        types: [opened, synchronize, reopened]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
 
 jobs:
-    lintAndTestWithCoverage:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - name: Test with Node.js Latest LTS
-              uses: actions/setup-node@v4
-              with:
-                  # Latest LTS version
-                  node-version: '20.x'
-            - name: Cache NPM modules
-              uses: actions/cache@v3
-              with:
-                path: ~/.npm
-                key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                restore-keys: |
-                  ${{ runner.os }}-node-
-            - run: npm install
-            - run: npm run lint
-            - run: npm run test:coverage
-            - name: Upload coverage to Codecov
-              uses: codecov/codecov-action@v3
-              with:
-                directory: ./coverage/
+  lintAndTestWithCoverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test with Node.js Latest LTS
+        uses: actions/setup-node@v4
+        with:
+          # Latest LTS version
+          node-version: "20.x"
+      - name: Cache NPM modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: npm install
+      - run: npm run lint
+      - run: npm run test:coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./coverage/
