@@ -649,11 +649,11 @@ describe("Connector HTTP errors", () => {
     });
 
     test("factory requires serverURL and token", () => {
-        // @ts-ignore 
+        // @ts-ignore
         expect(() => OnePasswordConnect({serverURL: undefined, token: undefined})).toThrow();
-        // @ts-ignore 
+        // @ts-ignore
         expect(() => OnePasswordConnect({serverURL: mockServerUrl, token: undefined})).toThrow();
-        // @ts-ignore 
+        // @ts-ignore
         expect(() => OnePasswordConnect({serverURL: undefined, token: mockToken})).toThrow();
 
     });
@@ -736,4 +736,14 @@ describe("Connector HTTP errors", () => {
             expect(error).toEqual(HttpErrorFactory.noItemsFoundByTitle());
         }
     });
+
+    test("AxiosError doesn't contain raw 'Authorization' header value", async () => {
+        nock(mockServerUrl).get("/v1/vaults/")
+
+        try {
+            await op.listVaults()
+        } catch (e) {
+            expect(JSON.stringify(e)).not.toContain(`Bearer ${mockToken}`);
+        }
+    })
 });
