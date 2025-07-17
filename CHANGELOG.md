@@ -16,11 +16,11 @@
 # v1.4.2
 
 ## Fixes
- * Export `HttpError` interface. Kudos to @cze-aeb {#124}
- * Update dependencies. {#125}
+ * Export `HttpError` interface. Credit and thanks go @cze-aeb  for this contribution. {#124}
 
 ## Security
 * Mask Authorization header value in `AxiosError`. {#127}
+* Update dependencies. {#125}
 
 ---
 
