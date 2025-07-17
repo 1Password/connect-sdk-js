@@ -12,6 +12,18 @@
 
 ---
 
+[//]: # (START/v1.4.2)
+# v1.4.2
+
+## Fixes
+ * Export `HttpError` interface. Credit and thanks go @cze-aeb  for this contribution. {#124}
+
+## Security
+* Mask Authorization header value in `AxiosError`. {#127}
+* Update dependencies. {#125}
+
+---
+
 [//]: # (START/v1.4.1)
 # v1.4.1
 
