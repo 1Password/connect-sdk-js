@@ -1,7 +1,7 @@
 import * as http from "http";
 import * as https from "https";
 // eslint-disable-next-line @typescript-eslint/tslint/config
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 
 import { getVersion } from "./metadata";
 import { HTTPMethod, RequestOptions, Response } from "./requests";
@@ -68,6 +68,7 @@ export class HTTPClient implements IRequestClient {
             (response) => response,
             // eslint-disable-next-line @typescript-eslint/promise-function-async,@typescript-eslint/tslint/config
             (error) => {
+                maskAuthorizationHeader(error);
                 if (error.response && error.response.data) {
                     return Promise.reject(error.response.data);
                 } else {
@@ -105,4 +106,21 @@ export interface ClientConfig {
 
 export interface ClientRequestOptions extends RequestOptions {
     authToken: string;
+}
+
+function maskAuthorizationHeader(error: AxiosError) {
+    // mask the authorization header in the error config
+    const token = error?.config?.headers["authorization"];
+    if (token) {
+        error.config.headers["authorization"] = "[REDACTED]";
+    }
+
+    // mask the authorization header in the request header
+    if (error.request?._currentRequest?._header) {
+        error.request._currentRequest._header =
+            error.request._currentRequest._header.replaceAll(
+                token,
+                "[REDACTED]",
+            );
+    }
 }

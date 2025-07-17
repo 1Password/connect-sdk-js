@@ -1,5 +1,6 @@
 import nock from "nock";
 import { Stream, Readable } from "stream";
+import { isAxiosError } from "axios";
 import {FullItem, ItemBuilder, OnePasswordConnect, Vault} from "../src";
 import {OPConfig} from "../src/lib/op-connect";
 import {ErrorResponse} from "../src/model/errorResponse";
@@ -649,11 +650,11 @@ describe("Connector HTTP errors", () => {
     });
 
     test("factory requires serverURL and token", () => {
-        // @ts-ignore 
+        // @ts-ignore
         expect(() => OnePasswordConnect({serverURL: undefined, token: undefined})).toThrow();
-        // @ts-ignore 
+        // @ts-ignore
         expect(() => OnePasswordConnect({serverURL: mockServerUrl, token: undefined})).toThrow();
-        // @ts-ignore 
+        // @ts-ignore
         expect(() => OnePasswordConnect({serverURL: undefined, token: mockToken})).toThrow();
 
     });
@@ -736,4 +737,19 @@ describe("Connector HTTP errors", () => {
             expect(error).toEqual(HttpErrorFactory.noItemsFoundByTitle());
         }
     });
+
+    test("AxiosError doesn't contain raw 'Authorization' header value", async () => {
+        nock(mockServerUrl).get("/v1/vaults/")
+
+        try {
+            await op.listVaults()
+        } catch (e) {
+            if (isAxiosError(e)) {
+                expect(e.config.headers["authorization"]).toEqual("[REDACTED]");
+                if (e.request?._currentRequest?._header) {
+                    expect(e.request?._currentRequest?._header).toContain("[REDACTED]");
+                }
+            }
+        }
+    })
 });
