@@ -129,7 +129,11 @@ export class Items extends OPResource {
         return ObjectSerializer.deserialize(data, "FullItem");
     }
 
-    public async update(vaultId, item: FullItem): Promise<FullItem> {
+    public async update(vaultId: string, item: FullItem): Promise<FullItem> {
+        item.vault = Object.assign(item.vault || {}, {
+            id: vaultId
+        });
+
         const { data } = await this.adapter.sendRequest(
             "put",
             this.basePath(vaultId, item.id),
