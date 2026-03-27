@@ -11,14 +11,14 @@ jobs:
   lintAndTestWithCoverage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Test with Node.js Latest LTS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           # Latest LTS version
           node-version: "20.x"
       - name: Cache NPM modules
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -28,6 +28,6 @@ jobs:
       - run: npm run lint
       - run: npm run test:coverage
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           directory: ./coverage/
