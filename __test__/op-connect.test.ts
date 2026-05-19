@@ -1,18 +1,17 @@
-import nock from "nock";
 import { Stream, Readable } from "stream";
+import nock from "nock";
 import { isAxiosError } from "axios";
 import {FullItem, ItemBuilder, OnePasswordConnect, Vault} from "../src";
 import {OPConfig} from "../src/lib/op-connect";
 import {ErrorResponse} from "../src/model/errorResponse";
 import {Item} from "../src/model/item";
-import CategoryEnum = Item.CategoryEnum;
 import { ErrorMessageFactory, HttpErrorFactory } from "../src/lib/utils";
 import { ERROR_MESSAGE } from "../src/lib/constants";
-import { ApiMock } from "./mocks";
 import { ItemFile } from "../src/model/itemFile";
 import { FullItemAllOfFields } from "../src/model/models";
+import { ApiMock } from "./mocks";
+import CategoryEnum = Item.CategoryEnum;
 
-// eslint-disable-next-line @typescript-eslint/tslint/config
 const mockServerUrl = "http://localhost:8000";
 const mockToken = "myToken";
 const VAULT_ID = ApiMock.VAULT_ID;
@@ -30,8 +29,8 @@ const apiMock = new ApiMock(mockServerUrl);
 describe("Test OnePasswordConnect CRUD", () => {
 
     beforeEach((done) => {
-        if (!nock.isActive()) nock.activate();
-        if (!apiMock.nock.isActive()) apiMock.nock.activate();
+        if (!nock.isActive()) {nock.activate();}
+        if (!apiMock.nock.isActive()) {apiMock.nock.activate();}
         done();
     });
 
@@ -61,9 +60,9 @@ describe("Test OnePasswordConnect CRUD", () => {
         const vaultItems = await op.listItems(VAULT_ID);
 
         expect(Array.isArray(vaultItems)).toBe(true);
-        vaultItems.forEach((vaultItem) => {
+        for (const vaultItem of vaultItems) {
             expect(vaultItem instanceof Item).toBe(true);
-        });
+        }
 
     });
 
@@ -151,13 +150,13 @@ describe("Test OnePasswordConnect CRUD", () => {
         test("should throw an error if no vaults found", async () => {
             apiMock.listVaultsByTitle(title).reply(200, []);
 
-            await expect(() => op.getVaultByTitle(title)).rejects.toEqual(HttpErrorFactory.noVaultsFoundByTitle());
+            await expect(async () => op.getVaultByTitle(title)).rejects.toEqual(HttpErrorFactory.noVaultsFoundByTitle());
         });
 
         test("should throw an error if more than 1 vault found", async () => {
             apiMock.listVaultsByTitle(title).reply(200, [{}, {}]);
 
-            await expect(() => op.getVaultByTitle(title)).rejects.toEqual(HttpErrorFactory.multipleVaultsFoundByTitle());
+            await expect(async () => op.getVaultByTitle(title)).rejects.toEqual(HttpErrorFactory.multipleVaultsFoundByTitle());
         });
 
         test("should return vault", async () => {
@@ -177,7 +176,7 @@ describe("Test OnePasswordConnect CRUD", () => {
             [""],
         ])("should throw error if %s provided", async (vaultQuery) => {
             // @ts-ignore
-            await expect(() => op.getVault(vaultQuery))
+            await expect(async () => op.getVault(vaultQuery))
                 .rejects.toThrow(ERROR_MESSAGE.PROVIDE_VAULT_NAME_OR_ID);
         });
 
@@ -203,7 +202,7 @@ describe("Test OnePasswordConnect CRUD", () => {
 
     describe("list items by title", () => {
         const title = "some title";
-        const getItemsByTitleMock = (title: string) => nock(mockServerUrl)
+        const getItemsByTitleMock = () => nock(mockServerUrl)
                 .get(`/v1/vaults/${VAULT_ID}/items/`)
                 .query({
                     filter: `title eq "${title}"`,
@@ -212,7 +211,7 @@ describe("Test OnePasswordConnect CRUD", () => {
             nock(mockServerUrl).get(`/v1/vaults/${VAULT_ID}/items/${itemId}`);
 
         test("should return empty array if nothing found", async () => {
-            getItemsByTitleMock(title).reply(200, []);
+            getItemsByTitleMock().reply(200, []);
 
             const result: FullItem[] = await op.listItemsByTitle(VAULT_ID, title);
 
@@ -222,18 +221,18 @@ describe("Test OnePasswordConnect CRUD", () => {
         test("should re-throw api error", async () => {
             const badRequestError = new Error('Some bad request');
 
-            getItemsByTitleMock(title).replyWithError(badRequestError);
+            getItemsByTitleMock().replyWithError(badRequestError);
 
-            await expect(() => op.listItemsByTitle(VAULT_ID, title)).rejects.toEqual(badRequestError);
+            await expect(async () => op.listItemsByTitle(VAULT_ID, title)).rejects.toEqual(badRequestError);
         });
 
         test("should return 2 items", async () => {
             const item1 = { id: "1" } as Item;
             const item2 = { id: "2" } as Item;
 
-            getItemsByTitleMock(title).reply(200, [item1, item2]);
-            getFullItemMock(item1.id!).reply(200, item1);
-            getFullItemMock(item2.id!).reply(200, item2);
+            getItemsByTitleMock().reply(200, [item1, item2]);
+            getFullItemMock(item1.id).reply(200, item1);
+            getFullItemMock(item2.id).reply(200, item2);
 
             const result: FullItem[] = await op.listItemsByTitle(VAULT_ID, title);
 
@@ -250,7 +249,7 @@ describe("Test OnePasswordConnect CRUD", () => {
             [""],
         ])("should throw error if %s provided", async (itemQuery) => {
             // @ts-ignore
-            await expect(() => op.getItem(VAULT_ID, itemQuery))
+            await expect(async () => op.getItem(VAULT_ID, itemQuery))
                 .rejects.toThrow(ERROR_MESSAGE.PROVIDE_ITEM_NAME_OR_ID);
         });
 
@@ -294,7 +293,7 @@ describe("Test OnePasswordConnect CRUD", () => {
             apiMock.getItemById()
                 .replyWithError(notFoundError);
 
-            await expect(() => op.getItemById(VAULT_ID, ITEM_ID))
+            await expect(async () => op.getItemById(VAULT_ID, ITEM_ID))
                 .rejects.toEqual(notFoundError);
         });
     });
@@ -307,7 +306,7 @@ describe("Test OnePasswordConnect CRUD", () => {
             apiMock.deleteItemById()
                 .reply(204);
 
-            await expect(() => op.deleteItemByTitle(VAULT_ID, itemTitle))
+            await expect(async () => op.deleteItemByTitle(VAULT_ID, itemTitle))
                 .rejects.toEqual(HttpErrorFactory.noItemsFoundByTitle());
         });
 
@@ -318,7 +317,7 @@ describe("Test OnePasswordConnect CRUD", () => {
             apiMock.deleteItemById()
                 .reply(204);
 
-            await expect(() => op.deleteItemByTitle(VAULT_ID, itemTitle))
+            await expect(async () => op.deleteItemByTitle(VAULT_ID, itemTitle))
                 .rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
         });
 
@@ -338,7 +337,7 @@ describe("Test OnePasswordConnect CRUD", () => {
             apiMock.deleteItemById()
                 .reply(404);
 
-            await expect(() => op.deleteItemById(VAULT_ID, ITEM_ID))
+            await expect(async () => op.deleteItemById(VAULT_ID, ITEM_ID))
                 .rejects.toThrow();
         });
 
@@ -355,21 +354,21 @@ describe("Test OnePasswordConnect CRUD", () => {
             [""],
         ])("should throw error if %s provided", async (itemQuery) => {
             // @ts-ignore
-            await expect(() => op.deleteItem(VAULT_ID, itemQuery))
+            await expect(async () => op.deleteItem(VAULT_ID, itemQuery))
                 .rejects.toThrow(ERROR_MESSAGE.PROVIDE_ITEM_NAME_OR_ID);
         });
 
         test("should throw an error if 2 items found by title", async () => {
             apiMock.listItemsByTitle(itemTitle).reply(200, [{}, {}]);
 
-            await expect(() => op.deleteItem(VAULT_ID, itemTitle))
+            await expect(async () => op.deleteItem(VAULT_ID, itemTitle))
                 .rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
         });
 
         test("should throw an error if no items found by title", async () => {
             apiMock.listItemsByTitle(itemTitle).reply(200, []);
 
-            await expect(() => op.deleteItem(VAULT_ID, itemTitle))
+            await expect(async () => op.deleteItem(VAULT_ID, itemTitle))
                 .rejects.toEqual(HttpErrorFactory.noItemsFoundByTitle());
         });
 
@@ -393,7 +392,7 @@ describe("Test OnePasswordConnect CRUD", () => {
             apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
             apiMock.listItemsByTitle(itemTitle).reply(200, []);
 
-            await expect(() => op.listFiles(VAULT_ID, itemTitle))
+            await expect(async () => op.listFiles(VAULT_ID, itemTitle))
                 .rejects.toEqual(HttpErrorFactory.noItemsFoundByTitle());
         });
 
@@ -428,14 +427,14 @@ describe("Test OnePasswordConnect CRUD", () => {
         test("should throw error if request to connect returns an error", async () => {
             apiMock.getItemById().reply(404);
 
-            await expect(() => op.getItemOTP(VAULT_ID, ITEM_ID))
+            await expect(async () => op.getItemOTP(VAULT_ID, ITEM_ID))
                 .rejects.toThrow();
         });
 
         test("should throw error if item has no OTP", async () => {
             apiMock.getItemById().reply(200, { id: ITEM_ID });
 
-            await expect(() => op.getItemOTP(VAULT_ID, ITEM_ID))
+            await expect(async () => op.getItemOTP(VAULT_ID, ITEM_ID))
                 .rejects.toThrow(ErrorMessageFactory.noOTPFoundForItem(ITEM_ID));
         });
 
@@ -463,7 +462,7 @@ describe("Test OnePasswordConnect CRUD", () => {
 
             apiMock.listItemsByTitleContains(title).replyWithError(badRequestError);
 
-            await expect(() => op.listItemsByTitleContains(VAULT_ID, title)).rejects.toEqual(badRequestError);
+            await expect(async () => op.listItemsByTitleContains(VAULT_ID, title)).rejects.toEqual(badRequestError);
         });
 
         test("should return 2 items", async () => {
@@ -487,33 +486,33 @@ describe("Test OnePasswordConnect CRUD", () => {
         test.each(["", null, undefined])
             ("should throw error if %s provides as file id", async (fileId) => {
                 // @ts-ignore
-                await expect(() => op.getFileById(vaultTitle, itemTitle, fileId)).rejects.toThrow(new Error(ErrorMessageFactory.noFileIdProvided()));
+                await expect(async () => op.getFileById(vaultTitle, itemTitle, fileId)).rejects.toThrow(new Error(ErrorMessageFactory.noFileIdProvided()));
             });
 
         test("should throw error if invalid vault id provided", async () => {
             apiMock.listVaultsByTitle(vaultTitle).replyWithError("something went wrong");
 
-            await expect(() => op.getFileById(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
+            await expect(async () => op.getFileById(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
         });
 
         test("should throw error if there is more than one vault with provided title", async () => {
             apiMock.listVaultsByTitle(vaultTitle).reply(200, [{}, {}]);
 
-            await expect(() => op.getFileById(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleVaultsFoundByTitle());
+            await expect(async () => op.getFileById(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleVaultsFoundByTitle());
         });
 
         test("should throw error if invalid item id provided", async () => {
             apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
             apiMock.listItemsByTitle(itemTitle).replyWithError("something went wrong");
 
-            await expect(() => op.getFileById(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
+            await expect(async () => op.getFileById(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
         });
 
         test("should throw error if there is more than one item with provided title", async () => {
             apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
             apiMock.listItemsByTitle(itemTitle).reply(200, [{}, {}]);
 
-            await expect(() => op.getFileById(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
+            await expect(async () => op.getFileById(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
         });
 
         test("should return file when search by vault and item title", async () => {
@@ -540,33 +539,33 @@ describe("Test OnePasswordConnect CRUD", () => {
             test.each(["", null, undefined])
             ("should throw error if %s provides as file id", async (fileId) => {
                 // @ts-ignore
-                await expect(() => op.getFileContent(vaultTitle, itemTitle, fileId)).rejects.toThrow(new Error(ErrorMessageFactory.noFileIdProvided()));
+                await expect(async () => op.getFileContent(vaultTitle, itemTitle, fileId)).rejects.toThrow(new Error(ErrorMessageFactory.noFileIdProvided()));
             });
 
             test("should throw error if invalid vault id provided", async () => {
                 apiMock.listVaultsByTitle(vaultTitle).replyWithError("something went wrong");
 
-                await expect(() => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
+                await expect(async () => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
             });
 
             test("should throw error if there is more than one vault with provided title", async () => {
                 apiMock.listVaultsByTitle(vaultTitle).reply(200, [{}, {}]);
 
-                await expect(() => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleVaultsFoundByTitle());
+                await expect(async () => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleVaultsFoundByTitle());
             });
 
             test("should throw error if invalid item id provided", async () => {
                 apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
                 apiMock.listItemsByTitle(itemTitle).replyWithError("something went wrong");
 
-                await expect(() => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
+                await expect(async () => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
             });
 
             test("should throw error if there is more than one item with provided title", async () => {
                 apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
                 apiMock.listItemsByTitle(itemTitle).reply(200, [{}, {}]);
 
-                await expect(() => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
+                await expect(async () => op.getFileContent(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
             });
 
             test("should return file content when search by vault and item title", async () => {
@@ -590,33 +589,33 @@ describe("Test OnePasswordConnect CRUD", () => {
             test.each(["", null, undefined])
             ("should throw error if %s provides as file id", async (fileId) => {
                 // @ts-ignore
-                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, fileId)).rejects.toThrow(new Error(ErrorMessageFactory.noFileIdProvided()));
+                await expect(async () => op.getFileContentStream(vaultTitle, itemTitle, fileId)).rejects.toThrow(new Error(ErrorMessageFactory.noFileIdProvided()));
             });
 
             test("should throw error if invalid vault id provided", async () => {
                 apiMock.listVaultsByTitle(vaultTitle).replyWithError("something went wrong");
 
-                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
+                await expect(async () => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
             });
 
             test("should throw error if there is more than one vault with provided title", async () => {
                 apiMock.listVaultsByTitle(vaultTitle).reply(200, [{}, {}]);
 
-                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleVaultsFoundByTitle());
+                await expect(async () => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleVaultsFoundByTitle());
             });
 
             test("should throw error if invalid item id provided", async () => {
                 apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
                 apiMock.listItemsByTitle(itemTitle).replyWithError("something went wrong");
 
-                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
+                await expect(async () => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(new Error("something went wrong"));
             });
 
             test("should throw error if there is more than one item with provided title", async () => {
                 apiMock.listVaultsByTitle(vaultTitle).reply(200, [{ id: VAULT_ID }]);
                 apiMock.listItemsByTitle(itemTitle).reply(200, [{}, {}]);
 
-                await expect(() => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
+                await expect(async () => op.getFileContentStream(vaultTitle, itemTitle, FILE_ID)).rejects.toEqual(HttpErrorFactory.multipleItemsFoundByTitle());
             });
 
             test("should return file stream when search by vault and item title", async () => {
@@ -641,7 +640,7 @@ describe("Test OnePasswordConnect CRUD", () => {
 describe("Connector HTTP errors", () => {
 
     beforeEach((done) => {
-        if (!nock.isActive()) nock.activate();
+        if (!nock.isActive()) {nock.activate();}
         done();
     });
 
@@ -743,11 +742,11 @@ describe("Connector HTTP errors", () => {
 
         try {
             await op.listVaults()
-        } catch (e) {
-            if (isAxiosError(e)) {
-                expect(e.config.headers["authorization"]).toEqual("[REDACTED]");
-                if (e.request?._currentRequest?._header) {
-                    expect(e.request?._currentRequest?._header).toContain("[REDACTED]");
+        } catch (error) {
+            if (isAxiosError(error)) {
+                expect(error.config.headers["authorization"]).toEqual("[REDACTED]");
+                if (error.request?._currentRequest?._header) {
+                    expect(error.request?._currentRequest?._header).toContain("[REDACTED]");
                 }
             }
         }

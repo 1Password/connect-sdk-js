@@ -237,7 +237,7 @@ export class OPConnect {
         vaultId: string,
         item: FullItem,
     ): Promise<FullItem> {
-        if (!item.id) throw Error("Item ID must be defined.");
+        if (!item.id) {throw Error("Item ID must be defined.");}
         return await this.items.update(vaultId, item);
     }
 

@@ -57,7 +57,7 @@ export class ItemBuilder {
             throw Error("Item Category is required.");
         }
 
-        this.item.sections = Array.from(this.sections.values());
+        this.item.sections = [...this.sections.values()];
 
         this.item.urls = this.urls.itemUrls.map(({ label, href }) =>
             this.urls.primaryUrl === href
@@ -188,7 +188,7 @@ export class ItemBuilder {
      */
     public addUrl(url: ItemUrls): ItemBuilder {
         const { primary, label, href } = url;
-        if (primary) this.urls.primaryUrl = href;
+        if (primary) {this.urls.primaryUrl = href;}
         this.urls.itemUrls.push({ label, href });
         return this;
     }
@@ -262,14 +262,14 @@ const generatorRecipeFromConfig = (opts: Partial<GeneratorRecipe>): GeneratorRec
  * @returns {boolean}
  */
 const validRecipe = (recipe: GeneratorRecipe): boolean => {
-    if (!recipe.characterSets || !recipe.characterSets.length) return true;
+    if (!recipe.characterSets || recipe.characterSets.length === 0) {return true;}
 
     const allowedCharactersSets = Object.values(
         GeneratorRecipe.CharacterSetsEnum,
     );
 
     // User provided more character sets than are defined
-    if (recipe.characterSets.length > allowedCharactersSets.length) return false;
+    if (recipe.characterSets.length > allowedCharactersSets.length) {return false;}
 
     for (const cs of recipe.characterSets) {
         if (allowedCharactersSets.indexOf(cs) === -1) {

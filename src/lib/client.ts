@@ -1,6 +1,5 @@
 import * as http from "http";
 import * as https from "https";
-// eslint-disable-next-line @typescript-eslint/tslint/config
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 
 import { getVersion } from "./metadata";
@@ -66,7 +65,7 @@ export class HTTPClient implements IRequestClient {
 
         axiosInstance.interceptors.response.use(
             (response) => response,
-            // eslint-disable-next-line @typescript-eslint/promise-function-async,@typescript-eslint/tslint/config
+            // eslint-disable-next-line @typescript-eslint/promise-function-async
             (error) => {
                 maskAuthorizationHeader(error);
                 if (error.response && error.response.data) {

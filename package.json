@@ -14,7 +14,7 @@
         "test": "jest",
         "test:coverage": "npx jest --ci --coverage",
         "build": "tsc",
-        "lint": "eslint --ext .ts",
+        "lint": "eslint --ext .ts src __test__",
         "watch": "tsc --watch"
     },
     "author": "1Password",

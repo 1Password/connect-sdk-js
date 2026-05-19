@@ -225,7 +225,7 @@ export class Items extends OPResource {
         );
 
         return Promise.all(
-            data.map(item => this.getById(vaultId, item.id))
+            data.map(async item => this.getById(vaultId, item.id))
         );
     }
 
@@ -247,7 +247,7 @@ export class Items extends OPResource {
             )}`,
         );
 
-        return Promise.all(data.map((item: SimpleItem) => this.getById(vaultId, item.id)));
+        return Promise.all(data.map(async (item: SimpleItem) => this.getById(vaultId, item.id)));
     }
 
     /**
@@ -424,7 +424,7 @@ export class Files extends OPResource {
         return query;
     }
 
-    private streamToString(stream: Stream): Promise<string> {
+    private async streamToString(stream: Stream): Promise<string> {
         return new Promise((resolve, reject) => {
             let content = '';
 

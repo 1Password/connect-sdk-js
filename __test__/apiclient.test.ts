@@ -34,7 +34,7 @@ describe("HTTPClient configuration", () => {
 
         // Don't care about the response here, just the prepared request config
         const apiPath = "v1/test/";
-        client.request("get", apiPath, {authToken: token});
+        void client.request("get", apiPath, {authToken: token});
 
         expect(mockedAxios.request).toHaveBeenCalled();
 
@@ -73,7 +73,7 @@ describe("HTTPClient configuration", () => {
             authToken: token,
         } as ClientRequestOptions;
 
-        client.request("get", "example", customRequestOptions);
+        void client.request("get", "example", customRequestOptions);
 
         expect(mockedAxios.request).toHaveBeenCalled();
 
