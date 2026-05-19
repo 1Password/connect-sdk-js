@@ -29,8 +29,12 @@ const apiMock = new ApiMock(mockServerUrl);
 describe("Test OnePasswordConnect CRUD", () => {
 
     beforeEach((done) => {
-        if (!nock.isActive()) {nock.activate();}
-        if (!apiMock.nock.isActive()) {apiMock.nock.activate();}
+        if (!nock.isActive()) {
+            nock.activate();
+        }
+        if (!apiMock.nock.isActive()) {
+            apiMock.nock.activate();
+        }
         done();
     });
 
@@ -640,7 +644,9 @@ describe("Test OnePasswordConnect CRUD", () => {
 describe("Connector HTTP errors", () => {
 
     beforeEach((done) => {
-        if (!nock.isActive()) {nock.activate();}
+        if (!nock.isActive()) {
+            nock.activate();
+        }
         done();
     });
 

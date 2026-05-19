@@ -50,12 +50,12 @@ describe("Test ItemBuilder", () => {
         //  - there is only 1 url with the `primary: true` attr
         let primaryUrls = 0;
         let primaryUrl;
-        if (urls) {for (const url of urls) {
+        for (const url of urls ?? []) {
             if (url.primary) {
                 primaryUrl = url.href;
                 primaryUrls++;
             }
-        }}
+        }
 
         expect(primaryUrl).toEqual("agilebits.com");
         expect(primaryUrls).toEqual(1);
