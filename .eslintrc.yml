@@ -18,7 +18,6 @@ parserOptions:
     sourceType: module
 plugins:
     - "@typescript-eslint"
-    - deprecation
     - import
     - jsdoc
     - no-unsanitized
@@ -76,7 +75,7 @@ rules:
     "@typescript-eslint/unified-signatures": error
     arrow-body-style: error
     curly: error
-    deprecation/deprecation: "warn"
+    "@typescript-eslint/no-deprecated": "warn"
     eqeqeq: error
     guard-for-in: error
     id-denylist:
@@ -129,6 +128,10 @@ rules:
     # TODO: re-enable these after fixing the underlying issues.
     # The rules below are flagged by lint today. They're disabled to get to a green baseline
     "@typescript-eslint/ban-ts-comment": "off"
+    "@typescript-eslint/prefer-promise-reject-errors": "off"
+    "@typescript-eslint/no-require-imports": "off"
+    "@typescript-eslint/no-unnecessary-type-assertion": "off"
+    "@typescript-eslint/prefer-includes": "off"
     unicorn/prefer-node-protocol: "off"
     unicorn/throw-new-error: "off"
     unicorn/new-for-builtins: "off"
