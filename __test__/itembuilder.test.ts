@@ -50,12 +50,12 @@ describe("Test ItemBuilder", () => {
         //  - there is only 1 url with the `primary: true` attr
         let primaryUrls = 0;
         let primaryUrl;
-        urls?.forEach((url) => {
+        for (const url of urls ?? []) {
             if (url.primary) {
                 primaryUrl = url.href;
                 primaryUrls++;
             }
-        });
+        }
 
         expect(primaryUrl).toEqual("agilebits.com");
         expect(primaryUrls).toEqual(1);
@@ -158,9 +158,9 @@ describe("Test ItemBuilder", () => {
             CategoryEnum.Login,
         );
 
-        caseInsensitiveTags.forEach((tag) => {
+        for (const tag of caseInsensitiveTags) {
             itemWithTagsBuilder.addTag(tag);
-        });
+        }
 
         const item = itemWithTagsBuilder.build();
         expect(item.tags).toBeDefined();
@@ -226,12 +226,12 @@ describe("Test ItemBuilder", () => {
         // @ts-ignore
         const invalidRecipe: GeneratorRecipe = {
             length: 6,
-            characterSets: new Array("adfioadhfg"),
+            characterSets: ["adfioadhfg"],
         } as GeneratorRecipe;
 
         const validRecipe: GeneratorRecipe = {
             length: 6,
-            characterSets: new Array(GeneratorRecipe.CharacterSetsEnum.Digits),
+            characterSets: [GeneratorRecipe.CharacterSetsEnum.Digits],
         };
 
         const builder = new ItemBuilder();

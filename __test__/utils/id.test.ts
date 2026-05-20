@@ -1,6 +1,6 @@
+import { generateSectionId, isValidId } from "../../src/lib/utils";
 import { isValidSectionId } from './../../src/lib/utils/id';
 import { ID_PREFIX } from './../../src/lib/constants';
-import { generateSectionId, isValidId } from "../../src/lib/utils";
 
 describe("isValidId", () => {
     test.each([

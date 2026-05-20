@@ -1,6 +1,6 @@
+import { URL } from "url";
 import { ResponseType } from "axios";
 import Debug from "debug";
-import { URL } from "url";
 
 import { ClientRequestOptions, IRequestClient } from "./client";
 

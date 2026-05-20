@@ -19,21 +19,19 @@ describe("Assert Adapter delegates calls to Client", () => {
     afterEach(() => {
         mockedRequest.mockClear();
     });
-    // eslint-disable-next-line @typescript-eslint/tslint/config
     const serverURL = "http://localhost:9999/";
     const adapterOpts: RequestAdapterOptions = {serverURL, token: "testToken"};
 
     test("URL is normalized before delegation call", () => {
         const adapter = new RequestAdapter(new HTTPClient(), adapterOpts);
-        adapter.sendRequest("get", "/example/1234");
+        void adapter.sendRequest("get", "/example/1234");
 
-        expect(mockedRequest).toBeCalledTimes(1);
+        expect(mockedRequest).toHaveBeenCalledTimes(1);
 
         // Expect the `url` to be concatenation
         // of `serverURL` and `/example/1234` without double `//`
         expect(mockedRequest).toHaveBeenCalledWith(
             "get",
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             "http://localhost:9999/example/1234",
             {authToken: adapterOpts.token});
     });
@@ -79,12 +77,12 @@ describe("Adapter with Custom Clients", () => {
 
         try {
             await op.getItem("123", "throwError");
-        } catch (e) {
-            expect(e.message).toMatch("Bad request");
+        } catch (error) {
+            expect(error.message).toMatch("Bad request");
         }
     });
 
-    test("Adapter returns rejected Promise from custom client", () => {
+    test("Adapter returns rejected Promise from custom client", async () => {
         // Assert Adapter bubbles up the rejected Promise
         const customClient = new CustomClient();
 
@@ -94,7 +92,7 @@ describe("Adapter with Custom Clients", () => {
             httpClient: customClient,
         });
 
-        expect(op.getItem("123", "rejectPromise"))
+        await expect(op.getItem("123", "rejectPromise"))
             .rejects
             .toMatchObject({data: "cannot use Https", status: 400});
 
