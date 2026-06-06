@@ -15,6 +15,8 @@ The 1Password Connect SDK JS provides your JavaScript and TypeScript application
 
 This library can be used by Node.js applications, tools, and other automations to access and manage items in 1Password vaults.
 
+*This project is licensed under [MIT](./LICENSE.md). Use of the 1Password APIs and services accessed through these tools is governed by the [1Password API Terms of Service](https://1password.com/legal/api-sdk-terms-of-service).*
+
 ## 💾 Installation
 
 You can install the SDK using npm or Yarn.
