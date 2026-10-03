@@ -152,6 +152,28 @@ export class OPConnect {
     }
 
     /**
+     * Returns full Items with an exact tag match in the specified Vault.
+     *
+     * @param {string} vaultId
+     * @param {string} tag
+     * @returns {Promise<FullItem[]>}
+     */
+    public async listItemsByTag(vaultId: string, tag: string): Promise<FullItem[]> {
+        return this.items.listItemsByTag(vaultId, tag);
+    }
+
+    /**
+     * Returns full Items whose tags contain the provided string.
+     *
+     * @param {string} vaultId
+     * @param {string} tagSearchStr
+     * @returns {Promise<FullItem[]>}
+     */
+    public async listItemsByTagContains(vaultId: string, tagSearchStr: string): Promise<FullItem[]> {
+        return this.items.listItemsByTagContains(vaultId, tagSearchStr);
+    }
+
+    /**
      * Get details about a specific Item in a Vault.
      *
      * @param {string} vaultId
