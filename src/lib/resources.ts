@@ -251,6 +251,36 @@ export class Items extends OPResource {
     }
 
     /**
+     * Search for all Items with an exact tag match.
+     *
+     * @param {string} vaultId
+     * @param {string} tag
+     * @returns {Promise<FullItem[]>}
+     */
+    public async listItemsByTag(vaultId: string, tag: string): Promise<FullItem[]> {
+        const { data } = await this.adapter.sendRequest(
+            "get",
+            `${this.basePath(vaultId)}?${QueryBuilder.filterByTag(tag)}`,
+        );
+        return Promise.all(data.map(async (item: SimpleItem) => this.getById(vaultId, item.id)));
+    }
+
+    /**
+     * Search for Items whose tags contain the provided string.
+     *
+     * @param {string} vaultId
+     * @param {string} tagSearchStr
+     * @returns {Promise<FullItem[]>}
+     */
+    public async listItemsByTagContains(vaultId: string, tagSearchStr: string): Promise<FullItem[]> {
+        const { data } = await this.adapter.sendRequest(
+            "get",
+            `${this.basePath(vaultId)}?${QueryBuilder.searchByTag(tagSearchStr)}`,
+        );
+        return Promise.all(data.map(async (item: SimpleItem) => this.getById(vaultId, item.id)));
+    }
+
+    /**
      * Searches for an Item with exact match on title.
      * If found, queries for complete item details and returns result.
      *
