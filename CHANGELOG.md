@@ -12,6 +12,19 @@
 
 ---
 
+[//]: # (START/v1.4.3)
+# v1.4.3
+
+## Fixes
+ * `ItemBuilder.addUrl` now keeps the URL's `label`. Credit and thanks go to @cze-aeb for this contribution. {#120}
+ * `Items.update` now sets the item's vault ID to the vault being updated. Credit and thanks go to @cze-aeb for this contribution. {#123}
+
+## Security
+ * Raise the minimum `axios` version to 1.20.0 and the minimum `uuid` version to 11.1.1, which fix published security advisories. The SDK wasn't affected by the `uuid` advisory. {#168}
+ * Releases are now published from GitHub Actions using npm trusted publishing, with provenance. {#165}
+
+---
+
 [//]: # (START/v1.4.2)
 # v1.4.2
 
