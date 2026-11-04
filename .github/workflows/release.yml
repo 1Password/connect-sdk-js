@@ -1,5 +1,9 @@
 name: Release SDK if needed
 
+# npm publishing uses npm trusted publishing (OIDC), so no NPM_TOKEN secret is needed.
+# The trusted publisher on npmjs.com is bound to this file (release.yml) and the
+# `connect-sdk-js` environment; renaming either breaks publishing.
+
 on:
   pull_request:
     branches:
@@ -14,6 +18,11 @@ jobs:
   release:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true && contains(github.event.pull_request.head.ref, 'release/')
+    # Must match the environment on the npm trusted publisher config.
+    environment: connect-sdk-js
+    permissions:
+      contents: write # create the GitHub release
+      id-token: write # npm trusted publishing (OIDC)
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2.22.1
@@ -28,12 +37,23 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: "24.x"
-          registry-url: "https://registry.npmjs.org"
+          # No registry-url: it writes an .npmrc with `_authToken=${NODE_AUTH_TOKEN}`,
+          # which trusted publishing doesn't use. npm defaults to registry.npmjs.org.
+
+      # Trusted publishing needs npm >= 11.5.1; older npm silently skips OIDC and
+      # fails later with ENEEDAUTH, so fail fast with a clear message instead.
+      - name: Check npm supports trusted publishing
+        run: |
+          v=$(npm --version)
+          echo "npm $v"
+          node -e 'const [a,b,c]=process.argv[1].split(".").map(Number); process.exit(a>11||(a===11&&(b>5||(b===5&&c>=1)))?0:1)' "$v" \
+            || { echo "::error::npm $v is too old for trusted publishing (need >= 11.5.1)"; exit 1; }
+
       - run: npm install
+      # No token: npm exchanges the job's OIDC token for a short-lived publish
+      # token and adds a provenance attestation automatically.
       - name: Publish to npm
         run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Create Release tag
         id: create-tag
         env:
