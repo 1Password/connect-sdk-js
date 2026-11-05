@@ -18,3 +18,9 @@ const buildFilterQuery = buildKeyValuePair(QUERY_PARAM_NAME.FILTER);
 export const filterByTitle = (title: string): string => buildFilterQuery(eqByTitle(title));
 
 export const searchByTitle = (title: string): string => buildFilterQuery(coByTitle(title));
+
+export const filterByTag = (tag: string): string =>
+    buildFilterQuery(encodeURIComponent(`tag eq ${JSON.stringify(tag)}`));
+
+export const searchByTag = (tag: string): string =>
+    buildFilterQuery(encodeURIComponent(`tag co ${JSON.stringify(tag)}`));
